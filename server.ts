@@ -350,7 +350,7 @@ app.post('/auth/google/callback', handleGoogleCallback);
 app.post('/api/auth/google', handleGoogleCallback);
 
 // Fast demo persona switcher for testing and verification
-app.post('/api/auth/demo-switch', (req, res) => {
+const handleSwitchUser = (req: express.Request, res: express.Response) => {
   const { userId } = req.body;
   if (!userId) return res.status(400).json({ error: 'userId is required' });
   const user = db.users.get(userId);
@@ -358,6 +358,16 @@ app.post('/api/auth/demo-switch', (req, res) => {
   const session = db.createSession(user);
   const assignments = db.getUserAssignmentsWithDetails(user.id);
   res.json({ success: true, user, session, assignments });
+};
+
+app.post('/api/auth/demo-switch', handleSwitchUser);
+app.post('/api/auth/switch-user', handleSwitchUser);
+
+// Explicitly stub email sign-in endpoint
+app.post('/api/auth/email/request', (req, res) => {
+  res.status(501).json({
+    error: 'Email magic-link sign-in is not yet available. Please sign in with Google or choose a sample identity.'
+  });
 });
 
 /**
@@ -542,7 +552,7 @@ app.post('/api/org/create-v2', handleCreateOrg);
 const handleGenerateLink = (req: express.Request, res: express.Response) => {
   try {
     const { orgId } = req.params;
-    const { targetRoleId, targetDepartmentId, daysValid = 7 } = req.body;
+    const { targetRoleId, targetDepartmentId, daysValid = 7, requiredIntegrations } = req.body;
 
     const user = getAuthenticatedUser(req);
     const requestingUserId = user?.id || req.body.userId;
@@ -575,7 +585,8 @@ const handleGenerateLink = (req: express.Request, res: express.Response) => {
       target_role_id: targetRoleId,
       target_department_id: deptId,
       created_by_user_id: requestingUserId,
-      days_valid: Number(daysValid) || 7
+      days_valid: Number(daysValid) || 7,
+      required_integrations: Array.isArray(requiredIntegrations) ? requiredIntegrations : []
     });
 
     res.json({
@@ -583,6 +594,7 @@ const handleGenerateLink = (req: express.Request, res: express.Response) => {
       link,
       token: link.token,
       expiresAt: link.expires_at,
+      requiredIntegrations: link.required_integrations,
       authorityExplanation: authCheck.reason
     });
   } catch (error: any) {
@@ -629,7 +641,8 @@ const handleResolveLink = (req: express.Request, res: express.Response) => {
     deptName: dept?.name || link.dept_name || 'General Department',
     expiresAt: link.expires_at,
     isExpired,
-    valid: !isExpired
+    valid: !isExpired,
+    requiredIntegrations: link.required_integrations || []
   });
 };
 

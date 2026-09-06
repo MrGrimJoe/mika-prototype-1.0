@@ -44,7 +44,10 @@ import { ChatPanel } from './components/ChatPanel';
 import { CreateTaskModal } from './components/CreateTaskModal';
 import { JoinModal } from './components/JoinModal';
 import { RoleLinkJoinView } from './components/RoleLinkJoinView';
-import { AuthLanding } from './components/AuthLanding';
+import { LandingPage } from './components/landing/LandingPage';
+import { SignInView } from './components/auth/SignInView';
+import { CreateOrgFlow } from './components/auth/CreateOrgFlow';
+import { SettingsView } from './components/SettingsView';
 import { AppSidebar, SidebarTab } from './components/layout/AppSidebar';
 import { RolesDashboard } from './components/RolesDashboard';
 import { DashboardView } from './components/DashboardView';
@@ -56,10 +59,15 @@ import {
   subscribeComments, 
   subscribeMeetings, 
   subscribeNotifications, 
+  subscribeIntegrationConnections,
+  subscribeUserCompliance,
   upsertTask, 
   upsertComment, 
-  upsertNotification 
+  upsertNotification,
+  upsertUserCompliance
 } from './lib/firestoreService';
+import { IntegrationConnection, UserIntegrationCompliance } from './types';
+import { Settings as SettingsIcon, User as UserIcon, LogOut, ChevronDown } from 'lucide-react';
 import { syncToGoogleCalendar } from './lib/workspace';
 
 import confetti from 'canvas-confetti';
@@ -123,38 +131,53 @@ export default function App() {
     return localStorage.getItem('mika_user_id') || INITIAL_USERS[0]?.id || 'u_principal';
   });
 
-  // Navigation State
+  // Navigation & View State
   const [activeTab, setActiveTab] = useState<SidebarTab>('dashboard');
+  const [authView, setAuthView] = useState<'landing' | 'signin' | 'create-org'>('landing');
+  const [createOrgPrefillGoogle, setCreateOrgPrefillGoogle] = useState<any | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
   const [activeJoinModalLink, setActiveJoinModalLink] = useState<JoinLink | null>(null);
   const [viewingProfileUser, setViewingProfileUser] = useState<User | null>(null);
   const [chatTargetUserId, setChatTargetUserId] = useState<string | null>(null);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+
+  // Live Integrations & Compliance State
+  const [integrationConnections, setIntegrationConnections] = useState<IntegrationConnection[]>([]);
+  const [userCompliances, setUserCompliances] = useState<UserIntegrationCompliance[]>([]);
 
   // Firestore Real-Time Subscriptions
   useEffect(() => {
-    const unsubTasks = subscribeTasks('org_oakridge', latestTasks => {
+    const orgId = organization?.id || 'org_oakridge';
+
+    const unsubTasks = subscribeTasks(orgId, latestTasks => {
       if (latestTasks && latestTasks.length > 0) {
         setTasks(latestTasks);
       }
     });
 
-    const unsubComments = subscribeComments('org_oakridge', latestComments => {
+    const unsubComments = subscribeComments(orgId, latestComments => {
       if (latestComments && latestComments.length > 0) {
         setComments(latestComments);
       }
     });
 
-    const unsubMeetings = subscribeMeetings('org_oakridge', latestMeetings => {
+    const unsubMeetings = subscribeMeetings(orgId, latestMeetings => {
       if (latestMeetings && latestMeetings.length > 0) {
         setMeetings(latestMeetings);
       }
     });
 
-    const unsubNotifications = subscribeNotifications('org_oakridge', latestNotifications => {
+    const unsubNotifications = subscribeNotifications(orgId, latestNotifications => {
       if (latestNotifications && latestNotifications.length > 0) {
         setNotifications(latestNotifications);
+      }
+    });
+
+    const unsubConns = subscribeIntegrationConnections(orgId, conns => {
+      if (conns) {
+        setIntegrationConnections(conns);
       }
     });
 
@@ -163,8 +186,19 @@ export default function App() {
       unsubComments();
       unsubMeetings();
       unsubNotifications();
+      unsubConns();
     };
-  }, []);
+  }, [organization?.id]);
+
+  useEffect(() => {
+    if (!currentUserId) return;
+    const unsubComp = subscribeUserCompliance(currentUserId, comps => {
+      if (comps) {
+        setUserCompliances(comps);
+      }
+    });
+    return () => unsubComp();
+  }, [currentUserId]);
 
   // Fetch initial backend state
   const refreshBackendState = async () => {
@@ -284,8 +318,10 @@ export default function App() {
   const handleSignOut = () => {
     setSession(null);
     setCurrentUserId(null);
+    setAuthView('landing');
     setActiveTab('dashboard');
     setSelectedTaskId(null);
+    setShowUserDropdown(false);
     localStorage.removeItem('mika_session');
     localStorage.removeItem('mika_user_id');
   };
@@ -542,16 +578,18 @@ export default function App() {
   };
 
   // Link Generation
-  const handleGenerateJoinLink = async (roleId: string, roleTitle: string, deptName: string, daysValid: number): Promise<JoinLink> => {
+  const handleGenerateJoinLink = async (roleId: string, roleTitle: string, deptName: string, daysValid: number, requiredIntegrations?: string[]): Promise<JoinLink> => {
     if (!currentUser) throw new Error('You must be logged in to generate invite links.');
 
-    const res = await fetch(`/api/orgs/org_oakridge/links`, {
+    const res = await fetch(`/api/orgs/${currentUser.orgId || 'org_oakridge'}/links`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         issuerUserId: currentUser.id,
+        targetRoleId: roleId,
         roleId,
-        validDays: daysValid
+        daysValid,
+        requiredIntegrations: requiredIntegrations || []
       })
     });
 
@@ -562,7 +600,7 @@ export default function App() {
 
     const newLink: JoinLink = {
       id: data.link.id,
-      orgId: data.link.orgId || 'org_oakridge',
+      orgId: data.link.orgId || currentUser.orgId || 'org_oakridge',
       roleId,
       roleTitle,
       deptName,
@@ -570,7 +608,8 @@ export default function App() {
       createdByUserId: currentUser.id,
       createdAt: data.link.createdAt,
       expiresAt: data.link.expiresAt,
-      useCount: data.link.useCount || 0
+      useCount: data.link.useCount || 0,
+      requiredIntegrations: data.requiredIntegrations || requiredIntegrations || []
     };
 
     setJoinLinks(prev => [newLink, ...prev]);
@@ -597,7 +636,7 @@ export default function App() {
     );
   }
 
-  // 2. If user is NOT authenticated, show AuthLanding
+  // 2. If user is NOT authenticated, show Mika 2.0 Auth Flow (Landing, Sign In, or Create Org)
   if (!currentUser) {
     const seedUsersData = users.map(u => {
       const asgn = assignments.find(a => a.userId === u.id && a.isActive);
@@ -614,13 +653,49 @@ export default function App() {
       };
     });
 
-    return (
-      <AuthLanding
-        onLoginSuccess={handleLoginSuccess}
-        onOpenJoinToken={token => setActiveJoinToken(token)}
-        seedUsers={seedUsersData}
-      />
-    );
+    if (authView === 'landing') {
+      return (
+        <LandingPage
+          onNavigateToSignIn={() => setAuthView('signin')}
+          onNavigateToCreateOrg={() => {
+            setCreateOrgPrefillGoogle(null);
+            setAuthView('create-org');
+          }}
+          onOpenJoinToken={token => setActiveJoinToken(token)}
+        />
+      );
+    }
+
+    if (authView === 'signin') {
+      return (
+        <SignInView
+          onBackToLanding={() => setAuthView('landing')}
+          onNavigateToCreateOrg={(googleData) => {
+            setCreateOrgPrefillGoogle(googleData || null);
+            setAuthView('create-org');
+          }}
+          onLoginSuccess={(user, sess) => handleLoginSuccess(user, sess, 'dashboard')}
+          seedUsers={seedUsersData}
+        />
+      );
+    }
+
+    if (authView === 'create-org') {
+      return (
+        <CreateOrgFlow
+          initialGoogleAccount={createOrgPrefillGoogle}
+          onBackToLanding={() => setAuthView('landing')}
+          onNavigateToSignIn={() => setAuthView('signin')}
+          onCreationComplete={(org, user, sess) => {
+            if (org) {
+              setOrganization(org);
+              localStorage.setItem('mika_org_data', JSON.stringify(org));
+            }
+            handleLoginSuccess(user, sess, 'dashboard');
+          }}
+        />
+      );
+    }
   }
 
   const handleFastSwitchUser = (userId: string) => {
@@ -684,6 +759,97 @@ export default function App() {
 
       {/* Main Content Stage */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative z-10 bg-[#F7F5F0]">
+        {/* Top Header Bar with active breadcrumb & Top-Right Avatar Entry Point */}
+        <header className="h-14 bg-white border-b border-[#DAD5C9] px-6 flex items-center justify-between shrink-0 z-20">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#8A8578]">
+              {organization?.name || 'Oakridge Academy'}
+            </span>
+            <span className="text-[#DAD5C9] font-mono">/</span>
+            <span className="text-xs font-mono font-bold text-[#1C2438] capitalize">
+              {activeTab}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Quick Settings Shortcut */}
+            <button
+              id="topbar-settings-button"
+              onClick={() => setActiveTab('settings')}
+              className={`p-2 rounded-xs border transition-colors cursor-pointer ${
+                activeTab === 'settings'
+                  ? 'bg-[#1C2438] text-white border-[#1C2438]'
+                  : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#F7F5F0] border-[#DAD5C9]'
+              }`}
+              title="Settings & Integrations"
+            >
+              <SettingsIcon className="w-4 h-4" />
+            </button>
+
+            {/* Top-Right Avatar Entry Point */}
+            <div className="relative">
+              <button
+                id="topbar-user-avatar-button"
+                onClick={() => setShowUserDropdown(prev => !prev)}
+                className="flex items-center gap-2 p-1.5 rounded-xs hover:bg-[#F7F5F0] border border-[#DAD5C9] transition-colors cursor-pointer"
+                title="Account Menu"
+              >
+                <div className="w-7 h-7 rounded-xs bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
+                  {currentUser.preferredName?.[0] || currentUser.fullName?.[0] || 'U'}
+                </div>
+                <span className="text-xs font-semibold text-[#1C2438] hidden sm:inline max-w-[120px] truncate">
+                  {currentUser.preferredName || currentUser.fullName}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#8A8578]" />
+              </button>
+
+              {showUserDropdown && (
+                <div className="absolute right-0 top-full mt-1.5 w-56 bg-white border border-[#DAD5C9] shadow-lg rounded-xs py-1.5 z-50 font-mono text-xs animate-in fade-in duration-100">
+                  <div className="px-3 py-2 border-b border-[#DAD5C9] bg-[#F7F5F0]">
+                    <div className="font-bold text-[#1C2438] truncate">{currentUser.fullName}</div>
+                    <div className="text-[10px] text-[#5C574B] truncate">{currentUser.email}</div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                      setViewingProfileUser(currentUser);
+                    }}
+                    className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
+                  >
+                    <UserIcon className="w-3.5 h-3.5 text-[#8A8578]" />
+                    <span>View Profile</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                      setActiveTab('settings');
+                    }}
+                    className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
+                  >
+                    <SettingsIcon className="w-3.5 h-3.5 text-[#8A8578]" />
+                    <span>Settings & Integrations</span>
+                  </button>
+
+                  <div className="border-t border-[#DAD5C9] my-1" />
+
+                  <button
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                      handleSignOut();
+                    }}
+                    className="w-full text-left px-3 py-2 hover:bg-[#FFF5F5] text-[#991B1B] flex items-center gap-2 cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-[#991B1B]" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {/* Part B1: Full-Page Task View Takes Over When Task is Selected */}
           {selectedTask ? (
@@ -845,6 +1011,20 @@ export default function App() {
                   onRemoveMember={handleRemoveMember}
                 />
               )}
+
+              {activeTab === 'settings' && (
+                <SettingsView
+                  currentUser={currentUser}
+                  currentOrg={organization}
+                  roles={roles}
+                  departments={departments}
+                  assignments={assignments}
+                  allUsers={users}
+                  connections={integrationConnections}
+                  userCompliances={userCompliances}
+                  onClose={() => setActiveTab('dashboard')}
+                />
+              )}
             </>
           )}
         </main>
@@ -912,6 +1092,21 @@ export default function App() {
             setAssignments(prev => [...prev, newAssignment]);
             setCurrentUserId(newUser.id);
             setActiveJoinModalLink(null);
+
+            if (userData.connectedIntegrations && organization?.id) {
+              Object.entries(userData.connectedIntegrations).forEach(([key, conn]) => {
+                const connInfo = conn as { accountLabel: string; connectedAt: string };
+                upsertUserCompliance({
+                  userId: newUser.id,
+                  orgId: organization.id,
+                  integrationKey: key,
+                  connectedAccountLabel: connInfo.accountLabel,
+                  connectedAt: connInfo.connectedAt,
+                  satisfiedAt: new Date().toISOString()
+                }).catch(console.warn);
+              });
+            }
+
             confetti({ particleCount: 50, spread: 70 });
           }}
         />

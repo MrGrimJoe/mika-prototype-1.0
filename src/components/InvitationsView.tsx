@@ -13,9 +13,11 @@ import {
   Building2, 
   ShieldCheck, 
   Share2,
-  Users
+  Users,
+  ShieldAlert
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { INTEGRATION_TOOLS } from '../lib/integrationService';
 
 interface InvitationsViewProps {
   currentUser: User;
@@ -24,7 +26,7 @@ interface InvitationsViewProps {
   allUsers: User[];
   assignments: Assignment[];
   joinLinks: JoinLink[];
-  onGenerateJoinLink: (roleId: string, roleTitle: string, deptName: string, daysValid: number) => Promise<JoinLink | null> | JoinLink | null;
+  onGenerateJoinLink: (roleId: string, roleTitle: string, deptName: string, daysValid: number, requiredIntegrations?: string[]) => Promise<JoinLink | null> | JoinLink | null;
   onSimulateJoin?: (roleId: string, deptId: string, user: { name: string; email: string }) => void;
 }
 
@@ -43,6 +45,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
   const [selectedDeptId, setSelectedDeptId] = useState<string>(allDepts[0]?.id || '');
   const [selectedRoleId, setSelectedRoleId] = useState<string>('');
   const [validityDays, setValidityDays] = useState<number>(7);
+  const [selectedRequiredTools, setSelectedRequiredTools] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -70,9 +73,10 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
     setIsGenerating(true);
     setMessage(null);
     try {
-      const created = await onGenerateJoinLink(role.id, role.title, dept.name, validityDays);
+      const created = await onGenerateJoinLink(role.id, role.title, dept.name, validityDays, selectedRequiredTools);
       if (created) {
         setMessage(`Invitation created for ${role.title}!`);
+        setSelectedRequiredTools([]);
         confetti({ particleCount: 30, spread: 60 });
       }
     } finally {
@@ -119,68 +123,115 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
           </div>
         </div>
 
-        <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
-              1. Department
-            </label>
-            <select
-              value={selectedDeptId}
-              onChange={e => {
-                setSelectedDeptId(e.target.value);
-                setSelectedRoleId('');
-              }}
-              className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] focus:border-[#1F2937] outline-hidden cursor-pointer"
-            >
-              {allDepts.map(d => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
-              2. Target Role
-            </label>
-            <select
-              value={selectedRoleId}
-              onChange={e => setSelectedRoleId(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] focus:border-[#1F2937] outline-hidden cursor-pointer"
-            >
-              <option value="">Select a role...</option>
-              {deptRoles.map(r => (
-                <option key={r.id} value={r.id}>
-                  {r.title} {r.isRoot ? '(Root Lead)' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
-              3. Link Validity
-            </label>
-            <div className="flex gap-2">
+        <form onSubmit={handleGenerate} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
+                1. Department
+              </label>
               <select
-                value={validityDays}
-                onChange={e => setValidityDays(Number(e.target.value))}
-                className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] outline-hidden cursor-pointer"
+                value={selectedDeptId}
+                onChange={e => {
+                  setSelectedDeptId(e.target.value);
+                  setSelectedRoleId('');
+                }}
+                className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] focus:border-[#1F2937] outline-hidden cursor-pointer"
               >
-                <option value={1}>24 Hours</option>
-                <option value={7}>7 Days</option>
-                <option value={30}>30 Days</option>
-                <option value={90}>90 Days</option>
+                {allDepts.map(d => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
               </select>
-              <button
-                type="submit"
-                disabled={!selectedRoleId || isGenerating}
-                className="px-4 py-2 bg-[#1F2937] hover:bg-[#111827] disabled:opacity-40 text-white rounded-xs text-xs font-mono uppercase tracking-wider font-bold transition-all cursor-pointer shrink-0 shadow-xs flex items-center gap-1.5"
+            </div>
+
+            <div>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
+                2. Target Role
+              </label>
+              <select
+                value={selectedRoleId}
+                onChange={e => setSelectedRoleId(e.target.value)}
+                className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] focus:border-[#1F2937] outline-hidden cursor-pointer"
               >
-                <Link2 className="w-3.5 h-3.5" />
-                <span>Generate</span>
-              </button>
+                <option value="">Select a role...</option>
+                {deptRoles.map(r => (
+                  <option key={r.id} value={r.id}>
+                    {r.title} {r.isRoot ? '(Root Lead)' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#4B5563] mb-1.5">
+                3. Link Validity
+              </label>
+              <div className="flex gap-2">
+                <select
+                  value={validityDays}
+                  onChange={e => setValidityDays(Number(e.target.value))}
+                  className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs text-[#111827] focus:ring-1 focus:ring-[#1F2937] outline-hidden cursor-pointer"
+                >
+                  <option value={1}>24 Hours</option>
+                  <option value={7}>7 Days</option>
+                  <option value={30}>30 Days</option>
+                  <option value={90}>90 Days</option>
+                </select>
+                <button
+                  type="submit"
+                  disabled={!selectedRoleId || isGenerating}
+                  className="px-4 py-2 bg-[#1F2937] hover:bg-[#111827] disabled:opacity-40 text-white rounded-xs text-xs font-mono uppercase tracking-wider font-bold transition-all cursor-pointer shrink-0 shadow-xs flex items-center gap-1.5"
+                >
+                  <Link2 className="w-3.5 h-3.5" />
+                  <span>Generate</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3.2: Require tool connections before joining */}
+          <div className="pt-3 border-t border-[#F3F4F6] space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#4B5563] flex items-center gap-1.5">
+                <ShieldAlert className="w-3.5 h-3.5 text-[#4B5563]" />
+                <span>Require tool connections before joining (Optional)</span>
+              </span>
+              <span className="text-[10px] font-mono text-[#6B7280]">
+                {selectedRequiredTools.length > 0 ? `${selectedRequiredTools.length} required` : 'None required'}
+              </span>
+            </div>
+            <p className="text-[11px] text-[#6B7280]">
+              Incoming members will be required to authenticate these accounts during the join flow before their role is activated.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pt-1">
+              {INTEGRATION_TOOLS.map(tool => {
+                const isChecked = selectedRequiredTools.includes(tool.key);
+                return (
+                  <label
+                    key={tool.key}
+                    className={`flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
+                      isChecked
+                        ? 'border-[#1F2937] bg-[#F9FAFB] text-[#111827] font-medium'
+                        : 'border-[#E5E7EB] hover:border-[#D1D5DB] text-[#4B5563]'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={e => {
+                        if (e.target.checked) {
+                          setSelectedRequiredTools(prev => [...prev, tool.key]);
+                        } else {
+                          setSelectedRequiredTools(prev => prev.filter(k => k !== tool.key));
+                        }
+                      }}
+                      className="rounded-xs border-[#D1D5DB] text-[#1F2937] focus:ring-0"
+                    />
+                    <span className="truncate">Require {tool.name}</span>
+                  </label>
+                );
+              })}
             </div>
           </div>
         </form>
@@ -232,7 +283,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                   key={link.id}
                   className="p-4 bg-white border border-[#E5E7EB] rounded-xs shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
-                  <div className="space-y-1 min-w-0 flex-1">
+                  <div className="space-y-1.5 min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm text-[#111827] truncate">
                         {link.roleTitle || role?.title || 'Target Role'}
@@ -241,6 +292,25 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                         • {link.deptName || dept?.name || 'Department'}
                       </span>
                     </div>
+
+                    {/* Required Integrations Badges */}
+                    {link.requiredIntegrations && link.requiredIntegrations.length > 0 && (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[10px] font-mono uppercase text-[#6B7280]">Requires:</span>
+                        {link.requiredIntegrations.map(k => {
+                          const tool = INTEGRATION_TOOLS.find(t => t.key === k);
+                          return (
+                            <span 
+                              key={k} 
+                              className="px-1.5 py-0.5 rounded-xs bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-[10px] font-medium"
+                            >
+                              {tool?.name || k}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-3 text-xs font-mono text-[#6B7280]">
                       <span className="truncate max-w-md bg-[#F9FAFB] px-2 py-0.5 rounded-xs border border-[#E5E7EB] text-[11px]">
                         {fullUrl}

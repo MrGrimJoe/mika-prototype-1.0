@@ -28,6 +28,8 @@ import {
   Department,
   Role,
   Assignment,
+  IntegrationConnection,
+  UserIntegrationCompliance,
 } from '../types';
 
 /* ==========================================================================
@@ -37,7 +39,7 @@ import {
 export async function upsertTask(task: Task): Promise<void> {
   try {
     const docRef = doc(db, 'tasks', task.id);
-    const payload = { ...task, orgId: task.orgId || 'org_school' };
+    const payload = { ...task };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `tasks/${task.id}`);
@@ -54,7 +56,7 @@ export async function removeTask(taskId: string): Promise<void> {
 }
 
 export function subscribeTasks(
-  orgId: string = 'org_school',
+  orgId: string,
   onTasks: (tasks: Task[]) => void,
   deptId?: string,
   onError?: (err: any) => void
@@ -88,7 +90,7 @@ export function subscribeTasks(
 export async function upsertComment(comment: Comment): Promise<void> {
   try {
     const docRef = doc(db, 'comments', comment.id);
-    const payload = { ...comment, orgId: comment.orgId || 'org_school' };
+    const payload = { ...comment };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `comments/${comment.id}`);
@@ -96,7 +98,7 @@ export async function upsertComment(comment: Comment): Promise<void> {
 }
 
 export function subscribeComments(
-  orgId: string = 'org_school',
+  orgId: string,
   onComments: (comments: Comment[]) => void
 ) {
   try {
@@ -122,7 +124,7 @@ export function subscribeComments(
 export async function upsertMeeting(meeting: Meeting): Promise<void> {
   try {
     const docRef = doc(db, 'meetings', meeting.id);
-    const payload = { ...meeting, orgId: meeting.orgId || 'org_school' };
+    const payload = { ...meeting };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `meetings/${meeting.id}`);
@@ -130,7 +132,7 @@ export async function upsertMeeting(meeting: Meeting): Promise<void> {
 }
 
 export function subscribeMeetings(
-  orgId: string = 'org_school',
+  orgId: string,
   onMeetings: (meetings: Meeting[]) => void
 ) {
   try {
@@ -156,7 +158,7 @@ export function subscribeMeetings(
 export async function upsertFileItem(file: FileItem): Promise<void> {
   try {
     const docRef = doc(db, 'files', file.id);
-    const payload = { ...file, orgId: file.orgId || 'org_school' };
+    const payload = { ...file };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `files/${file.id}`);
@@ -176,7 +178,7 @@ export const uploadMikaFile = upsertFileItem;
 export const deleteMikaFile = removeFileItem;
 
 export function subscribeFiles(
-  orgId: string = 'org_school',
+  orgId: string,
   onFiles: (files: FileItem[]) => void,
   deptId?: string
 ) {
@@ -205,7 +207,7 @@ export function subscribeFiles(
 export async function upsertNotification(notif: OrgNotification): Promise<void> {
   try {
     const docRef = doc(db, 'notifications', notif.id);
-    const payload = { ...notif, orgId: notif.orgId || 'org_school' };
+    const payload = { ...notif };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `notifications/${notif.id}`);
@@ -213,7 +215,7 @@ export async function upsertNotification(notif: OrgNotification): Promise<void> 
 }
 
 export function subscribeNotifications(
-  orgId: string = 'org_school',
+  orgId: string,
   onNotifs: (notifs: OrgNotification[]) => void,
   userId?: string
 ) {
@@ -242,7 +244,7 @@ export function subscribeNotifications(
 export async function upsertMessage(message: Message): Promise<void> {
   try {
     const docRef = doc(db, 'messages', message.id);
-    const payload = { ...message, orgId: message.orgId || 'org_school' };
+    const payload = { ...message };
     await setDoc(docRef, payload, { merge: true });
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, `messages/${message.id}`);
@@ -250,7 +252,7 @@ export async function upsertMessage(message: Message): Promise<void> {
 }
 
 export function subscribeMessages(
-  orgId: string = 'org_school',
+  orgId: string,
   onMessages: (messages: Message[]) => void,
   channelId?: string
 ) {
@@ -266,6 +268,82 @@ export function subscribeMessages(
         onMessages(msgs);
       },
       (err) => console.warn('Firestore messages subscription notice:', err)
+    );
+  } catch (err) {
+    return () => {};
+  }
+}
+
+/* ==========================================================================
+   INTEGRATION CONNECTIONS (Section 2)
+   ========================================================================== */
+
+export async function upsertIntegrationConnection(conn: IntegrationConnection): Promise<void> {
+  try {
+    const docRef = doc(db, 'integration_connections', conn.id);
+    await setDoc(docRef, conn, { merge: true });
+  } catch (err) {
+    handleFirestoreError(err, OperationType.WRITE, `integration_connections/${conn.id}`);
+  }
+}
+
+export async function removeIntegrationConnection(connId: string): Promise<void> {
+  try {
+    const docRef = doc(db, 'integration_connections', connId);
+    await deleteDoc(docRef);
+  } catch (err) {
+    handleFirestoreError(err, OperationType.DELETE, `integration_connections/${connId}`);
+  }
+}
+
+export function subscribeIntegrationConnections(
+  orgId: string,
+  onConns: (conns: IntegrationConnection[]) => void
+) {
+  try {
+    const colRef = collection(db, 'integration_connections');
+    const q = query(colRef, where('orgId', '==', orgId));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const conns = snapshot.docs.map((d) => d.data() as IntegrationConnection);
+        onConns(conns);
+      },
+      (err) => console.warn('Firestore integration_connections subscription notice:', err)
+    );
+  } catch (err) {
+    return () => {};
+  }
+}
+
+/* ==========================================================================
+   USER INTEGRATION COMPLIANCE (Section 3)
+   ========================================================================== */
+
+export async function upsertUserCompliance(comp: UserIntegrationCompliance): Promise<void> {
+  const docId = comp.id || `${comp.userId}_${comp.integrationKey}`;
+  try {
+    const docRef = doc(db, 'user_compliance', docId);
+    await setDoc(docRef, { ...comp, id: docId }, { merge: true });
+  } catch (err) {
+    handleFirestoreError(err, OperationType.WRITE, `user_compliance/${docId}`);
+  }
+}
+
+export function subscribeUserCompliance(
+  userId: string,
+  onCompliances: (comps: UserIntegrationCompliance[]) => void
+) {
+  try {
+    const colRef = collection(db, 'user_compliance');
+    const q = query(colRef, where('userId', '==', userId));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const comps = snapshot.docs.map((d) => d.data() as UserIntegrationCompliance);
+        onCompliances(comps);
+      },
+      (err) => console.warn('Firestore user_compliance subscription notice:', err)
     );
   } catch (err) {
     return () => {};

@@ -80,6 +80,7 @@ export interface DbInviteLink {
   created_at: string;
   role_title?: string;
   dept_name?: string;
+  required_integrations?: string[];
 }
 
 export interface DbSession {
@@ -687,6 +688,7 @@ class Database {
     created_by_user_id: string;
     days_valid: number;
     token?: string;
+    required_integrations?: string[];
   }): DbInviteLink {
     const token = linkData.token || `join_${Math.random().toString(36).substring(2, 10)}`;
     const role = this.roles.get(linkData.target_role_id);
@@ -702,7 +704,8 @@ class Database {
       expires_at: new Date(Date.now() + linkData.days_valid * 86400000).toISOString(),
       created_at: new Date().toISOString(),
       role_title: role?.name || 'Member Role',
-      dept_name: dept?.name || 'Department'
+      dept_name: dept?.name || 'Department',
+      required_integrations: linkData.required_integrations || []
     };
 
     this.inviteLinks.set(token, link);

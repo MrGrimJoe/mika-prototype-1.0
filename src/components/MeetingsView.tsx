@@ -68,6 +68,11 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
     setIsStarting(true);
     setErrorMessage(null);
+    if (!currentUser?.orgId) {
+      setErrorMessage('Invalid session: User organization membership is missing. Please sign in again.');
+      return;
+    }
+
     const dept = allDepts.find(d => d.id === deptId);
 
     // Get all members assigned to this department
@@ -90,7 +95,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
       const newMeeting: Meeting = {
         id: `meet-${Date.now()}`,
-        orgId: dept?.orgId || 'org_school',
+        orgId: currentUser.orgId,
         deptId: deptId,
         deptName: dept?.name || 'Department',
         title: meetingTitle.trim(),
@@ -111,7 +116,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
         if (memberId !== currentUser.id) {
           await upsertNotification({
             id: `notif-meet-${Date.now()}-${memberId}`,
-            orgId: currentUser.orgId || 'org_oakridge',
+            orgId: currentUser.orgId,
             userId: memberId,
             title: `Meeting started in ${dept?.name || 'Department'}`,
             message: `${currentUser.fullName} has started a live Google Meet: "${meetingTitle.trim()}". Click to join now.`,

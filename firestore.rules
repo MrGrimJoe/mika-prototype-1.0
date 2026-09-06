@@ -94,5 +94,16 @@ service cloud.firestore {
       allow create: if isSignedIn() && (!('orgId' in request.resource.data) || canWriteToOrg(request.resource.data.orgId));
       allow update, delete: if isSignedIn() && (!('orgId' in resource.data) || isOrgMember(resource.data.orgId));
     }
+
+    match /integration_connections/{connId} {
+      allow read: if isSignedIn() && (resource == null || isOrgMember(resource.data.orgId));
+      allow create: if isSignedIn() && canWriteToOrg(request.resource.data.orgId);
+      allow update, delete: if isSignedIn() && isOrgMember(resource.data.orgId);
+    }
+
+    match /user_compliance/{complianceId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
   }
 }

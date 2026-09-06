@@ -18,9 +18,15 @@ import {
   HelpCircle,
   FileCheck,
   CheckCircle2,
-  Wand2
+  Wand2,
+  Info
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { INTEGRATION_TOOLS } from '../lib/integrationService';
+import { IntegrationConnection, Role, Department } from '../types';
+import { OAuthConnectModal } from './OAuthConnectModal';
+import { IntegrationChecklist } from './IntegrationChecklist';
+import { IntegrationAccessConfigModal } from './IntegrationAccessConfigModal';
 
 interface OnboardingWalkthroughProps {
   onComplete: () => void;
@@ -45,12 +51,18 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [aiCustomOrgName, setAiCustomOrgName] = useState('');
 
+  // Org Creation Tools & Integrations State (Section 2.1)
+  const [connectedTools, setConnectedTools] = useState<IntegrationConnection[]>([]);
+  const [subStepWhoGetsAccess, setSubStepWhoGetsAccess] = useState(false);
+  const [walkthroughNotice, setWalkthroughNotice] = useState<string | null>(null);
+
   const stepLabels = [
     'Landing',
     'Choose start',
     'Build the org',
     'Size and storage',
-    'Root admin view',
+    'Connect tools',
+    'Authority cascade',
     'Staff task feed'
   ];
 
@@ -59,8 +71,45 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
   const storageCost = bringOwnStorage ? 0 : (storageGiB * (20 / 250));
   const totalMonthly = peopleCost + storageCost;
 
+  // Mock roles and departments for 'Who gets to use these?' in walkthrough
+  const demoRoles: Role[] = [
+    { id: 'role_principal', orgId: 'org_demo', slug: 'principal', isRoot: true, title: 'Principal', deptId: 'dept_leadership', roleType: 'master_root' },
+    { id: 'role_sec_head', orgId: 'org_demo', slug: 'sec_head', isRoot: false, isSectionRoot: true, title: 'Middle School Section Head', deptId: 'dept_middle_sec', roleType: 'section_root' },
+    { id: 'role_c6_lead', orgId: 'org_demo', slug: 'c6_lead', isRoot: true, title: 'Class 6 Lead', deptId: 'dept_c6', roleType: 'dept_root' },
+    { id: 'role_math_t', orgId: 'org_demo', slug: 'math_t', isRoot: false, title: 'Math Teacher', deptId: 'dept_c6', roleType: 'member' },
+    { id: 'role_eng_t', orgId: 'org_demo', slug: 'eng_t', isRoot: false, title: 'English Teacher', deptId: 'dept_c6', roleType: 'member' },
+    { id: 'role_sci_t', orgId: 'org_demo', slug: 'sci_t', isRoot: false, title: 'Science Teacher', deptId: 'dept_c7', roleType: 'member' },
+  ];
+
+  const demoDepts: Department[] = [
+    { id: 'dept_leadership', orgId: 'org_demo', slug: 'leadership', type: 'department', name: 'Executive Leadership', createdAt: new Date().toISOString(), isTemporary: false },
+    { id: 'dept_middle_sec', orgId: 'org_demo', slug: 'middle-sec', type: 'section', name: 'Middle School Section', createdAt: new Date().toISOString(), isTemporary: false },
+    { id: 'dept_c6', orgId: 'org_demo', slug: 'c6', type: 'department', name: 'Class 6 Department', createdAt: new Date().toISOString(), isTemporary: false },
+    { id: 'dept_c7', orgId: 'org_demo', slug: 'c7', type: 'department', name: 'Class 7 Department', createdAt: new Date().toISOString(), isTemporary: false },
+  ];
+
   const handleNext = () => {
-    if (currentStep < 5) {
+    // Check if at Connect Tools step (Step 4)
+    if (currentStep === 4 && !subStepWhoGetsAccess) {
+      if (connectedTools.length > 0) {
+        // At least one tool connected: show 'Who gets to use these?'
+        setSubStepWhoGetsAccess(true);
+        return;
+      } else {
+        // Nothing checked: non-blocking subtle notice
+        setWalkthroughNotice("You haven't connected any tools yet. You can add them anytime from Settings.");
+        setCurrentStep(5);
+        return;
+      }
+    }
+
+    if (currentStep === 4 && subStepWhoGetsAccess) {
+      setSubStepWhoGetsAccess(false);
+      setCurrentStep(5);
+      return;
+    }
+
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else {
       confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
@@ -69,9 +118,31 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
   };
 
   const handleBack = () => {
+    if (currentStep === 4 && subStepWhoGetsAccess) {
+      setSubStepWhoGetsAccess(false);
+      return;
+    }
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleConnectInWalkthrough = (toolKey: string, accountLabel: string) => {
+    const newConn: IntegrationConnection = {
+      id: `conn-walkthrough-${toolKey}`,
+      integrationKey: toolKey,
+      orgId: 'org_demo',
+      scope: 'org',
+      accessRoleIds: 'all',
+      connectedByUserId: 'user_creator',
+      accountLabel,
+      connectedAt: new Date().toISOString()
+    };
+    setConnectedTools(prev => [...prev.filter(c => c.integrationKey !== toolKey), newConn]);
+  };
+
+  const handleDisconnectInWalkthrough = (connId: string) => {
+    setConnectedTools(prev => prev.filter(c => c.id !== connId));
   };
 
   const handleCopyDemoLink = () => {
@@ -102,10 +173,10 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white border border-stone-300 rounded-2xl shadow-xl overflow-hidden my-4">
+    <div className="max-w-2xl mx-auto bg-white border border-stone-300 rounded-2xl shadow-xl overflow-hidden my-4">
       {/* Progress Dots Bar */}
       <div className="flex gap-1.5 p-4 pt-5 px-6">
-        {[0, 1, 2, 3, 4, 5].map(idx => (
+        {[0, 1, 2, 3, 4, 5, 6].map(idx => (
           <div
             key={idx}
             className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
@@ -116,7 +187,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
       </div>
 
       <p className="text-[11px] font-mono-code text-stone-500 px-6 uppercase tracking-wider">
-        {currentStep + 1} / 6 · {stepLabels[currentStep]}
+        {currentStep + 1} / 7 · {stepLabels[currentStep]}
       </p>
 
       <div className="p-6">
@@ -380,15 +451,70 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
           </div>
         )}
 
-        {/* STEP 4: Root Admin View & Invites (Part VII §8) */}
-        {currentStep === 4 && (
+        {/* STEP 4: Connect Tools & Integrations (Section 2.1) */}
+        {currentStep === 4 && !subStepWhoGetsAccess && (
+          <div className="space-y-4">
+            <div>
+              <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+                Connect Tools & Integrations
+              </h2>
+              <p className="text-xs text-stone-600">
+                Connect Google Workspace, GitHub, Figma, and Canva org-wide. Connecting is optional — you can skip or add tools anytime later from Settings.
+              </p>
+            </div>
+
+            <IntegrationChecklist
+              connections={connectedTools}
+              scope="org"
+              isEnterpriseOrg={bringOwnStorage}
+              onConnect={handleConnectInWalkthrough}
+              onDisconnect={handleDisconnectInWalkthrough}
+            />
+
+            <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-[11px] text-stone-500 flex items-center gap-2">
+              <Info className="w-4 h-4 text-stone-400 shrink-0" />
+              <span>
+                Connected tools will be configured org-wide. In the next step, you can choose whether all roles or specific roles get access.
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 4 SUB-STEP: Who gets to use these? (Section 2.1 / 2.2) */}
+        {currentStep === 4 && subStepWhoGetsAccess && (
+          <div>
+            <IntegrationAccessConfigModal
+              connections={connectedTools}
+              roles={demoRoles}
+              departments={demoDepts}
+              isInline={true}
+              onSave={(updated) => {
+                setConnectedTools(updated);
+              }}
+              onContinue={() => {
+                setSubStepWhoGetsAccess(false);
+                setCurrentStep(5);
+              }}
+            />
+          </div>
+        )}
+
+        {/* STEP 5: Root Admin View & Invites (Part VII §8) */}
+        {currentStep === 5 && (
           <div>
             <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
               Your people & authority cascade
             </h2>
-            <p className="text-xs text-stone-600 mb-4">
+            <p className="text-xs text-stone-600 mb-3">
               Invite links cascade strictly along the authority chain. Master roots can issue for anyone; sub-roots issue only for roles beneath them.
             </p>
+
+            {walkthroughNotice && (
+              <div className="mb-4 p-2.5 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-center gap-2 animate-in fade-in">
+                <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>{walkthroughNotice}</span>
+              </div>
+            )}
 
             <div className="space-y-2 mb-4">
               <div className="flex items-center justify-between p-3 rounded-lg bg-[#FAF9F6] border border-stone-200">
@@ -440,8 +566,8 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
           </div>
         )}
 
-        {/* STEP 5: Staff Task Feed (Part IV §6) */}
-        {currentStep === 5 && (
+        {/* STEP 6: Staff Task Feed (Part IV §6) */}
+        {currentStep === 6 && (
           <div>
             <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
               Your tasks (Employee Feed)
@@ -450,21 +576,13 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
               math-teacher · Class 6 (Single surface view of deliverables)
             </p>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <div className="bg-white border-l-4 border-l-[#DC2626] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-semibold text-stone-900">Submit Q1 exam draft</h4>
-                  <span className="text-[10px] text-rose-600 font-medium">Due Fri</span>
+                  <h4 className="text-xs font-semibold text-stone-900">Term 2 Exam Math Questions</h4>
+                  <span className="text-[10px] text-red-600 font-semibold font-mono-code">DUE TOMORROW</span>
                 </div>
-                <p className="text-[11px] text-stone-500 mt-1">Pending action · Assigned by Marcus Hayes</p>
-              </div>
-
-              <div className="bg-white border-l-4 border-l-[#2563EB] border border-stone-200 rounded-lg p-3 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-semibold text-stone-900">Grade midterm papers</h4>
-                  <span className="text-[10px] text-blue-600 font-medium">Help requested</span>
-                </div>
-                <p className="text-[11px] text-stone-500 mt-1">Lead notified · Comment thread open</p>
+                <p className="text-[11px] text-stone-500 mt-1">Delegated by Section Head · Middle School</p>
               </div>
 
               <div className="bg-white border-l-4 border-l-[#16A34A] border border-stone-200 rounded-lg p-3 shadow-xs">
@@ -493,9 +611,13 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
           onClick={handleNext}
           className="px-6 py-2 bg-[#2F3B7A] hover:bg-[#232c5c] text-white text-xs font-semibold rounded-lg shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer"
         >
-          {currentStep === 5 ? (
+          {currentStep === 6 ? (
             <>
               Launch Workspace <CheckCircle2 className="w-4 h-4" />
+            </>
+          ) : currentStep === 4 && !subStepWhoGetsAccess ? (
+            <>
+              Continue <ArrowRight className="w-3.5 h-3.5" />
             </>
           ) : (
             <>

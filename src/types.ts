@@ -219,6 +219,7 @@ export interface JoinLink {
   useCount: number;
   createdByUserId: string;
   createdAt: string;
+  requiredIntegrations?: string[];
 }
 
 export interface OrgNotification {
@@ -235,6 +236,42 @@ export interface OrgNotification {
   createdAt?: string;
   read: boolean;
   metadata?: Record<string, any>;
+}
+
+export type IntegrationKey = 
+  | 'google_drive' 
+  | 'github' 
+  | 'figma' 
+  | 'canva' 
+  | 'google_calendar' 
+  | 'google_meet' 
+  | 'google_gmail' 
+  | 'google_tasks' 
+  | 'google_forms' 
+  | 'google_classroom' 
+  | 'google_keep'
+  | string;
+
+export interface IntegrationConnection {
+  id: string;
+  integrationKey: IntegrationKey;
+  orgId: string;
+  scope: 'org' | 'root';
+  scopeRootUserId?: string;   // set when scope === 'root'
+  accessRoleIds: 'all' | string[];  // 'all' or list of roleIds/deptIds
+  connectedByUserId: string;
+  accountLabel: string;       // connected account username or email shown in UI
+  connectedAt: string;
+}
+
+export interface UserIntegrationCompliance {
+  id?: string;
+  userId: string;
+  orgId: string;
+  integrationKey: string;
+  connectedAccountLabel?: string;
+  connectedAt?: string;
+  satisfiedAt: string;
 }
 
 export interface ConnectedAppInfo {

@@ -11,11 +11,12 @@ import {
   PanelLeft,
   Layers,
   UserPlus,
-  ShieldCheck
+  ShieldCheck,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import { User, Role, Department } from '../../types';
 
-export type SidebarTab = 'dashboard' | 'tasks' | 'team' | 'files' | 'chat' | 'invites' | 'meetings' | 'admin';
+export type SidebarTab = 'dashboard' | 'tasks' | 'team' | 'files' | 'chat' | 'invites' | 'meetings' | 'admin' | 'settings';
 
 interface AppSidebarProps {
   currentUser: User;
@@ -34,6 +35,8 @@ interface AppSidebarProps {
   onOpenWalkthrough?: () => void;
   onCreateTaskClick?: () => void;
   onViewProfile?: (user: User) => void;
+  onOpenSettings?: () => void;
+  isAnyRoot?: boolean;
   orgName?: string;
 }
 
@@ -51,6 +54,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   onSwitchUser,
   onSignOut,
   onViewProfile,
+  onOpenSettings,
+  isAnyRoot = false,
   orgName = 'Oakridge Academy'
 }) => {
   const [showPersonaMenu, setShowPersonaMenu] = useState(false);
@@ -101,10 +106,10 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       icon: UserPlus
     },
     {
-      id: 'admin' as const,
-      label: 'Admin & Integrations',
-      shortLabel: 'Admin',
-      icon: ShieldCheck
+      id: 'settings' as const,
+      label: 'Settings',
+      shortLabel: 'Settings',
+      icon: SettingsIcon
     }
   ];
 
@@ -262,13 +267,25 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
         </button>
 
         {!isCollapsed && (
-          <button
-            onClick={() => setShowPersonaMenu(!showPersonaMenu)}
-            className="p-1.5 text-[#8A8578] hover:text-[#1C2438] hover:bg-[#F7F5F0] rounded-xs transition-colors cursor-pointer"
-            title="Switch active user identity (Test Mode)"
-          >
-            <ChevronDown className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-1">
+            {isAnyRoot && onOpenSettings && (
+              <button
+                id="sidebar-gear-settings-btn"
+                onClick={onOpenSettings}
+                className="p-1.5 text-[#8A8578] hover:text-[#1C2438] hover:bg-[#F7F5F0] rounded-xs transition-colors cursor-pointer"
+                title="Settings & Integrations"
+              >
+                <SettingsIcon className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <button
+              onClick={() => setShowPersonaMenu(!showPersonaMenu)}
+              className="p-1.5 text-[#8A8578] hover:text-[#1C2438] hover:bg-[#F7F5F0] rounded-xs transition-colors cursor-pointer"
+              title="Switch active user identity (Test Mode)"
+            >
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+          </div>
         )}
 
         {showPersonaMenu && (

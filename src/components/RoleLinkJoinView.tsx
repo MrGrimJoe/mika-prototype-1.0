@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { signInWithGooglePopup } from '../lib/firebase';
 import { 
   Link2, 
@@ -11,9 +11,14 @@ import {
   AlertCircle,
   HelpCircle,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  Check,
+  ShieldAlert
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { INTEGRATION_TOOLS, IntegrationToolDefinition } from '../lib/integrationService';
+import { OAuthConnectModal } from './OAuthConnectModal';
+import { upsertUserCompliance } from '../lib/firestoreService';
 
 interface RoleLinkJoinViewProps {
   token: string;
@@ -33,6 +38,7 @@ interface ResolvedLink {
   expiresAt: string;
   isExpired: boolean;
   valid: boolean;
+  requiredIntegrations?: string[];
 }
 
 export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
@@ -61,6 +67,22 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
   // Existing account merge prompt state
   const [existingAccountData, setExistingAccountData] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Integration gating state (Section 3.3)
+  const [connectedIntegrations, setConnectedIntegrations] = useState<Record<string, { accountLabel: string; connectedAt: string }>>({});
+  const [connectingTool, setConnectingTool] = useState<IntegrationToolDefinition | null>(null);
+
+  const requiredKeys = useMemo(() => linkInfo?.requiredIntegrations || [], [linkInfo]);
+  const requiredToolsList = useMemo(() => {
+    return requiredKeys
+      .map(key => INTEGRATION_TOOLS.find(t => t.key === key))
+      .filter(Boolean) as IntegrationToolDefinition[];
+  }, [requiredKeys]);
+
+  const allRequirementsSatisfied = useMemo(() => {
+    if (requiredKeys.length === 0) return true;
+    return requiredKeys.every(k => !!connectedIntegrations[k]);
+  }, [requiredKeys, connectedIntegrations]);
 
   // Fetch link info on mount
   useEffect(() => {
@@ -175,6 +197,24 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
       }
 
       confetti({ particleCount: 50, spread: 70 });
+
+      // Persist user compliance records to Firestore
+      if (data.user?.id && linkInfo?.orgId) {
+        for (const key of requiredKeys) {
+          const conn = connectedIntegrations[key];
+          if (conn) {
+            upsertUserCompliance({
+              userId: data.user.id,
+              orgId: linkInfo.orgId,
+              integrationKey: key,
+              connectedAccountLabel: conn.accountLabel,
+              connectedAt: conn.connectedAt,
+              satisfiedAt: new Date().toISOString()
+            }).catch(console.warn);
+          }
+        }
+      }
+
       onJoinSuccess(data.user, data.session);
     } catch (err: any) {
       setError(err.message || 'Signup failed');
@@ -208,6 +248,24 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
       }
 
       confetti({ particleCount: 60, spread: 80 });
+
+      // Persist user compliance records to Firestore
+      if (data.user?.id && linkInfo?.orgId) {
+        for (const key of requiredKeys) {
+          const conn = connectedIntegrations[key];
+          if (conn) {
+            upsertUserCompliance({
+              userId: data.user.id,
+              orgId: linkInfo.orgId,
+              integrationKey: key,
+              connectedAccountLabel: conn.accountLabel,
+              connectedAt: conn.connectedAt,
+              satisfiedAt: new Date().toISOString()
+            }).catch(console.warn);
+          }
+        }
+      }
+
       onJoinSuccess(data.user, data.session);
     } catch (err: any) {
       setError(err.message || 'Failed to merge role');
@@ -218,6 +276,85 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
   const handleCancelMerge = () => {
     setExistingAccountData(null);
     setGoogleAuthData(null);
+  };
+
+  const renderRequiredConnectionsCard = () => {
+    if (requiredToolsList.length === 0) return null;
+
+    return (
+      <div className="p-4 bg-stone-50 border border-stone-200 rounded-xs space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+            <ShieldAlert className="w-4 h-4 text-amber-600" />
+            <span>Required to activate this role</span>
+          </div>
+          <span className="text-[10px] font-mono">
+            {allRequirementsSatisfied ? (
+              <span className="text-emerald-700 font-bold flex items-center gap-1">
+                <Check className="w-3 h-3 text-emerald-600" />
+                All Connected
+              </span>
+            ) : (
+              <span className="text-amber-800 font-semibold">
+                {Object.keys(connectedIntegrations).length}/{requiredToolsList.length} Connected
+              </span>
+            )}
+          </span>
+        </div>
+
+        <p className="text-[11px] text-stone-600">
+          Your team lead requires these accounts to be connected before your role is activated.
+        </p>
+
+        <div className="space-y-2 pt-1">
+          {requiredToolsList.map((tool) => {
+            const conn = connectedIntegrations[tool.key];
+            return (
+              <div
+                key={tool.key}
+                className="flex items-center justify-between p-2.5 bg-white border border-stone-200 rounded-xs text-xs shadow-2xs"
+              >
+                <div className="min-w-0 flex-1 mr-3">
+                  <div className="font-semibold text-stone-900 truncate flex items-center gap-1.5">
+                    <span>{tool.name}</span>
+                    <span className="text-[10px] text-stone-500 font-normal">({tool.category})</span>
+                  </div>
+                  <div className="text-[10px] text-stone-600 truncate mt-0.5">
+                    {conn ? (
+                      <span className="text-emerald-700 font-medium flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                        Connected as {conn.accountLabel}
+                      </span>
+                    ) : (
+                      <span className="text-amber-800 font-mono">
+                        (not connected)
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  {conn ? (
+                    <span className="px-2.5 py-1 text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xs flex items-center gap-1">
+                      <Check className="w-3 h-3 text-emerald-600" />
+                      Connected
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConnectingTool(tool)}
+                      className="px-3 py-1.5 bg-[#1A1A1A] hover:bg-stone-800 text-white text-xs font-mono uppercase tracking-wider font-semibold rounded-xs transition-colors cursor-pointer"
+                    >
+                      Connect Account
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -359,12 +496,19 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 </p>
               </div>
 
+              {/* Required Integrations Gating Card */}
+              {renderRequiredConnectionsCard()}
+
               <div className="flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={handleConfirmMerge}
-                  disabled={submitting}
-                  className="w-full py-2.5 bg-[#1A1A1A] text-white text-xs font-mono uppercase tracking-wider font-semibold hover:bg-[#333333] transition-colors flex items-center justify-center gap-2"
+                  disabled={submitting || !allRequirementsSatisfied}
+                  className={`w-full py-2.5 text-xs font-mono uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 ${
+                    !allRequirementsSatisfied
+                      ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
+                      : 'bg-[#1A1A1A] text-white hover:bg-[#333333] cursor-pointer'
+                  }`}
                 >
                   {submitting ? 'Merging Role...' : 'Yes, Add Role to My Account'}
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -510,10 +654,17 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 </span>
               </div>
 
+              {/* Required Integrations Gating Card */}
+              {renderRequiredConnectionsCard()}
+
               <button
                 type="submit"
-                disabled={submitting}
-                className="w-full py-2.5 bg-[#1A1A1A] text-white text-xs font-mono uppercase tracking-wider font-semibold hover:bg-[#333333] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                disabled={submitting || !allRequirementsSatisfied}
+                className={`w-full py-2.5 text-xs font-mono uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 ${
+                  !allRequirementsSatisfied
+                    ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
+                    : 'bg-[#1A1A1A] text-white hover:bg-[#333333] cursor-pointer'
+                }`}
               >
                 {submitting ? 'Creating Account & Binding...' : 'Accept Assignment & Enter Dashboard'}
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -537,6 +688,26 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
         </div>
       </div>
+
+      {/* OAuth Connect Modal for Required Integrations */}
+      {connectingTool && (
+        <OAuthConnectModal
+          tool={connectingTool}
+          scope="root"
+          defaultAccount={googleAuthData?.email || ''}
+          onClose={() => setConnectingTool(null)}
+          onSuccess={(accountLabel) => {
+            setConnectedIntegrations((prev) => ({
+              ...prev,
+              [connectingTool.key]: {
+                accountLabel,
+                connectedAt: new Date().toISOString(),
+              },
+            }));
+            setConnectingTool(null);
+          }}
+        />
+      )}
     </div>
   );
 };
