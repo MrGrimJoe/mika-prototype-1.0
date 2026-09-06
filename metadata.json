@@ -1,0 +1,6 @@
+{
+  "name": "Mika",
+  "description": "Recursive organizational management system with deterministic authority, task management, and integration layer for GitHub, Figma, Canva, and Google Workspace.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

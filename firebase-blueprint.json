@@ -1,0 +1,235 @@
+{
+  "entities": {
+    "Organization": {
+      "title": "Organization",
+      "description": "Root organization record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "masterRootUserId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" },
+        "storageType": { "type": "string", "enum": ["drive", "mika", "self_host"] },
+        "teamSize": { "type": "number" },
+        "storageGiB": { "type": "number" },
+        "pricingMonthly": { "type": "number" }
+      },
+      "required": ["id", "name", "masterRootUserId"]
+    },
+    "Department": {
+      "title": "Department",
+      "description": "Department or section in the organization",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["department", "section", "subject", "temp"] },
+        "rootRoleId": { "type": "string", "maxLength": 128 },
+        "parentDeptId": { "type": "string", "maxLength": 128 },
+        "groupedDeptIds": { "type": "array" },
+        "isTemporary": { "type": "boolean" },
+        "isArchived": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "orgId", "name", "type"]
+    },
+    "Role": {
+      "title": "Role",
+      "description": "Organizational role definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "deptId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "isRoot": { "type": "boolean" },
+        "isSectionRoot": { "type": "boolean" },
+        "roleType": { "type": "string", "enum": ["master_root", "dept_root", "section_root", "subject_root", "member"] },
+        "description": { "type": "string", "maxLength": 1000 }
+      },
+      "required": ["id", "orgId", "deptId", "title", "roleType"]
+    },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Assignment of a user to a role within a department",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "roleId": { "type": "string", "maxLength": 128 },
+        "deptId": { "type": "string", "maxLength": 128 },
+        "validFrom": { "type": "string" },
+        "validTo": { "type": "string" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["id", "userId", "roleId", "deptId", "isActive"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Authoritative task with 6-state lifecycle",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "deptId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 300 },
+        "description": { "type": "string", "maxLength": 5000 },
+        "assignedByUserId": { "type": "string", "maxLength": 128 },
+        "assignedToRoleId": { "type": "string", "maxLength": 128 },
+        "assignedToUserId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["pending", "help", "submitted", "done", "expired", "rejected"] },
+        "confirmationMode": { "type": "string", "enum": ["file", "yes_no"] },
+        "dueDate": { "type": "string" },
+        "calendarEventId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "rejectionReason": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "orgId", "deptId", "title", "assignedByUserId", "assignedToRoleId", "status"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Follow-up thread on a task",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "taskId": { "type": "string", "maxLength": 128 },
+        "authorUserId": { "type": "string", "maxLength": 128 },
+        "authorName": { "type": "string", "maxLength": 200 },
+        "authorRoleTitle": { "type": "string", "maxLength": 200 },
+        "content": { "type": "string", "maxLength": 5000 },
+        "createdAt": { "type": "string" },
+        "isHelpNotice": { "type": "boolean" },
+        "isSystemNotice": { "type": "boolean" }
+      },
+      "required": ["id", "taskId", "authorUserId", "content", "createdAt"]
+    },
+    "FileItem": {
+      "title": "FileItem",
+      "description": "File metadata stored in Drive or Firebase Storage",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "deptId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 255 },
+        "size": { "type": "string", "maxLength": 50 },
+        "type": { "type": "string", "maxLength": 100 },
+        "storageBackend": { "type": "string", "enum": ["drive", "mika", "self_host"] },
+        "downloadUrl": { "type": "string", "maxLength": 2000 },
+        "driveFileId": { "type": "string", "maxLength": 200 },
+        "uploadedByUserId": { "type": "string", "maxLength": 128 },
+        "uploadedByName": { "type": "string", "maxLength": 200 },
+        "uploadedAt": { "type": "string" },
+        "isAutoArchived": { "type": "boolean" },
+        "folder": { "type": "string", "maxLength": 255 }
+      },
+      "required": ["id", "orgId", "deptId", "name", "uploadedByUserId", "uploadedAt"]
+    },
+    "Meeting": {
+      "title": "Meeting",
+      "description": "Persisted Google Meet record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "deptId": { "type": "string", "maxLength": 128 },
+        "deptName": { "type": "string", "maxLength": 200 },
+        "title": { "type": "string", "maxLength": 300 },
+        "startedByUserId": { "type": "string", "maxLength": 128 },
+        "startedByName": { "type": "string", "maxLength": 200 },
+        "meetLink": { "type": "string", "maxLength": 1000 },
+        "calendarEventId": { "type": "string", "maxLength": 255 },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "attendeeUserIds": { "type": "array" }
+      },
+      "required": ["id", "orgId", "deptId", "title", "startedByUserId", "meetLink", "startTime", "isActive"]
+    },
+    "OrgNotification": {
+      "title": "OrgNotification",
+      "description": "In-app notification for task/meeting events",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 2000 },
+        "type": { "type": "string" },
+        "relatedTaskId": { "type": "string" },
+        "relatedDeptId": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["id", "userId", "title", "message", "type", "timestamp", "read"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message backed by Google Chat transport",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 128 },
+        "channelType": { "type": "string", "enum": ["dept", "dm", "event"] },
+        "channelId": { "type": "string", "maxLength": 128 },
+        "channelName": { "type": "string", "maxLength": 200 },
+        "senderUserId": { "type": "string", "maxLength": 128 },
+        "senderName": { "type": "string", "maxLength": 200 },
+        "senderRoleTitle": { "type": "string", "maxLength": 200 },
+        "content": { "type": "string", "maxLength": 5000 },
+        "timestamp": { "type": "string" },
+        "chatMessageName": { "type": "string", "maxLength": 255 }
+      },
+      "required": ["id", "orgId", "channelType", "channelId", "senderUserId", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/organizations/{orgId}": {
+      "schema": "Organization",
+      "description": "Organization documents"
+    },
+    "/departments/{deptId}": {
+      "schema": "Department",
+      "description": "Department tree nodes"
+    },
+    "/roles/{roleId}": {
+      "schema": "Role",
+      "description": "Roles in departments"
+    },
+    "/assignments/{assignmentId}": {
+      "schema": "Assignment",
+      "description": "User assignments to roles"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Actionable tasks with lifecycle"
+    },
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comments and threads on tasks"
+    },
+    "/files/{fileId}": {
+      "schema": "FileItem",
+      "description": "Files in Vault"
+    },
+    "/meetings/{meetingId}": {
+      "schema": "Meeting",
+      "description": "Meeting logs and active Google Meet links"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "OrgNotification",
+      "description": "In-app notifications"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat messages"
+    }
+  }
+}
