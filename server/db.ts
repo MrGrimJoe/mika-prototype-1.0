@@ -61,6 +61,7 @@ export interface DbRole {
 
 export interface DbRoleAssignment {
   id: string;
+  org_id: string;
   user_id: string;
   role_id: string;
   department_id: string;
@@ -158,6 +159,19 @@ export interface DbEventBinding {
   is_active: boolean;
 }
 
+export interface DbIntegrationConnection {
+  id: string;
+  integration_key: string;
+  org_id: string;
+  scope: 'org' | 'root';
+  scope_root_user_id?: string;
+  access_role_ids: 'all' | string[];
+  connected_by_user_id: string;
+  account_label: string;
+  access_token?: string; // Stored server-side only, NEVER sent to client
+  connected_at: string;
+}
+
 class Database {
   users: Map<string, DbUser> = new Map();
   organizations: Map<string, DbOrganization> = new Map();
@@ -171,6 +185,7 @@ class Database {
   files: Map<string, DbFile> = new Map();
   messages: Map<string, DbMessage> = new Map();
   events: Map<string, DbEventBinding> = new Map();
+  integrationConnections: Map<string, DbIntegrationConnection> = new Map();
 
   constructor() {
     this.seedDatabase();
@@ -492,7 +507,7 @@ class Database {
 
     // 5. Role Assignments: In test environment, only Master Root (Principal) is initially assigned.
     const seedAssignments: DbRoleAssignment[] = [
-      { id: 'asgn_1', user_id: 'u_principal', role_id: 'role_principal', department_id: 'dept_school', is_authority_holder: true, assigned_at: '2026-08-01T08:00:00Z', is_active: true }
+      { id: 'asgn_1', org_id: 'org_school', user_id: 'u_principal', role_id: 'role_principal', department_id: 'dept_school', is_authority_holder: true, assigned_at: '2026-08-01T08:00:00Z', is_active: true }
     ];
     seedAssignments.forEach(a => this.roleAssignments.set(a.id, a));
 
@@ -668,6 +683,7 @@ class Database {
     const asgnId = `asgn_${Date.now()}_root`;
     const assignment: DbRoleAssignment = {
       id: asgnId,
+      org_id: org.id,
       user_id: masterRootUser.id,
       role_id: roleId,
       department_id: deptId,
@@ -731,6 +747,7 @@ class Database {
     const asgnId = `asgn_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const assignment: DbRoleAssignment = {
       id: asgnId,
+      org_id: role?.org_id || 'org_school',
       user_id: userId,
       role_id: roleId,
       department_id: deptId,
@@ -759,6 +776,119 @@ class Database {
         }
       }
     }
+    return results;
+  }
+
+  // =========================================================================
+  // Integration Connections & Token Storage (Stored server-side only)
+  // =========================================================================
+
+  saveIntegrationToken(data: {
+    integrationKey: string;
+    orgId: string;
+    scope: 'org' | 'root';
+    scopeRootUserId?: string;
+    accountLabel: string;
+    accessToken: string;
+    connectedByUserId: string;
+    connectedAt?: string;
+  }): DbIntegrationConnection {
+    // Check if an existing connection exists for this org/key/scope/user
+    let existingId: string | undefined;
+    for (const [id, conn] of this.integrationConnections.entries()) {
+      if (
+        conn.integration_key === data.integrationKey &&
+        conn.org_id === data.orgId &&
+        conn.scope === data.scope &&
+        (data.scope === 'org' || conn.scope_root_user_id === data.scopeRootUserId)
+      ) {
+        existingId = id;
+        break;
+      }
+    }
+
+    const id = existingId || `conn_${Date.now()}_${data.integrationKey}`;
+    const connection: DbIntegrationConnection = {
+      id,
+      integration_key: data.integrationKey,
+      org_id: data.orgId,
+      scope: data.scope,
+      scope_root_user_id: data.scopeRootUserId,
+      access_role_ids: 'all',
+      connected_by_user_id: data.connectedByUserId,
+      account_label: data.accountLabel,
+      access_token: data.accessToken,
+      connected_at: data.connectedAt || new Date().toISOString()
+    };
+
+    this.integrationConnections.set(id, connection);
+    return connection;
+  }
+
+  resolveIntegrationConnection(integrationKey: string, user: DbUser): DbIntegrationConnection | null {
+    // 1. Check for org-wide connection
+    for (const conn of this.integrationConnections.values()) {
+      if (conn.integration_key === integrationKey && conn.scope === 'org' && conn.access_token) {
+        return conn;
+      }
+    }
+
+    // 2. Check for root-scoped connection where user is the root or connected by user
+    for (const conn of this.integrationConnections.values()) {
+      if (
+        conn.integration_key === integrationKey &&
+        conn.scope === 'root' &&
+        conn.access_token &&
+        (conn.scope_root_user_id === user.id || conn.connected_by_user_id === user.id)
+      ) {
+        return conn;
+      }
+    }
+
+    // 3. Fallback: if any valid connection with an access token exists for this integrationKey, use it
+    for (const conn of this.integrationConnections.values()) {
+      if (conn.integration_key === integrationKey && conn.access_token) {
+        return conn;
+      }
+    }
+
+    return null;
+  }
+
+  deleteIntegrationConnection(connId: string): boolean {
+    return this.integrationConnections.delete(connId);
+  }
+
+  getPublicIntegrationConnections(orgId?: string) {
+    const results: Array<{
+      id: string;
+      integrationKey: string;
+      orgId: string;
+      scope: 'org' | 'root';
+      scopeRootUserId?: string;
+      accessRoleIds: 'all' | string[];
+      connectedByUserId: string;
+      accountLabel: string;
+      connectedAt: string;
+    }> = [];
+
+    for (const conn of this.integrationConnections.values()) {
+      if (!orgId || conn.org_id === orgId) {
+        results.push({
+          id: conn.id,
+          integrationKey: conn.integration_key,
+          orgId: conn.org_id,
+          scope: conn.scope,
+          scopeRootUserId: conn.scope_root_user_id,
+          accessRoleIds: conn.access_role_ids,
+          connectedByUserId: conn.connected_by_user_id,
+          accountLabel: conn.account_label,
+          connectedAt: conn.connected_at
+          // EXPLICITLY NO access_token! Never sent to client
+        });
+      }
+    }
+
     return results;
   }
 }

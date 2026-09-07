@@ -28,8 +28,11 @@ interface IntegrationChecklistProps {
   connections: IntegrationConnection[];
   scope: 'org' | 'root';
   isEnterpriseOrg?: boolean;
+  orgId?: string;
+  userId?: string;
   onConnect: (toolKey: string, accountLabel: string) => Promise<void> | void;
   onDisconnect?: (connId: string) => Promise<void> | void;
+  onConfigureAccess?: (toolKey: string) => void;
   // If in root mode, pass the list of org-wide connections to detect already-covered tools
   orgWideConnections?: IntegrationConnection[];
 }
@@ -38,8 +41,11 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
   connections,
   scope,
   isEnterpriseOrg = false,
+  orgId,
+  userId,
   onConnect,
   onDisconnect,
+  onConfigureAccess,
   orgWideConnections = [],
 }) => {
   const [activeOAuthTool, setActiveOAuthTool] = useState<IntegrationToolDefinition | null>(null);
@@ -238,6 +244,8 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
         <OAuthConnectModal
           tool={activeOAuthTool}
           scope={scope}
+          orgId={orgId}
+          userId={userId}
           onSuccess={async (accountLabel) => {
             const toolKey = activeOAuthTool.key;
             setActiveOAuthTool(null);

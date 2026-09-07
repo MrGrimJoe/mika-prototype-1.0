@@ -716,6 +716,7 @@ export default function App() {
 
     const newAssignment: Assignment = {
       id: `asgn_${Date.now()}`,
+      orgId: organization?.id || 'org_oakridge',
       userId: newUser.id,
       roleId,
       deptId,
@@ -1081,6 +1082,7 @@ export default function App() {
 
             const newAssignment: Assignment = {
               id: `asgn_${Date.now()}`,
+              orgId: organization?.id || 'org_oakridge',
               userId: newUser.id,
               roleId: activeJoinModalLink.roleId,
               deptId: roles.find(r => r.id === activeJoinModalLink.roleId)?.deptId || departments[0].id,

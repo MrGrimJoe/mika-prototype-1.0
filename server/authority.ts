@@ -42,14 +42,18 @@ function getNormalizedRoles(): Role[] {
 }
 
 function getNormalizedAssignments(): Assignment[] {
-  return Array.from(db.roleAssignments.values()).map(a => ({
-    id: a.id,
-    userId: a.user_id,
-    roleId: a.role_id,
-    deptId: a.department_id,
-    validFrom: a.assigned_at,
-    isActive: a.is_active
-  }));
+  return Array.from(db.roleAssignments.values()).map(a => {
+    const role = db.roles.get(a.role_id);
+    return {
+      id: a.id,
+      orgId: a.org_id || role?.org_id || 'org_school',
+      userId: a.user_id,
+      roleId: a.role_id,
+      deptId: a.department_id,
+      validFrom: a.assigned_at,
+      isActive: a.is_active
+    };
+  });
 }
 
 /**

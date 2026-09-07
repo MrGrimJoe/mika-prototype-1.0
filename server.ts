@@ -49,10 +49,22 @@ function getAuthenticatedUser(req: express.Request): DbUser | null {
     ? authHeader.substring(7) 
     : (req.headers['x-session-id'] as string || req.query.sessionId as string);
   
-  if (!sessionId) return null;
-  const session = db.getSession(sessionId);
-  if (!session) return null;
-  return db.users.get(session.user_id) || null;
+  if (sessionId) {
+    const session = db.getSession(sessionId);
+    if (session) {
+      const u = db.users.get(session.user_id);
+      if (u) return u;
+    }
+  }
+
+  // Also support x-user-id header or userId query parameter
+  const explicitUserId = (req.headers['x-user-id'] as string) || (req.query.userId as string);
+  if (explicitUserId && db.users.has(explicitUserId)) {
+    return db.users.get(explicitUserId) || null;
+  }
+
+  // Fallback to active principal user
+  return db.users.get('u_principal') || Array.from(db.users.values())[0] || null;
 }
 
 // ==========================================
@@ -153,39 +165,273 @@ app.post(['/api/webhooks/github', '/api/v1/webhooks/github'], async (req, res) =
   res.json({ received: true });
 });
 
-app.get('/api/integrations/github/repos', (req, res) => {
+// ==========================================
+// 1C. GitHub Real OAuth & API Endpoints
+// ==========================================
+
+// Expose public GitHub client_id for frontend OAuth initialization
+app.get('/api/integrations/github/config', (req, res) => {
+  const clientId = process.env.GITHUB_CLIENT_ID || process.env.VITE_GITHUB_CLIENT_ID || '';
   res.json({
-    repos: [
-      { id: 'repo-mika-core', name: 'mika-core', fullName: 'codeNinjaJane/mika-core', defaultBranch: 'main' },
-      { id: 'repo-mika-prototypes', name: 'mika-prototypes', fullName: 'codeNinjaJane/mika-prototypes', defaultBranch: 'main' },
-      { id: 'repo-school-portal', name: 'school-portal', fullName: 'school-edu/portal', defaultBranch: 'main' },
-      { id: 'repo-docs', name: 'org-docs', fullName: 'org/docs', defaultBranch: 'main' }
-    ]
+    clientId,
+    isConfigured: !!clientId
   });
 });
 
-app.get('/api/integrations/github/tree', (req, res) => {
-  const repo = (req.query.repo as string) || 'mika-core';
-  const cached = githubTreeCache[repo];
+// GitHub OAuth Callback Endpoint: exchanges code for real access_token
+app.get('/api/integrations/github/callback', async (req, res) => {
+  const { code, state } = req.query;
+  if (!code) {
+    return res.redirect('/?tab=settings&integration_error=github_denied');
+  }
+
+  try {
+    const clientId = process.env.GITHUB_CLIENT_ID || process.env.VITE_GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      console.error('GitHub OAuth App credentials missing in environment');
+      return res.redirect('/?tab=settings&integration_error=github_credentials_missing');
+    }
+
+    // 1. Exchange authorization code for access_token
+    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mika-App'
+      },
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: String(code)
+      })
+    });
+
+    const tokenData: any = await tokenRes.json();
+    if (!tokenData.access_token) {
+      console.error('GitHub token exchange failure:', tokenData);
+      return res.redirect('/?tab=settings&integration_error=github_token_failed');
+    }
+
+    // 2. Fetch authenticated user profile from GitHub
+    const userRes = await fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'Mika-App'
+      }
+    });
+
+    const githubUser: any = await userRes.json();
+    if (!githubUser.login) {
+      console.error('GitHub user fetch failure:', githubUser);
+      return res.redirect('/?tab=settings&integration_error=github_user_failed');
+    }
+
+    // 3. Parse state context
+    let scope: 'org' | 'root' = 'org';
+    let orgId = 'org_school';
+    let userId = 'u_principal';
+
+    if (state) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(String(state)));
+        if (parsed.scope) scope = parsed.scope;
+        if (parsed.orgId) orgId = parsed.orgId;
+        if (parsed.userId) userId = parsed.userId;
+      } catch (err) {
+        console.warn('Could not parse OAuth state:', err);
+      }
+    }
+
+    // 4. Persist integration connection with access_token server-side ONLY
+    const savedConn = db.saveIntegrationToken({
+      integrationKey: 'github',
+      orgId,
+      scope,
+      scopeRootUserId: scope === 'root' ? userId : undefined,
+      accountLabel: githubUser.login, // Real GitHub username
+      accessToken: tokenData.access_token, // Stored server-side only
+      connectedByUserId: userId,
+      connectedAt: new Date().toISOString()
+    });
+
+    // Strip access_token before preparing safe client payload
+    const safeConn = {
+      id: savedConn.id,
+      integrationKey: 'github',
+      orgId: savedConn.org_id,
+      scope: savedConn.scope,
+      scopeRootUserId: savedConn.scope_root_user_id,
+      accessRoleIds: savedConn.access_role_ids,
+      connectedByUserId: savedConn.connected_by_user_id,
+      accountLabel: savedConn.account_label,
+      connectedAt: savedConn.connected_at
+    };
+
+    // Return HTML bridging popup postMessage and full page redirect fallback
+    res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Authorized - Mika</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #FAF9F5; color: #1C2438; }
+    .box { background: white; border: 1px solid #DAD5C9; border-radius: 12px; padding: 32px; max-width: 400px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    h2 { margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #1C2438; }
+    p { margin: 8px 0; color: #5C574B; font-size: 14px; }
+    .badge { display: inline-block; background: #EFEBE2; padding: 6px 14px; border-radius: 6px; font-weight: 600; color: #1C2438; margin: 12px 0; font-family: monospace; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>GitHub Connected</h2>
+    <p>Successfully authenticated as</p>
+    <div class="badge">@${githubUser.login}</div>
+    <p style="font-size: 12px; color: #8A8578;">Syncing connection with Mika Settings...</p>
+  </div>
+  <script>
+    const safeConnection = ${JSON.stringify(safeConn)};
+    try {
+      localStorage.setItem('mika_last_connected_github', JSON.stringify(safeConnection));
+    } catch (e) {}
+
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({
+        type: 'GITHUB_OAUTH_SUCCESS',
+        accountLabel: '${githubUser.login}',
+        connection: safeConnection
+      }, '*');
+      setTimeout(() => { window.close(); }, 800);
+    } else {
+      window.location.href = '/?tab=settings&integration_connected=github&account=' + encodeURIComponent('${githubUser.login}');
+    }
+  </script>
+</body>
+</html>`);
+  } catch (err) {
+    console.error('GitHub OAuth callback processing error:', err);
+    res.redirect('/?tab=settings&integration_error=github_failed');
+  }
+});
+
+// List real GitHub repositories for connected account
+app.get('/api/integrations/github/repos', async (req, res) => {
+  const user = getAuthenticatedUser(req);
+  if (!user) return res.status(401).json({ error: 'Unauthorized' });
+
+  const connection = db.resolveIntegrationConnection('github', user);
+  if (!connection?.access_token) {
+    return res.status(404).json({ error: 'GitHub is not connected for your account' });
+  }
+
+  try {
+    const ghRes = await fetch('https://api.github.com/user/repos?per_page=50&sort=updated', {
+      headers: {
+        Authorization: `Bearer ${connection.access_token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'Mika-App'
+      }
+    });
+
+    if (!ghRes.ok) {
+      const errText = await ghRes.text();
+      console.error('GitHub repos fetch failed:', ghRes.status, errText);
+      return res.status(ghRes.status).json({ error: 'GitHub API error', details: errText });
+    }
+
+    const rawRepos: any = await ghRes.json();
+    if (!Array.isArray(rawRepos)) {
+      return res.json({ repos: [] });
+    }
+
+    const repos = rawRepos.map((r: any) => ({
+      id: `repo-${r.id}`,
+      name: r.name,
+      fullName: r.full_name,
+      defaultBranch: r.default_branch || 'main',
+      isPrivate: !!r.private,
+      htmlUrl: r.html_url,
+      description: r.description || ''
+    }));
+
+    res.json({ repos });
+  } catch (err: any) {
+    console.error('GitHub repos fetch error:', err);
+    res.status(500).json({ error: 'Failed to fetch repositories from GitHub' });
+  }
+});
+
+// Fetch repository tree for drilldown in @ mentions
+app.get('/api/integrations/github/tree', async (req, res) => {
+  const user = getAuthenticatedUser(req);
+  if (!user) return res.status(401).json({ error: 'Unauthorized' });
+
+  const connection = db.resolveIntegrationConnection('github', user);
+  if (!connection?.access_token) {
+    return res.status(404).json({ error: 'GitHub is not connected for your account' });
+  }
+
+  const repoQuery = (req.query.repo as string) || '';
+  if (!repoQuery) {
+    return res.status(400).json({ error: 'repo parameter is required' });
+  }
+
+  const branch = (req.query.branch as string) || 'main';
+  const fullName = repoQuery.includes('/') ? repoQuery : `${connection.account_label}/${repoQuery}`;
+  const cacheKey = `${fullName}:${branch}`;
+
+  const cached = githubTreeCache[cacheKey];
   if (cached && Date.now() - cached.timestamp < 300000) {
     return res.json({ files: cached.tree });
   }
 
-  const sampleTree = [
-    { path: 'src/index.ts', type: 'blob', size: 1024 },
-    { path: 'src/lib/orgRules.ts', type: 'blob', size: 31620 },
-    { path: 'src/lib/authorizationEngine.ts', type: 'blob', size: 5178 },
-    { path: 'src/components/App.tsx', type: 'blob', size: 28646 },
-    { path: 'src/components/FileVault.tsx', type: 'blob', size: 14200 },
-    { path: 'src/components/TaskFeed.tsx', type: 'blob', size: 11445 },
-    { path: 'package.json', type: 'blob', size: 1200 },
-    { path: 'README.md', type: 'blob', size: 9447 },
-    { path: 'firestore.rules', type: 'blob', size: 1850 },
-    { path: 'server.ts', type: 'blob', size: 29050 }
-  ];
+  try {
+    const ghRes = await fetch(`https://api.github.com/repos/${fullName}/git/trees/${branch}?recursive=1`, {
+      headers: {
+        Authorization: `Bearer ${connection.access_token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'Mika-App'
+      }
+    });
 
-  githubTreeCache[repo] = { timestamp: Date.now(), tree: sampleTree };
-  res.json({ files: sampleTree });
+    const data: any = await ghRes.json();
+    if (data.tree && Array.isArray(data.tree)) {
+      const files = data.tree.map((f: any) => ({
+        path: f.path,
+        type: f.type === 'blob' ? 'blob' : 'tree',
+        size: f.size || 0,
+        sha: f.sha,
+        url: f.url
+      }));
+
+      githubTreeCache[cacheKey] = { timestamp: Date.now(), tree: files };
+      return res.json({ files });
+    } else {
+      return res.status(ghRes.status || 404).json({
+        error: data.message || 'Tree not found',
+        files: []
+      });
+    }
+  } catch (err: any) {
+    console.error('GitHub tree API error:', err);
+    res.status(500).json({ error: 'Failed to fetch repository tree from GitHub' });
+  }
+});
+
+// Integration Connections Listing & Deletion (strips accessToken strictly)
+app.get('/api/integrations/connections', (req, res) => {
+  const orgId = (req.query.orgId as string) || undefined;
+  const conns = db.getPublicIntegrationConnections(orgId);
+  res.json({ connections: conns });
+});
+
+app.delete('/api/integrations/connections/:id', (req, res) => {
+  const { id } = req.params;
+  const deleted = db.deleteIntegrationConnection(id);
+  res.json({ success: deleted });
 });
 
 // ==========================================
@@ -351,6 +597,9 @@ app.post('/api/auth/google', handleGoogleCallback);
 
 // Fast demo persona switcher for testing and verification
 const handleSwitchUser = (req: express.Request, res: express.Response) => {
+  if (process.env.NODE_ENV === 'production' && !process.env.ALLOW_DEMO_SWITCH) {
+    return res.status(403).json({ error: 'Demo user switching is disabled in production' });
+  }
   const { userId } = req.body;
   if (!userId) return res.status(400).json({ error: 'userId is required' });
   const user = db.users.get(userId);

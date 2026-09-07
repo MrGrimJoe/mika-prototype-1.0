@@ -361,11 +361,11 @@ export const INITIAL_ROLES: Role[] = [
 export const INITIAL_ASSIGNMENTS: Assignment[] = [
   // Test Environment: Only the Master Root (Principal) is initialized.
   // All subordinate positions are vacant awaiting invite link signups or test joins.
-  { id: 'asgn_1', userId: 'u_principal', roleId: 'role_principal', deptId: 'dept_school', validFrom: '2026-08-01', isActive: true }
+  { id: 'asgn_1', orgId: 'org_oakridge', userId: 'u_principal', roleId: 'role_principal', deptId: 'dept_school', validFrom: '2026-08-01', isActive: true }
 ];
 
 export const SAMPLE_EMPLOYEE_ASSIGNMENTS: Assignment[] = [
-  { id: 'asgn_1', userId: 'u_principal', roleId: 'role_principal', deptId: 'dept_school', validFrom: '2026-08-01', isActive: true }
+  { id: 'asgn_1', orgId: 'org_oakridge', userId: 'u_principal', roleId: 'role_principal', deptId: 'dept_school', validFrom: '2026-08-01', isActive: true }
 ];
 
 export const INITIAL_TASKS: Task[] = [];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Settings as SettingsIcon,
   Shield,
@@ -72,6 +72,70 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const isEnterprise = currentOrg?.storageType === 'byod' || currentOrg?.storageType === 'drive';
 
   const orgWideConnections = connections.filter((c) => c.scope === 'org');
+
+  // Handle GitHub OAuth redirect parameters & postMessage events
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const connectedTool = params.get('integration_connected');
+    const account = params.get('account');
+    const error = params.get('integration_error');
+
+    if (connectedTool === 'github') {
+      const label = account ? `@${account}` : 'your GitHub account';
+      setStatusFeedback(`Successfully connected GitHub as ${label}.`);
+
+      // Ensure connection is recorded in Firestore
+      try {
+        const storedStr = localStorage.getItem('mika_last_connected_github');
+        if (storedStr) {
+          const stored = JSON.parse(storedStr);
+          upsertIntegrationConnection(stored);
+          localStorage.removeItem('mika_last_connected_github');
+        } else {
+          // Fetch public connections from backend
+          fetch('/api/integrations/connections')
+            .then(res => res.json())
+            .then(data => {
+              if (data.connections) {
+                const gh = data.connections.find((c: any) => c.integrationKey === 'github');
+                if (gh) upsertIntegrationConnection(gh);
+              }
+            })
+            .catch(() => {});
+        }
+      } catch (e) {}
+
+      // Clean URL params
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('integration_connected');
+      newUrl.searchParams.delete('account');
+      window.history.replaceState({}, '', newUrl.toString());
+
+      setTimeout(() => setStatusFeedback(null), 5000);
+    } else if (error) {
+      setStatusFeedback(`GitHub authorization failed: ${error.replace(/_/g, ' ')}`);
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('integration_error');
+      window.history.replaceState({}, '', newUrl.toString());
+      setTimeout(() => setStatusFeedback(null), 5000);
+    }
+  }, []);
+
+  // Popup postMessage listener
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.data?.type === 'GITHUB_OAUTH_SUCCESS') {
+        const accountLabel = event.data.accountLabel || 'connected';
+        if (event.data.connection) {
+          await upsertIntegrationConnection(event.data.connection);
+        }
+        setStatusFeedback(`Successfully connected GitHub as @${accountLabel}.`);
+        setTimeout(() => setStatusFeedback(null), 5000);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   const userAssignments = assignments.filter((a) => a.userId === currentUser.id);
   const userAccessSummary = getUserToolAccessSummary(
@@ -308,6 +372,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               scope={isMasterRoot ? 'org' : 'root'}
               orgWideConnections={orgWideConnections}
               isEnterpriseOrg={isEnterprise}
+              orgId={currentOrg?.id}
+              userId={currentUser.id}
               onConnect={handleConnectIntegration}
               onDisconnect={handleDisconnect}
               onConfigureAccess={(toolKey) => setSelectedToolForConfig(toolKey)}
@@ -486,6 +552,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {selectedToolForOAuth && (
         <OAuthConnectModal
           toolKey={selectedToolForOAuth}
+          scope={isMasterRoot ? 'org' : 'root'}
+          orgId={currentOrg?.id}
+          userId={currentUser.id}
           isEnterprise={isEnterprise}
           onSuccess={handleOAuthSuccess}
           onClose={() => setSelectedToolForOAuth(null)}

@@ -52,6 +52,7 @@ export interface Department {
 
 export interface Assignment {
   id: string;
+  orgId: string;
   userId: string;
   roleId: string;
   deptId: string;

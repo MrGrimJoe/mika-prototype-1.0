@@ -54,9 +54,9 @@ service cloud.firestore {
     }
 
     match /assignments/{assignmentId} {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn();
-      allow update, delete: if isSignedIn();
+      allow read: if isSignedIn() && (resource == null || isOrgMember(resource.data.orgId));
+      allow create: if isSignedIn() && canWriteToOrg(request.resource.data.orgId);
+      allow update, delete: if isSignedIn() && isOrgMember(resource.data.orgId);
     }
 
     match /tasks/{taskId} {
