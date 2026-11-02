@@ -201,10 +201,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Context Switcher Block */}
         <div className="p-3.5 border-b border-[#DAD5C9] bg-white space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8A8578] font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A] font-bold">
               Messaging Context
             </span>
-            <span className="text-[9px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.5 rounded-xs border border-[#DAD5C9]">
+            <span className="text-[11px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.5 rounded-xs border border-[#DAD5C9]">
               Rules A, B, C
             </span>
           </div>
@@ -225,7 +225,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#8A8578] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#6B665A] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           ) : activeContext ? (
@@ -241,7 +241,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Reachable Contact Search */}
         <div className="p-2 border-b border-[#DAD5C9] bg-[#F7F5F0]">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-[#8A8578] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#6B665A] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search eligible peers..."
@@ -255,7 +255,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Reachable Contacts List */}
         <div className="flex-1 overflow-y-auto p-2 space-y-3">
           {reachableContacts.length === 0 ? (
-            <div className="p-4 text-center text-xs text-[#8A8578] font-mono leading-relaxed">
+            <div className="p-4 text-center text-xs text-[#6B665A] font-mono leading-relaxed">
               No contacts reachable under your active role/department context.
             </div>
           ) : (
@@ -264,7 +264,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
               return (
                 <div key={ruleLabel} className="space-y-1">
-                  <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-[#8A8578] font-bold">
+                  <div className="px-1 text-[11px] font-mono uppercase tracking-wider text-[#6B665A] font-bold">
                     {ruleLabel} ({items.length})
                   </div>
 
@@ -286,7 +286,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                           onClick={() => setSelectedUserId(item.user.id)}
                         >
                           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                            <button
+                            <button aria-label={`View ${item.user.fullName}'s profile`}
                               type="button"
                               onClick={e => {
                                 e.stopPropagation();
@@ -314,7 +314,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 </span>
                               </div>
 
-                              <div className="text-[10px] font-mono text-[#8A8578] truncate mt-0.5">
+                              <div className="text-[11px] font-mono text-[#6B665A] truncate mt-0.5">
                                 {item.roleTitles.join(', ') || item.contextDescription}
                               </div>
                             </div>
@@ -339,7 +339,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             {/* Conversation Header */}
             <div className="px-6 py-3.5 border-b border-[#DAD5C9] bg-white flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <button
+                <button aria-label={`View ${activeContact.user.fullName}'s profile`}
                   type="button"
                   onClick={() => onViewProfile && onViewProfile(activeContact.user)}
                   className="w-9 h-9 rounded-xs bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-sm shrink-0 cursor-pointer"
@@ -353,16 +353,16 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     <span className="font-bold text-sm text-[#1C2438] truncate text-left">
                       {activeContact.user.fullName}
                     </span>
-                    <span className="text-[10px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.2 rounded-xs border border-[#DAD5C9]">
+                    <span className="text-[11px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.2 rounded-xs border border-[#DAD5C9]">
                       {activeContact.ruleLabel}
                     </span>
                     {/* Part A5: Backed by Google Chat indicator */}
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] px-1.5 py-0.2 rounded-xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] px-1.5 py-0.2 rounded-xs">
                       <Radio className="w-2.5 h-2.5" />
                       Backed by Google Chat
                     </span>
                   </div>
-                  <p className="text-[11px] font-mono text-[#8A8578] truncate">
+                  <p className="text-[11px] font-mono text-[#6B665A] truncate">
                     {activeContact.contextDescription} · {activeContact.user.email}
                   </p>
                 </div>
@@ -382,7 +382,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
             {/* Conversation Message Log */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#F7F5F0]">
-              <div className="p-3 bg-white border border-[#DAD5C9] rounded-xs text-xs font-mono text-[#8A8578] space-y-1 shadow-2xs">
+              <div className="p-3 bg-white border border-[#DAD5C9] rounded-xs text-xs font-mono text-[#6B665A] space-y-1 shadow-2xs">
                 <div className="flex items-center gap-1.5 font-bold text-[#1C2438]">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A]" />
                   <span>Authoritative Channel Established</span>
@@ -397,7 +397,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </div>
 
               {currentMessages.length === 0 ? (
-                <div className="py-12 text-center text-xs text-[#8A8578] font-mono">
+                <div className="py-12 text-center text-xs text-[#6B665A] font-mono">
                   No previous messages in this channel. Send a dispatch below.
                 </div>
               ) : (
@@ -413,7 +413,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                         <span className="text-[11px] font-bold text-[#1C2438] font-mono">
                           {isSelf ? 'You' : msg.senderName}
                         </span>
-                        <span className="text-[10px] text-[#8A8578] font-mono">
+                        <span className="text-[11px] text-[#6B665A] font-mono">
                           {msg.timestamp}
                         </span>
                       </div>
@@ -454,7 +454,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#F7F5F0]">
-            <div className="w-12 h-12 rounded-full bg-white border border-[#DAD5C9] flex items-center justify-center text-[#8A8578] mb-3 shadow-2xs">
+            <div className="w-12 h-12 rounded-full bg-white border border-[#DAD5C9] flex items-center justify-center text-[#6B665A] mb-3 shadow-2xs">
               <MessageSquare className="w-6 h-6 stroke-[1.5]" />
             </div>
             <h3 className="font-bold text-sm text-[#1C2438]">

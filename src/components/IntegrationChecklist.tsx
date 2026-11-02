@@ -196,7 +196,7 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
                 {renderIcon(tool.key)}
                 <span className="text-xs font-semibold text-slate-800">{tool.name}</span>
                 {tool.enterpriseOnly && (
-                  <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                  <span className="px-1.5 py-0.2 rounded text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
                     Enterprise
                   </span>
                 )}
@@ -211,7 +211,7 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
                     {currentConn?.accountLabel}
                   </span>
                   {onDisconnect && currentConn && (
-                    <button
+                    <button aria-label="Disconnect integration"
                       type="button"
                       onClick={() => {
                         if (window.confirm(`Disconnect ${tool.name}?`)) {

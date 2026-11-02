@@ -162,7 +162,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowTokenInput(false)}
-                  className="px-1.5 text-xs text-[#8A8578] hover:text-[#1C2438] cursor-pointer"
+                  className="px-1.5 text-xs text-[#6B665A] hover:text-[#1C2438] cursor-pointer"
                 >
                   ✕
                 </button>
@@ -187,7 +187,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="how-it-works" className="py-24 px-6 border-t border-[#DAD5C9] bg-[#EFEBE2]">
         <div className="max-w-5xl mx-auto">
           <div className="mb-14 text-center max-w-2xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8A8578]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
               FOUNDATIONAL ARCHITECTURE
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C2438] mt-2 tracking-tight">
@@ -198,7 +198,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {/* Block 1 */}
             <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] block mb-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
                 01 // DIMENSIONAL OVERLAY
               </span>
               <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
@@ -211,7 +211,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 2 */}
             <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] block mb-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
                 02 // DIRECTED PERMISSIONS
               </span>
               <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
@@ -224,7 +224,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 3 */}
             <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] block mb-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
                 03 // AUTOMATIC REASONING
               </span>
               <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
@@ -237,7 +237,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 4 */}
             <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] block mb-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
                 04 // RULE OF LAW
               </span>
               <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
@@ -257,7 +257,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="graph-showcase" className="py-24 px-6 border-t border-[#DAD5C9] bg-[#F7F5F0]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8A8578]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
               RELATIONSHIP TOPOLOGY
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C2438] mt-2 tracking-tight">
@@ -299,7 +299,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           6. FOOTER
       ───────────────────────────────────────────────────────────── */}
       <footer className="py-8 px-6 border-t border-[#DAD5C9] bg-[#F7F5F0]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#8A8578]">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#6B665A]">
           <div className="flex items-center gap-2">
             <span className="font-serif font-bold text-[#1C2438] text-sm">Mika</span>
             <span>&copy; {new Date().getFullYear()}</span>

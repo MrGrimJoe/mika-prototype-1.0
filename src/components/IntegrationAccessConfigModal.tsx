@@ -183,7 +183,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
                                 <div className="font-medium text-slate-800 truncate">
                                   {role.title}
                                 </div>
-                                <div className="text-[10px] text-slate-400 truncate">
+                                <div className="text-[11px] text-slate-400 truncate">
                                   {dept?.name || 'Department'}
                                 </div>
                               </div>

@@ -55,7 +55,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
   if (!currentUser) {
     return (
-      <div className="p-8 text-center bg-white border border-[#DAD5C9] rounded-xs font-mono text-xs text-[#8A8578]">
+      <div className="p-8 text-center bg-white border border-[#DAD5C9] rounded-xs font-mono text-xs text-[#6B665A]">
         Please sign in to access Google Meet Conferences.
       </div>
     );
@@ -248,7 +248,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
       {/* Past Meeting History Section */}
       <div className="bg-white border border-[#DAD5C9] rounded-xs p-5 shadow-2xs">
-        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#8A8578] mb-4 flex items-center gap-2">
+        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#5C574B]" />
           <span>Meeting History & Attendance Logs</span>
         </h3>
@@ -264,7 +264,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                       {meeting.deptName}
                     </span>
                   </div>
-                  <p className="text-xs text-[#8A8578] font-mono">
+                  <p className="text-xs text-[#6B665A] font-mono">
                     Convened by {meeting.startedByName} • {new Date(meeting.startTime).toLocaleDateString()} {new Date(meeting.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -279,7 +279,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
             ))}
           </div>
         ) : (
-          <p className="text-xs text-[#8A8578] font-mono italic py-4">
+          <p className="text-xs text-[#6B665A] font-mono italic py-4">
             No past meetings recorded yet. Meetings started by department roots will appear here.
           </p>
         )}
@@ -296,7 +296,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
               </h3>
               <button
                 onClick={() => setCreateModalOpen(false)}
-                className="p-1 text-[#8A8578] hover:text-[#1C2438] rounded-xs cursor-pointer"
+                className="p-1 text-[#6B665A] hover:text-[#1C2438] rounded-xs cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

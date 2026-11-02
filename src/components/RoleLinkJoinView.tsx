@@ -288,7 +288,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
             <ShieldAlert className="w-4 h-4 text-amber-600" />
             <span>Required to activate this role</span>
           </div>
-          <span className="text-[10px] font-mono">
+          <span className="text-[11px] font-mono">
             {allRequirementsSatisfied ? (
               <span className="text-emerald-700 font-bold flex items-center gap-1">
                 <Check className="w-3 h-3 text-emerald-600" />
@@ -317,9 +317,9 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 <div className="min-w-0 flex-1 mr-3">
                   <div className="font-semibold text-stone-900 truncate flex items-center gap-1.5">
                     <span>{tool.name}</span>
-                    <span className="text-[10px] text-stone-500 font-normal">({tool.category})</span>
+                    <span className="text-[11px] text-stone-500 font-normal">({tool.category})</span>
                   </div>
-                  <div className="text-[10px] text-stone-600 truncate mt-0.5">
+                  <div className="text-[11px] text-stone-600 truncate mt-0.5">
                     {conn ? (
                       <span className="text-emerald-700 font-medium flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
@@ -429,7 +429,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
               </div>
               <span className="text-xs font-mono font-bold tracking-tight text-[#1A1A1A]">MIKA AUTH</span>
             </div>
-            <span className="text-[10px] font-mono uppercase px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-[11px] font-mono uppercase px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200">
               Role Link Verified
             </span>
           </div>
@@ -445,7 +445,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
         {/* Role & Department Card */}
         <div className="p-6 border-b border-[#E5E5E5] bg-white space-y-3">
           <div className="p-4 bg-[#FAFAFA] border border-[#E5E5E5] space-y-2">
-            <div className="text-[10px] font-mono uppercase text-[#737373]">Target Role & Department</div>
+            <div className="text-[11px] font-mono uppercase text-[#737373]">Target Role & Department</div>
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="text-sm font-bold text-[#1A1A1A] flex items-center gap-1.5 font-mono">
@@ -457,7 +457,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-[10px] font-mono px-2 py-1 bg-white border border-[#E5E5E5] text-[#525252] flex items-center gap-1">
+                <span className="text-[11px] font-mono px-2 py-1 bg-white border border-[#E5E5E5] text-[#525252] flex items-center gap-1">
                   <Clock className="w-3 h-3 text-[#737373]" />
                   {daysLeft}d left
                 </span>
@@ -555,7 +555,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-[#E5E5E5]" />
                 </div>
-                <div className="relative flex justify-center text-[10px] uppercase font-mono">
+                <div className="relative flex justify-center text-[11px] uppercase font-mono">
                   <span className="bg-white px-2 text-[#737373]">Or select test account</span>
                 </div>
               </div>
@@ -575,7 +575,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     <div className="font-semibold text-[#1A1A1A]">Elena Rostova (Existing Account)</div>
                     <div className="text-[11px] text-[#737373]">elena.rostova@mika-org.edu • Tests Account Merge</div>
                   </div>
-                  <span className="text-[10px] font-mono text-amber-600">Merge test →</span>
+                  <span className="text-[11px] font-mono text-amber-600">Merge test →</span>
                 </button>
 
                 <button
@@ -591,7 +591,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     <div className="font-semibold text-[#1A1A1A]">New Incoming Teacher (First-Time)</div>
                     <div className="text-[11px] text-[#737373]">Simulate first-time Google sign up</div>
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-600">New signup →</span>
+                  <span className="text-[11px] font-mono text-emerald-600">New signup →</span>
                 </button>
               </div>
             </div>
@@ -599,7 +599,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
             /* SCENARIO C: First-time Google user -> Minimal Signup Fields */
             <form onSubmit={handleCompleteNewSignup} className="space-y-3.5">
               <div className="p-3 bg-[#FAFAFA] border border-[#E5E5E5] text-xs">
-                <div className="text-[10px] font-mono uppercase text-[#737373] mb-1">Authenticated Google Email</div>
+                <div className="text-[11px] font-mono uppercase text-[#737373] mb-1">Authenticated Google Email</div>
                 <div className="font-mono font-bold text-[#1A1A1A]">{googleAuthData.email}</div>
               </div>
 
@@ -681,7 +681,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
               <ArrowLeft className="w-3 h-3" />
               Cancel & Return
             </button>
-            <span className="text-[10px] font-mono text-[#737373]">
+            <span className="text-[11px] font-mono text-[#737373]">
               Mika Auth Subsystem v2.6
             </span>
           </div>

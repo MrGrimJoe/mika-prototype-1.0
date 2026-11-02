@@ -313,7 +313,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {/* B2: Help Button Fixed at Top Right & Global Shortcut Controls */}
           <div className="flex items-center gap-3">
             {/* Global Shortcut Active Toggle */}
-            <button
+            <button aria-label="Set this task as the target for Ctrl+Alt+M shortcut across any browser tab"
               id="btn-set-active-task"
               onClick={handleSetActiveTask}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xs text-xs font-mono font-bold uppercase tracking-wider transition-all border shadow-xs cursor-pointer ${
@@ -328,7 +328,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
             </button>
 
             {/* Tampermonkey userscript modal trigger */}
-            <button
+            <button aria-label="Userscript Shortcut Instructions"
               onClick={() => setShowUserscriptModal(true)}
               className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xs hover:bg-slate-100 transition"
               title="Userscript Shortcut Instructions"
@@ -342,7 +342,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 Help Requested (Assigner Notified)
               </span>
             ) : task.status !== 'done' && (
-              <button
+              <button aria-label="Request help and notify assigner"
                 id="btn-task-help-topright"
                 onClick={handleHelpClick}
                 className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xs text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer"
@@ -409,15 +409,15 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
           <div className="flex flex-wrap items-center gap-6 text-xs text-[#5C574B] pt-4 border-t border-[#DAD5C9]">
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#8A8578]">Assigned by:</span>
+              <span className="font-mono uppercase text-[#6B665A]">Assigned by:</span>
               <span className="font-bold text-[#1C2438]">{assigner?.fullName || 'Root Authority'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#8A8578]">Assignee:</span>
+              <span className="font-mono uppercase text-[#6B665A]">Assignee:</span>
               <span className="font-bold text-[#1C2438]">{assignee?.fullName || targetRole?.title || 'Department Staff'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#8A8578]">Created:</span>
+              <span className="font-mono uppercase text-[#6B665A]">Created:</span>
               <span>{new Date(task.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
@@ -435,7 +435,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <FileText className="w-5 h-5 text-[#2F3B7A]" />
                 <div>
                   <p className="text-xs font-bold text-[#1C2438] font-mono">{task.referenceFile.name}</p>
-                  <p className="text-[11px] text-[#8A8578] font-mono">{task.referenceFile.size || 'Attached File'}</p>
+                  <p className="text-[11px] text-[#6B665A] font-mono">{task.referenceFile.size || 'Attached File'}</p>
                 </div>
               </div>
               {task.referenceFile.url && (
@@ -455,7 +455,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
         {/* Description & Objective Card */}
         <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#8A8578] mb-3">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-3">
             Task Description & Specifications
           </h3>
           <div className="text-sm leading-relaxed text-[#1C2438] whitespace-pre-wrap">
@@ -465,9 +465,9 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {/* Connected Mentions Chips (GitHub repos/files, Figma, Canva, Drive) */}
           {task.mentions && task.mentions.length > 0 && (
             <div className="mt-4 pt-4 border-t border-[#DAD5C9]">
-              <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#8A8578] mb-2 flex items-center gap-1.5">
+              <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-2 flex items-center gap-1.5">
                 <span>Referenced Assets & Repositories</span>
-                <span className="text-[10px] bg-slate-100 px-1.5 py-0.2 rounded text-slate-600">
+                <span className="text-[11px] bg-slate-100 px-1.5 py-0.2 rounded text-slate-600">
                   {task.mentions.length}
                 </span>
               </h4>
@@ -530,7 +530,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
         {/* B4 & B8: Deliverable / Confirmation Section */}
         <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#8A8578] mb-4 flex items-center justify-between">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-4 flex items-center justify-between">
             <span>Confirmation & Completion Status</span>
             <span className="font-normal normal-case text-xs text-[#5C574B]">
               Mode: {task.confirmationMode === 'yes_no' ? 'Yes/No Confirmation' : 'File Dropbox Confirmation'}
@@ -579,7 +579,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700">
                   Quick Export from Design Integrations
                 </span>
-                <span className="text-[10px] text-slate-400 font-mono">1-Click Deliverable Capture</span>
+                <span className="text-[11px] text-slate-400 font-mono">1-Click Deliverable Capture</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -650,11 +650,11 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                     isDragging ? 'border-[#2F3B7A] bg-[#EFF6FF]' : 'border-[#DAD5C9] bg-[#F7F5F0]'
                   }`}
                 >
-                  <Upload className="w-8 h-8 mx-auto text-[#8A8578] mb-2" />
+                  <Upload className="w-8 h-8 mx-auto text-[#6B665A] mb-2" />
                   <p className="text-xs font-bold font-mono uppercase text-[#1C2438] mb-1">
                     Drop Deliverable File Here
                   </p>
-                  <p className="text-xs text-[#8A8578] mb-4">
+                  <p className="text-xs text-[#6B665A] mb-4">
                     Attach required deliverable to submit task for authority review
                   </p>
                   <input
@@ -681,7 +681,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <div className="p-4 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold font-mono uppercase text-[#1C2438]">Ready to submit?</p>
-                    <p className="text-xs text-[#8A8578]">Tap Mark Done to alert root authority for review.</p>
+                    <p className="text-xs text-[#6B665A]">Tap Mark Done to alert root authority for review.</p>
                   </div>
                   <button
                     id="btn-mark-done-yesno"
@@ -725,7 +725,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   <ShieldCheck className="w-4 h-4 text-[#2F3B7A]" />
                   Root Authority Review Actions
                 </span>
-                <span className="text-[11px] font-mono text-[#8A8578]">Decision Required</span>
+                <span className="text-[11px] font-mono text-[#6B665A]">Decision Required</span>
               </div>
 
               {/* Submitted deliverable summary for reviewer */}
@@ -812,7 +812,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
         {/* Comments & Discussion Thread */}
         <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#8A8578] mb-4">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-4">
             Activity & Comment Thread ({taskComments.length})
           </h3>
 
@@ -827,7 +827,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                       : 'bg-[#F7F5F0] border-[#DAD5C9] text-[#1C2438]'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-mono text-[#8A8578] mb-1">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[#6B665A] mb-1">
                     <span className="font-bold text-[#1C2438]">{comment.authorName}</span>
                     <span>{new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
@@ -835,7 +835,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 </div>
               ))
             ) : (
-              <p className="text-xs text-[#8A8578] italic font-mono">No comments on this assignment yet.</p>
+              <p className="text-xs text-[#6B665A] italic font-mono">No comments on this assignment yet.</p>
             )}
           </div>
 

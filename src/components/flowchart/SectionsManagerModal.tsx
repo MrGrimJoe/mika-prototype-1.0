@@ -124,10 +124,10 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                       />
                       <div className="flex items-center justify-between text-xs">
                         <div className="flex items-center gap-1">
-                          <span className="text-[10px] text-neutral-500">Shade:</span>
+                          <span className="text-[11px] text-neutral-500">Shade:</span>
                           <div className="flex items-center gap-1">
                             {SHADES.map((s) => (
-                              <button
+                              <button aria-label={s.label}
                                 key={s.id}
                                 type="button"
                                 onClick={() => setEditShade(s.id)}
@@ -165,16 +165,16 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                           <span className="text-neutral-400">§</span>
                           {section.name}
                         </span>
-                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
+                        <span className="text-[11px] uppercase font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
                           {section.shade}
                         </span>
-                        <span className="text-[10px] text-neutral-500">
+                        <span className="text-[11px] text-neutral-500">
                           ({assignedDepts.length} {assignedDepts.length === 1 ? 'dept' : 'depts'})
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1">
-                        <button
+                        <button aria-label="Rename / Edit"
                           type="button"
                           onClick={() => handleStartEdit(section)}
                           className="p-1 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-200 rounded-xs transition-colors"
@@ -182,7 +182,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                         >
                           <Edit3 size={13} />
                         </button>
-                        <button
+                        <button aria-label="Delete Section (Ungroup all members)"
                           type="button"
                           onClick={() => {
                             if (window.confirm(`Ungroup section "${section.name}"? (Departments will remain)`)) {
@@ -207,7 +207,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                           className="flex items-center gap-1 bg-white border border-neutral-300 px-2 py-0.5 rounded-xs text-[11px] text-neutral-800"
                         >
                           <span>{dept.name}</span>
-                          <button
+                          <button aria-label="Remove department from this section"
                             type="button"
                             onClick={() => onRemoveDepartmentFromSection(dept.id)}
                             className="text-neutral-400 hover:text-neutral-900 ml-0.5"

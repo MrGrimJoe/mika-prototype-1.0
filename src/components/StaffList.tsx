@@ -143,19 +143,19 @@ export const StaffList: React.FC<StaffListProps> = ({
                       {user.fullName}
                     </h3>
                     {user.preferredName && user.preferredName !== user.fullName && (
-                      <span className="text-xs text-[#8A8578] font-mono">[{user.preferredName}]</span>
+                      <span className="text-xs text-[#6B665A] font-mono">[{user.preferredName}]</span>
                     )}
                   </div>
 
-                  <p className="text-[11px] font-mono text-[#8A8578] truncate">{user.email}</p>
+                  <p className="text-[11px] font-mono text-[#6B665A] truncate">{user.email}</p>
 
                   <div className="mt-1.5">
                     {isLead ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[10px] font-bold uppercase tracking-wider bg-[#1C2438] text-white font-mono">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-bold uppercase tracking-wider bg-[#1C2438] text-white font-mono">
                         <Shield className="w-2.5 h-2.5" /> ROOT_LEAD
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[10px] font-mono uppercase tracking-wider bg-[#F7F5F0] text-[#5C574B] border border-[#DAD5C9]">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-mono uppercase tracking-wider bg-[#F7F5F0] text-[#5C574B] border border-[#DAD5C9]">
                         STAFF_MEMBER
                       </span>
                     )}
@@ -165,17 +165,17 @@ export const StaffList: React.FC<StaffListProps> = ({
 
               {/* Roles Held */}
               <div className="space-y-1.5 mb-3">
-                <p className="text-[10px] font-bold text-[#8A8578] uppercase tracking-wider font-mono">
+                <p className="text-[11px] font-bold text-[#6B665A] uppercase tracking-wider font-mono">
                   Assigned Roles [{roles.length}]
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {roles.map((item, idx) => (
                     <span
                       key={idx}
-                      className="px-2 py-0.5 rounded-xs text-[10px] bg-[#F7F5F0] border border-[#DAD5C9] text-[#1C2438] font-mono inline-flex items-center gap-1"
+                      className="px-2 py-0.5 rounded-xs text-[11px] bg-[#F7F5F0] border border-[#DAD5C9] text-[#1C2438] font-mono inline-flex items-center gap-1"
                     >
                       <span className="font-bold">@{item.role?.title}</span>
-                      <span className="text-[#8A8578]">[{item.dept?.name}]</span>
+                      <span className="text-[#6B665A]">[{item.dept?.name}]</span>
                     </span>
                   ))}
                 </div>
@@ -186,9 +186,9 @@ export const StaffList: React.FC<StaffListProps> = ({
             <div className="pt-3 border-t border-[#DAD5C9] flex items-center justify-between">
               <div className="flex items-center gap-1.5" title="Live task state breakdown">
                 {counts.total === 0 ? (
-                  <span className="text-xs font-mono text-[#8A8578]">IDLE // NO_TASKS</span>
+                  <span className="text-xs font-mono text-[#6B665A]">IDLE // NO_TASKS</span>
                 ) : (
-                  <div className="flex items-center gap-1 font-mono text-[10px]">
+                  <div className="flex items-center gap-1 font-mono text-[11px]">
                     {counts.pending > 0 && (
                       <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-xs font-bold bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]" title="Pending">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]" />
@@ -241,7 +241,7 @@ export const StaffList: React.FC<StaffListProps> = ({
       <div className="bg-white border border-[#DAD5C9] p-4 rounded-xs shadow-2xs flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
         <div className="flex items-center gap-2">
           <Layers className="w-4 h-4 text-[#1C2438]" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#1C2438]">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#1C2438]">
             System Partition Summary:
           </span>
         </div>
@@ -291,12 +291,12 @@ export const StaffList: React.FC<StaffListProps> = ({
                   <h3 className="text-base font-bold text-[#1C2438]">
                     {selectedUser.fullName}
                   </h3>
-                  <p className="text-xs font-mono text-[#8A8578]">{selectedUser.email}</p>
+                  <p className="text-xs font-mono text-[#6B665A]">{selectedUser.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedUser(null)}
-                className="text-[#8A8578] hover:text-[#1C2438] font-mono text-sm p-1 rounded-xs cursor-pointer"
+                className="text-[#6B665A] hover:text-[#1C2438] font-mono text-sm p-1 rounded-xs cursor-pointer"
               >
                 ✕
               </button>
@@ -304,7 +304,7 @@ export const StaffList: React.FC<StaffListProps> = ({
 
             {/* Assignments & Scopes */}
             <div className="mb-5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[#8A8578] mb-2 font-mono">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-[#6B665A] mb-2 font-mono">
                 Active Assignments:
               </div>
               <div className="space-y-2">
@@ -315,9 +315,9 @@ export const StaffList: React.FC<StaffListProps> = ({
                     <div key={a.id} className="p-3 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs flex items-center justify-between text-xs font-mono">
                       <div>
                         <span className="font-bold text-[#1C2438]">{role?.title}</span>
-                        <span className="text-[#8A8578]"> in {dept?.name}</span>
+                        <span className="text-[#6B665A]"> in {dept?.name}</span>
                       </div>
-                      <span className="text-[10px] text-[#16A34A] font-bold">Active</span>
+                      <span className="text-[11px] text-[#16A34A] font-bold">Active</span>
                     </div>
                   );
                 })}

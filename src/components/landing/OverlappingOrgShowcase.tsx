@@ -235,7 +235,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
                   )}
                 </div>
 
-                <div className="text-[9px] font-mono text-[#8A8578] mt-0.5 tracking-tight truncate">
+                <div className="text-[11px] font-mono text-[#6B665A] mt-0.5 tracking-tight truncate">
                   {node.role}
                 </div>
               </div>
@@ -244,7 +244,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
         })}
 
         {/* Legend Overlay bottom-left */}
-        <div className="absolute bottom-3 left-3 z-20 bg-[#F7F5F0]/90 backdrop-blur-xs border border-[#DAD5C9] rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-[10px] font-mono text-[#5C574B]">
+        <div className="absolute bottom-3 left-3 z-20 bg-[#F7F5F0]/90 backdrop-blur-xs border border-[#DAD5C9] rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-[11px] font-mono text-[#5C574B]">
           <div className="flex items-center gap-1.5">
             <span className="w-3.5 h-[1.5px] bg-[#1C2438] inline-block" />
             <span>Normal root nesting</span>
@@ -256,7 +256,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
         </div>
 
         {/* Interactive inspection hint bottom-right */}
-        <div className="absolute bottom-3 right-3 z-20 text-[10px] font-mono text-[#8A8578]">
+        <div className="absolute bottom-3 right-3 z-20 text-[11px] font-mono text-[#6B665A]">
           {activeNode ? (
             <span className="text-[#1C2438] font-semibold">
               Inspecting: {activeNode.label} &mdash; {activeNode.subtext}
@@ -268,7 +268,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
       </div>
 
       {/* Caption beneath in muted mono text, one short line */}
-      <p className="text-xs font-mono text-[#8A8578] text-center mt-3 tracking-tight">
+      <p className="text-xs font-mono text-[#6B665A] text-center mt-3 tracking-tight">
         Structures overlap without merging. Authority flows by relationship semantics, never diagram position.
       </p>
     </div>

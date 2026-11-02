@@ -144,16 +144,16 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         {/* Header bar */}
         <div className="px-6 py-4 border-b border-[#DAD5C9] flex items-center justify-between bg-[#FAF9F6]">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8A8578] font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A] font-bold">
               Personnel Profile
             </span>
             {isSelf && (
-              <span className="text-[9px] font-mono bg-[#2F3B7A] text-white px-2 py-0.5 rounded-full font-bold">
+              <span className="text-[11px] font-mono bg-[#2F3B7A] text-white px-2 py-0.5 rounded-full font-bold">
                 You
               </span>
             )}
             {isTargetAnyRoot && (
-              <span className="text-[9px] font-mono bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
+              <span className="text-[11px] font-mono bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
                 Root
               </span>
             )}
@@ -161,7 +161,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           <button
             onClick={onClose}
             id="close-profile-modal-btn"
-            className="p-1 text-[#8A8578] hover:text-[#1C2438] rounded-md transition-colors cursor-pointer"
+            className="p-1 text-[#6B665A] hover:text-[#1C2438] rounded-md transition-colors cursor-pointer"
             aria-label="Close profile"
           >
             <X className="w-4 h-4" />
@@ -182,10 +182,10 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                 </h2>
               </div>
               {user.preferredName && user.preferredName !== user.fullName && (
-                <p className="text-xs text-[#8A8578]">Known as "{user.preferredName}"</p>
+                <p className="text-xs text-[#6B665A]">Known as "{user.preferredName}"</p>
               )}
               <div className="mt-1 flex items-center gap-1.5 text-xs font-mono text-[#5C574B]">
-                <Mail className="w-3.5 h-3.5 text-[#8A8578]" />
+                <Mail className="w-3.5 h-3.5 text-[#6B665A]" />
                 <span className="truncate">{user.email}</span>
               </div>
             </div>
@@ -224,13 +224,13 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Organizational Assignments */}
           <div className="pt-2">
-            <h3 className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
               <Building2 className="w-3.5 h-3.5" />
               <span>Assigned Positions ({rolesWithDepts.length})</span>
             </h3>
 
             {rolesWithDepts.length === 0 ? (
-              <p className="text-xs text-[#8A8578] italic">No active roles currently assigned.</p>
+              <p className="text-xs text-[#6B665A] italic">No active roles currently assigned.</p>
             ) : (
               <div className="space-y-2">
                 {rolesWithDepts.map(({ role, dept }, idx) => {
@@ -247,7 +247,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                         <div className="font-bold text-xs text-[#1C2438]">
                           {role?.title || 'Staff Role'}
                         </div>
-                        <div className="text-[11px] text-[#8A8578] mt-0.5">
+                        <div className="text-[11px] text-[#6B665A] mt-0.5">
                           Department: <span className="font-medium text-[#5C574B]">{dept?.name || 'Unknown'}</span>
                         </div>
                       </div>
@@ -276,7 +276,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Integration Access Section (Section 4.1) */}
           <div className="pt-2 border-t border-[#DAD5C9]">
-            <h3 className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Available Connected Tools ({accessSummary.length})</span>
             </h3>
@@ -289,11 +289,11 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-slate-800">{item.tool.name}</span>
-                    <span className="text-[10px] text-slate-400 font-mono-code">
+                    <span className="text-[11px] text-slate-400 font-mono-code">
                       {item.accountLabel}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                  <span className="text-[11px] font-mono-code px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                     {item.grantedByLabel}
                   </span>
                 </div>
@@ -304,7 +304,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {/* Required Integrations Section (Section 4.2) */}
           {requiredList.length > 0 && (
             <div className="pt-2 border-t border-[#DAD5C9]">
-              <h3 className="text-[10px] font-mono uppercase tracking-wider text-[#8A8578] mb-2.5 flex items-center gap-1.5 font-bold">
+              <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
                 <span>Role Required Connectors</span>
               </h3>
@@ -355,13 +355,13 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           )}
 
           {/* Member Meta */}
-          <div className="pt-2 border-t border-[#DAD5C9] grid grid-cols-2 gap-3 text-xs font-mono text-[#8A8578]">
+          <div className="pt-2 border-t border-[#DAD5C9] grid grid-cols-2 gap-3 text-xs font-mono text-[#6B665A]">
             <div>
-              <span className="text-[10px] uppercase text-[#8A8578] block">Personnel ID</span>
+              <span className="text-[11px] uppercase text-[#6B665A] block">Personnel ID</span>
               <span className="text-[#1C2438]">{user.id}</span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-[#8A8578] block">Account Status</span>
+              <span className="text-[11px] uppercase text-[#6B665A] block">Account Status</span>
               <span className="text-[#059669] font-medium flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                 Active Enrolled

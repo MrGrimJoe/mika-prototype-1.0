@@ -276,7 +276,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
 
         <div className="flex items-center gap-2.5">
           {onResetEmployees && (
-            <button
+            <button aria-label="Reset all employees back to empty state"
               onClick={onResetEmployees}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-[#991B1B] hover:bg-[#FEF2F2] border border-[#FCA5A5] rounded-xs transition-colors cursor-pointer"
               title="Reset all employees back to empty state"
@@ -315,7 +315,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
               {employees.map(({ user, roles }) => (
                 <tr key={user.id} className="hover:bg-[#F9FAFB] transition-colors">
                   <td className="px-5 py-4">
-                    <button
+                    <button aria-label={`View ${user.fullName}'s profile`}
                       onClick={() => onViewProfile && onViewProfile(user)}
                       className="flex items-center gap-3 text-left group cursor-pointer"
                       title={`View ${user.fullName}'s profile`}
@@ -325,7 +325,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                       </div>
                       <div>
                         <div className="font-bold text-[#111827] group-hover:underline">{user.fullName}</div>
-                        <div className="text-[10px] font-mono text-[#6B7280]">ID: {user.id}</div>
+                        <div className="text-[11px] font-mono text-[#6B7280]">ID: {user.id}</div>
                       </div>
                     </button>
                   </td>

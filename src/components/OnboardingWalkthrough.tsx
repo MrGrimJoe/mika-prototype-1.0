@@ -335,7 +335,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 <div className="flex items-center gap-2 text-[#2F3B7A] font-semibold">
                   <Layers className="w-4 h-4 text-[#2F3B7A]" />
                   <span>Middle School</span>
-                  <span className="px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 text-[10px]">section</span>
+                  <span className="px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 text-[11px]">section</span>
                 </div>
 
                 <div className="ml-4 pl-3 border-l border-stone-300 space-y-1.5">
@@ -344,10 +344,10 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                     <span>Class 6</span>
                   </div>
                   <div className="flex gap-1.5 ml-5">
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
                       math-teacher
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
                       english-teacher
                     </span>
                   </div>
@@ -357,7 +357,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                     <span>Class 7</span>
                   </div>
                   <div className="flex gap-1.5 ml-5">
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
                       math-teacher
                     </span>
                   </div>
@@ -524,7 +524,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                   </div>
                   <div>
                     <h4 className="text-xs font-semibold text-stone-900">Middle Head</h4>
-                    <span className="text-[10px] text-[#7C3AED] font-mono-code font-semibold">section root</span>
+                    <span className="text-[11px] text-[#7C3AED] font-mono-code font-semibold">section root</span>
                   </div>
                 </div>
                 <span className="text-xs text-stone-500">2 active tasks</span>
@@ -537,7 +537,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                   </div>
                   <div>
                     <h4 className="text-xs font-semibold text-stone-900">Amara K.</h4>
-                    <span className="text-[10px] text-stone-500 font-mono-code">math-teacher @ Class 6</span>
+                    <span className="text-[11px] text-stone-500 font-mono-code">math-teacher @ Class 6</span>
                   </div>
                 </div>
                 <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626]"></span>
@@ -550,7 +550,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 <span className="text-xs font-bold text-[#2F3B7A] font-mono-code">
                   math-teacher · Class 7
                 </span>
-                <span className="text-[10px] text-indigo-700 font-medium">Expires in 4 days</span>
+                <span className="text-[11px] text-indigo-700 font-medium">Expires in 4 days</span>
               </div>
               <p className="text-[11px] text-stone-600 mb-3">
                 Multi-use link for all incoming math teachers. Accounts bind automatically upon Google Sign-In.
@@ -580,7 +580,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
               <div className="bg-white border-l-4 border-l-[#DC2626] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-stone-900">Term 2 Exam Math Questions</h4>
-                  <span className="text-[10px] text-red-600 font-semibold font-mono-code">DUE TOMORROW</span>
+                  <span className="text-[11px] text-red-600 font-semibold font-mono-code">DUE TOMORROW</span>
                 </div>
                 <p className="text-[11px] text-stone-500 mt-1">Delegated by Section Head · Middle School</p>
               </div>
@@ -588,7 +588,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
               <div className="bg-white border-l-4 border-l-[#16A34A] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-stone-900">Update lesson plan template</h4>
-                  <span className="text-[10px] text-emerald-600 font-medium">Submitted & Reviewed</span>
+                  <span className="text-[11px] text-emerald-600 font-medium">Submitted & Reviewed</span>
                 </div>
                 <p className="text-[11px] text-stone-500 mt-1">File archived in Class 6 File Vault</p>
               </div>

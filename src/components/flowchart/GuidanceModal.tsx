@@ -209,7 +209,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
               <div className="space-y-2">
                 <div className="border border-neutral-300 bg-white p-3 rounded-xs flex items-start gap-2.5">
-                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     1
                   </span>
                   <div>
@@ -221,7 +221,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 </div>
 
                 <div className="border border-neutral-300 bg-white p-3 rounded-xs flex items-start gap-2.5">
-                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     2
                   </span>
                   <div>
@@ -250,7 +250,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Selecting Departments:</span>
-                    <span className="text-[10px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">[SELECT] Button</span>
+                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">[SELECT] Button</span>
                   </div>
                   <p className="text-[11px] text-neutral-600">
                     Click the SELECT toggle on any subordinate department. Pick one or multiple departments. A floating action bar will open at the bottom.
@@ -260,7 +260,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Grouping into a Section:</span>
-                    <span className="text-[10px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Floating Dock</span>
+                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Floating Dock</span>
                   </div>
                   <p className="text-[11px] text-neutral-600">
                     Enter a section name, choose a border style (solid, dashed, or double), and select a paper grey tone. Grouped departments display a dedicated section badge and border styling.
@@ -270,7 +270,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Branch Removal & Reparenting:</span>
-                    <span className="text-[10px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Trash Icon</span>
+                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Trash Icon</span>
                   </div>
                   <p className="text-[11px] text-neutral-600">
                     When deleting an intermediate department with child branches, you can select Reparent Sub-Branches to lift child nodes up to the parent, preserving the lower branches.
@@ -280,7 +280,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Adding Roots & Roles:</span>
-                    <span className="text-[10px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Enter Key</span>
+                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Enter Key</span>
                   </div>
                   <p className="text-[11px] text-neutral-600">
                     Type a title into the Root or Roles input field and press Enter. Click the X mark on any tag to remove an entry.

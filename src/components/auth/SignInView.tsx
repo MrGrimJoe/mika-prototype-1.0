@@ -199,7 +199,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
             <h1 className="text-2xl font-serif font-bold text-[#1C2438] tracking-tight">
               Log in to Mika
             </h1>
-            <p className="text-xs font-mono text-[#8A8578] mt-1">
+            <p className="text-xs font-mono text-[#6B665A] mt-1">
               Authenticate with your verified identity.
             </p>
           </div>
@@ -232,7 +232,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
                 authMethod === 'google'
                   ? 'bg-[#F7F5F0] text-[#1C2438] font-bold shadow-xs border border-[#DAD5C9]'
-                  : 'text-[#8A8578] hover:text-[#1C2438]'
+                  : 'text-[#6B665A] hover:text-[#1C2438]'
               }`}
             >
               Google Account
@@ -242,7 +242,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
                 authMethod === 'email'
                   ? 'bg-[#F7F5F0] text-[#1C2438] font-bold shadow-xs border border-[#DAD5C9]'
-                  : 'text-[#8A8578] hover:text-[#1C2438]'
+                  : 'text-[#6B665A] hover:text-[#1C2438]'
               }`}
             >
               Email Sign-In
@@ -308,7 +308,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                       Institutional Email Address
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A8578]" />
+                      <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6B665A]" />
                       <input
                         type="email"
                         required
@@ -335,7 +335,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
 
           {/* Quick Demo Switcher */}
           <div className="mt-8 pt-5 border-t border-[#DAD5C9]">
-            <div className="flex items-center justify-between mb-3 text-[10px] font-mono text-[#8A8578]">
+            <div className="flex items-center justify-between mb-3 text-[11px] font-mono text-[#6B665A]">
               <span>SAMPLE IDENTITIES</span>
               <span>ONE-CLICK ACCESS</span>
             </div>
@@ -351,16 +351,16 @@ export const SignInView: React.FC<SignInViewProps> = ({
                     <div className="text-xs font-semibold text-[#1C2438] flex items-center gap-1.5">
                       <span>{user.fullName}</span>
                       {user.isRoot && (
-                        <span className="text-[9px] font-mono bg-[#E8E4DA] text-[#2F3B7A] px-1 py-0.2 rounded-xs font-bold">
+                        <span className="text-[11px] font-mono bg-[#E8E4DA] text-[#2F3B7A] px-1 py-0.2 rounded-xs font-bold">
                           ROOT
                         </span>
                       )}
                     </div>
-                    <div className="text-[10px] font-mono text-[#8A8578]">
+                    <div className="text-[11px] font-mono text-[#6B665A]">
                       {user.roleTitle} &bull; {user.deptName}
                     </div>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#8A8578] group-hover:text-[#1C2438] transition-colors" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#6B665A] group-hover:text-[#1C2438] transition-colors" />
                 </button>
               ))}
             </div>
@@ -369,7 +369,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#DAD5C9] bg-[#F7F5F0] py-3 text-center text-xs font-mono text-[#8A8578]">
+      <footer className="border-t border-[#DAD5C9] bg-[#F7F5F0] py-3 text-center text-xs font-mono text-[#6B665A]">
         Deterministic organizational authorization &bull; {new Date().getFullYear()}
       </footer>
     </div>

@@ -162,7 +162,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
                 <div className="font-medium text-slate-900 truncate">
                   {item.displayName}
                 </div>
-                <div className="text-[10px] text-slate-400 truncate">
+                <div className="text-[11px] text-slate-400 truncate">
                   {item.type.replace('_', ' ')}
                 </div>
               </div>
@@ -172,7 +172,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
       </div>
 
       {!isRepoFileDrilldown && (
-        <div className="px-3 py-1.5 bg-slate-50 text-[10px] text-slate-500 border-t border-slate-100">
+        <div className="px-3 py-1.5 bg-slate-50 text-[11px] text-slate-500 border-t border-slate-100">
           Tip: Type <code className="text-slate-800 bg-white px-1 py-0.5 rounded border border-slate-200">@repo-name/</code> to drill down into repo files!
         </div>
       )}

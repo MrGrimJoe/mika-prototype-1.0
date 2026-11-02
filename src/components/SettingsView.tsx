@@ -197,11 +197,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#DAD5C9]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8A8578]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
               ORGANISATION SETTINGS
             </span>
             {isMasterRoot && (
-              <span className="text-[9px] font-mono bg-[#1C2438] text-white px-1.5 py-0.5 rounded-xs">
+              <span className="text-[11px] font-mono bg-[#1C2438] text-white px-1.5 py-0.5 rounded-xs">
                 MASTER ROOT
               </span>
             )}
@@ -246,7 +246,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <LinkIcon className="w-3.5 h-3.5" />
           <span>Integrations & OAuth</span>
           {connections.length > 0 && (
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-xs ${
+            <span className={`text-[11px] px-1.5 py-0.2 rounded-xs ${
               activeTab === 'integrations' ? 'bg-white/20 text-white' : 'bg-[#DAD5C9] text-[#1C2438]'
             }`}>
               {connections.length}
@@ -305,7 +305,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   Inherited from your active roles: {userAssignments.map(a => `@${roles.find(r => r.id === a.roleId)?.title || 'Role'}`).join(', ') || 'None'}
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-[#2F3B7A] bg-white px-2 py-1 rounded-xs border border-[#DAD5C9]">
+              <span className="text-[11px] font-mono text-[#2F3B7A] bg-white px-2 py-1 rounded-xs border border-[#DAD5C9]">
                 {currentUser.email}
               </span>
             </div>
@@ -317,7 +317,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   className={`p-3 rounded-xs border text-xs font-mono flex items-center justify-between ${
                     detail.hasAccess
                       ? 'bg-white border-[#DAD5C9] text-[#1C2438]'
-                      : 'bg-[#F7F5F0] border-[#E8E4DA] text-[#8A8578]'
+                      : 'bg-[#F7F5F0] border-[#E8E4DA] text-[#6B665A]'
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -326,7 +326,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     </div>
                     <div>
                       <div className="font-bold">{detail.tool.name}</div>
-                      <div className="text-[10px] text-[#5C574B]">
+                      <div className="text-[11px] text-[#5C574B]">
                         {detail.hasAccess ? (
                           detail.grantedByLabel || 'Active Connection'
                         ) : (
@@ -338,7 +338,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   {detail.hasAccess ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   ) : (
-                    <Lock className="w-3.5 h-3.5 text-[#8A8578] shrink-0" />
+                    <Lock className="w-3.5 h-3.5 text-[#6B665A] shrink-0" />
                   )}
                 </div>
               ))}
@@ -357,11 +357,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </p>
               </div>
               {isAnyRoot ? (
-                <span className="text-[10px] font-mono uppercase bg-[#2F3B7A] text-white px-2 py-1 rounded-xs">
+                <span className="text-[11px] font-mono uppercase bg-[#2F3B7A] text-white px-2 py-1 rounded-xs">
                   {isMasterRoot ? 'Master Root Permitted' : 'Root Authority Permitted'}
                 </span>
               ) : (
-                <span className="text-[10px] font-mono text-[#8A8578] bg-[#E8E4DA] px-2 py-1 rounded-xs">
+                <span className="text-[11px] font-mono text-[#6B665A] bg-[#E8E4DA] px-2 py-1 rounded-xs">
                   View-Only
                 </span>
               )}
@@ -386,7 +386,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <h4 className="font-bold text-[#1C2438] flex items-center gap-2">
                 <span>⚡ Browser Userscript (Ctrl+Alt+M)</span>
               </h4>
-              <span className="text-[10px] text-[#2F3B7A] bg-[#EFF6FF] border border-[#BFDBFE] px-2 py-0.5 rounded-xs font-semibold">
+              <span className="text-[11px] text-[#2F3B7A] bg-[#EFF6FF] border border-[#BFDBFE] px-2 py-0.5 rounded-xs font-semibold">
                 Tampermonkey Ready
               </span>
             </div>
@@ -402,7 +402,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <span>Download Userscript</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
-              <span className="text-[10px] text-[#8A8578]">
+              <span className="text-[11px] text-[#6B665A]">
                 Works with Violentmonkey or Tampermonkey.
               </span>
             </div>
@@ -439,7 +439,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 type="text"
                 disabled
                 defaultValue={currentOrg?.slug || 'acme-corp'}
-                className="w-full bg-[#E8E4DA] border border-[#DAD5C9] px-3 py-2 rounded-xs text-[#8A8578]"
+                className="w-full bg-[#E8E4DA] border border-[#DAD5C9] px-3 py-2 rounded-xs text-[#6B665A]"
               />
             </div>
           </div>
@@ -473,7 +473,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 Files live inside your organization's verified Google Drive domain.
               </p>
               {currentOrg?.storageType === 'byod' && (
-                <span className="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -489,7 +489,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 Zero-knowledge encrypted cloud storage at linear continuous rates.
               </p>
               {(currentOrg?.storageType === 'mika' || !currentOrg?.storageType) && (
-                <span className="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -505,7 +505,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 On-premise S3 or MinIO bucket endpoint for sovereign airgapped networks.
               </p>
               {currentOrg?.storageType === 'self_host' && (
-                <span className="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -534,11 +534,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <div key={dept.id} className="p-4 flex items-center justify-between font-mono text-xs">
                   <div>
                     <div className="font-bold text-[#1C2438]">{dept.name}</div>
-                    <div className="text-[10px] text-[#5C574B]">
+                    <div className="text-[11px] text-[#5C574B]">
                       Lead: {leadRole ? `@${leadRole.title}` : 'Unassigned'} • {deptRoles.length} Defined Roles
                     </div>
                   </div>
-                  <span className="text-[10px] bg-[#F7F5F0] px-2 py-1 rounded-xs border border-[#DAD5C9] text-[#1C2438]">
+                  <span className="text-[11px] bg-[#F7F5F0] px-2 py-1 rounded-xs border border-[#DAD5C9] text-[#1C2438]">
                     {dept.isSection ? 'Section' : 'Department'}
                   </span>
                 </div>

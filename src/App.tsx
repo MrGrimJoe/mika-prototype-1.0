@@ -763,7 +763,7 @@ export default function App() {
         {/* Top Header Bar with active breadcrumb & Top-Right Avatar Entry Point */}
         <header className="h-14 bg-white border-b border-[#DAD5C9] px-6 flex items-center justify-between shrink-0 z-20">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#8A8578]">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#6B665A]">
               {organization?.name || 'Oakridge Academy'}
             </span>
             <span className="text-[#DAD5C9] font-mono">/</span>
@@ -774,7 +774,7 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             {/* Quick Settings Shortcut */}
-            <button
+            <button aria-label="Settings & Integrations"
               id="topbar-settings-button"
               onClick={() => setActiveTab('settings')}
               className={`p-2 rounded-xs border transition-colors cursor-pointer ${
@@ -789,7 +789,7 @@ export default function App() {
 
             {/* Top-Right Avatar Entry Point */}
             <div className="relative">
-              <button
+              <button aria-label="Account Menu"
                 id="topbar-user-avatar-button"
                 onClick={() => setShowUserDropdown(prev => !prev)}
                 className="flex items-center gap-2 p-1.5 rounded-xs hover:bg-[#F7F5F0] border border-[#DAD5C9] transition-colors cursor-pointer"
@@ -801,14 +801,14 @@ export default function App() {
                 <span className="text-xs font-semibold text-[#1C2438] hidden sm:inline max-w-[120px] truncate">
                   {currentUser.preferredName || currentUser.fullName}
                 </span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#8A8578]" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#6B665A]" />
               </button>
 
               {showUserDropdown && (
                 <div className="absolute right-0 top-full mt-1.5 w-56 bg-white border border-[#DAD5C9] shadow-lg rounded-xs py-1.5 z-50 font-mono text-xs animate-in fade-in duration-100">
                   <div className="px-3 py-2 border-b border-[#DAD5C9] bg-[#F7F5F0]">
                     <div className="font-bold text-[#1C2438] truncate">{currentUser.fullName}</div>
-                    <div className="text-[10px] text-[#5C574B] truncate">{currentUser.email}</div>
+                    <div className="text-[11px] text-[#5C574B] truncate">{currentUser.email}</div>
                   </div>
 
                   <button
@@ -818,7 +818,7 @@ export default function App() {
                     }}
                     className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-[#8A8578]" />
+                    <UserIcon className="w-3.5 h-3.5 text-[#6B665A]" />
                     <span>View Profile</span>
                   </button>
 
@@ -829,7 +829,7 @@ export default function App() {
                     }}
                     className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
                   >
-                    <SettingsIcon className="w-3.5 h-3.5 text-[#8A8578]" />
+                    <SettingsIcon className="w-3.5 h-3.5 text-[#6B665A]" />
                     <span>Settings & Integrations</span>
                   </button>
 

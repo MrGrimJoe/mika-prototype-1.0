@@ -205,7 +205,7 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
               </ul>
               <div className="pt-1 text-[11px] text-slate-500 flex items-center gap-1.5">
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>Redirects to <code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">github.com/login/oauth/authorize</code></span>
+                <span>Redirects to <code className="bg-slate-200 px-1 py-0.5 rounded text-[11px]">github.com/login/oauth/authorize</code></span>
               </div>
             </div>
 

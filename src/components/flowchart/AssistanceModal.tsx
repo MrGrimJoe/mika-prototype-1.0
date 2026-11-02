@@ -459,7 +459,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                     <h2 className="font-bold text-lg text-neutral-900 tracking-tight">
                       ASSISTANCE SERVICE
                     </h2>
-                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 border border-emerald-300 rounded-xs">
+                    <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2 py-0.5 border border-emerald-300 rounded-xs">
                       100% Free
                     </span>
                   </div>
@@ -545,16 +545,16 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                     <span className="font-bold text-xs tracking-tight text-white">
                       Mika Support Specialist
                     </span>
-                    <span className="text-[9px] bg-emerald-800 text-emerald-200 font-semibold px-1.5 py-0.2 rounded-xs">
+                    <span className="text-[11px] bg-emerald-800 text-emerald-200 font-semibold px-1.5 py-0.2 rounded-xs">
                       Live on duty
                     </span>
                   </div>
-                  <div className="text-[10px] text-neutral-300 font-sans flex items-center gap-1.5">
+                  <div className="text-[11px] text-neutral-300 font-sans flex items-center gap-1.5">
                     <span>Chatting with <strong>{userName}</strong></span>
-                    <button
+                    <button aria-label="Change Name"
                       type="button"
                       onClick={() => setHasStartedChat(false)}
-                      className="text-emerald-300 hover:underline text-[10px]"
+                      className="text-emerald-300 hover:underline text-[11px]"
                       title="Change Name"
                     >
                       (Change)
@@ -565,7 +565,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
 
               <div className="flex items-center gap-2">
                 {/* Voice Call toggle */}
-                <button
+                <button aria-label="Phone Call Assistance"
                   type="button"
                   onClick={() => setShowCallOption(!showCallOption)}
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold rounded-xs transition-colors ${
@@ -612,7 +612,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                   </span>
                   <a
                     href="tel:+18005550199"
-                    className="bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 py-1 text-[10px] font-bold rounded-xs flex items-center gap-1 transition-colors"
+                    className="bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 py-1 text-[11px] font-bold rounded-xs flex items-center gap-1 transition-colors"
                   >
                     <PhoneCall size={10} />
                     Dial Now
@@ -660,7 +660,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                     key={msg.id}
                     className={`flex flex-col ${isHelper ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] text-neutral-400 font-sans">
+                    <div className="flex items-center gap-1.5 mb-1 px-1 text-[11px] text-neutral-400 font-sans">
                       <span className="font-semibold text-neutral-600">
                         {isHelper ? 'Specialist Helper' : userName}
                       </span>
@@ -680,7 +680,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                       {/* Interactive Canvas Action Trigger */}
                       {msg.suggestedAction && onApplyStructure && (
                         <div className="mt-2 pt-2 border-t border-neutral-200 bg-neutral-50 -mx-3 -mb-3 p-3 rounded-b-sm space-y-1.5">
-                          <span className="text-[10px] font-mono font-bold text-neutral-600 uppercase tracking-wide block">
+                          <span className="text-[11px] font-mono font-bold text-neutral-600 uppercase tracking-wide block">
                             Prepared Structure:
                           </span>
                           <p className="text-[11px] font-sans text-neutral-600">
@@ -717,7 +717,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
 
             {/* Quick Prompt Suggestions */}
             <div className="border-t border-neutral-200 bg-white px-3 py-2 flex items-center gap-1.5 overflow-x-auto text-[11px]">
-              <span className="text-[10px] text-neutral-400 font-bold uppercase shrink-0">
+              <span className="text-[11px] text-neutral-400 font-bold uppercase shrink-0">
                 Quick Prompts:
               </span>
               <button
@@ -758,7 +758,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                 placeholder="Tell the helper what structure or departments you need..."
                 className="flex-1 bg-white border border-neutral-300 focus:border-neutral-900 px-3 py-2 text-xs rounded-xs text-neutral-900 focus:outline-none transition-colors font-sans"
               />
-              <button
+              <button aria-label="Send Message"
                 type="submit"
                 disabled={!inputText.trim()}
                 className="bg-neutral-900 hover:bg-neutral-800 disabled:opacity-40 text-white p-2 rounded-xs transition-colors shadow-[2px_2px_0px_#71717a] cursor-pointer"

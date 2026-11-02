@@ -57,7 +57,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                 <h2 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900">
                   LIVE ASSISTANCE SERVICE
                 </h2>
-                <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 border border-emerald-300 rounded-xs">
+                <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-1.5 py-0.5 border border-emerald-300 rounded-xs">
                   100% Free
                 </span>
               </div>
@@ -141,7 +141,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                       <PhoneCall size={15} className="text-emerald-700" />
                       Speak via Phone
                     </span>
-                    <span className="text-[10px] bg-neutral-200 group-hover:bg-emerald-100 text-neutral-700 group-hover:text-emerald-900 px-1.5 py-0.5 rounded-xs">
+                    <span className="text-[11px] bg-neutral-200 group-hover:bg-emerald-100 text-neutral-700 group-hover:text-emerald-900 px-1.5 py-0.5 rounded-xs">
                       Live
                     </span>
                   </div>
@@ -164,7 +164,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                       <MessageSquare size={15} className="text-emerald-700" />
                       Text an Employee
                     </span>
-                    <span className="text-[10px] bg-neutral-200 group-hover:bg-emerald-100 text-neutral-700 group-hover:text-emerald-900 px-1.5 py-0.5 rounded-xs">
+                    <span className="text-[11px] bg-neutral-200 group-hover:bg-emerald-100 text-neutral-700 group-hover:text-emerald-900 px-1.5 py-0.5 rounded-xs">
                       Chat / SMS
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                         <Phone size={14} className="text-emerald-700" />
                         Direct Phone Line
                       </span>
-                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-xs">
+                      <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-xs">
                         Toll-Free
                       </span>
                     </div>
@@ -351,7 +351,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                       <span className="font-bold text-neutral-900 block">Direct SMS Helpline:</span>
                       <span className="text-[11px] text-neutral-600">Text your structure to: <strong>+1 (800) 555-0199</strong></span>
                     </div>
-                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 border border-emerald-300 rounded-xs">
+                    <span className="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 border border-emerald-300 rounded-xs">
                       24/7 SMS
                     </span>
                   </div>

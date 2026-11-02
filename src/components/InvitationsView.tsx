@@ -89,7 +89,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#E5E7EB]">
         <div>
-          <div className="text-[10px] font-mono uppercase tracking-widest text-[#6B7280] mb-1.5 flex items-center gap-2">
+          <div className="text-[11px] font-mono uppercase tracking-widest text-[#6B7280] mb-1.5 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
             <span>Staff Onboarding // Role Link Access</span>
           </div>
@@ -197,7 +197,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                 <ShieldAlert className="w-3.5 h-3.5 text-[#4B5563]" />
                 <span>Require tool connections before joining (Optional)</span>
               </span>
-              <span className="text-[10px] font-mono text-[#6B7280]">
+              <span className="text-[11px] font-mono text-[#6B7280]">
                 {selectedRequiredTools.length > 0 ? `${selectedRequiredTools.length} required` : 'None required'}
               </span>
             </div>
@@ -254,7 +254,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
             <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-[#111827]">
               Active Invitation Links
             </h2>
-            <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-[#F3F4F6] text-[#4B5563] rounded-xs">
+            <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-[#F3F4F6] text-[#4B5563] rounded-xs">
               {joinLinks.length}
             </span>
           </div>
@@ -296,13 +296,13 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                     {/* Required Integrations Badges */}
                     {link.requiredIntegrations && link.requiredIntegrations.length > 0 && (
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] font-mono uppercase text-[#6B7280]">Requires:</span>
+                        <span className="text-[11px] font-mono uppercase text-[#6B7280]">Requires:</span>
                         {link.requiredIntegrations.map(k => {
                           const tool = INTEGRATION_TOOLS.find(t => t.key === k);
                           return (
                             <span 
                               key={k} 
-                              className="px-1.5 py-0.5 rounded-xs bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-[10px] font-medium"
+                              className="px-1.5 py-0.5 rounded-xs bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-[11px] font-medium"
                             >
                               {tool?.name || k}
                             </span>
@@ -335,7 +335,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                       <span>{isCopied ? 'Copied' : 'Copy Link'}</span>
                     </button>
 
-                    <button
+                    <button aria-label="Show QR Code"
                       onClick={() => setQrModalLink(link)}
                       className="p-1.5 text-[#4B5563] hover:text-[#111827] hover:bg-[#F3F4F6] rounded-xs border border-[#E5E7EB] transition-colors cursor-pointer"
                       title="Show QR Code"

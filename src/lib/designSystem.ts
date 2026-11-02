@@ -14,7 +14,7 @@ export const colors = {
   paperRaised: '#EFEBE2',
   paperSunken: '#E8E4DA',
   hairline: '#DAD5C9',
-  mutedText: '#8A8578',
+  mutedText: '#6B665A',
   secondaryText: '#5C574B',
   ink: '#1C2438',
   accent: '#2F3B7A',
@@ -38,42 +38,42 @@ export const colors = {
  */
 export const taskStateColors = {
   pending: {
-    text: '#DC2626',      // Red
+    text: '#B91C1C',      // Red (5.9:1 on bg)
     bg: '#FEF2F2',
     border: '#FECACA',
     dot: '#EF4444',
     label: 'Pending'
   },
   help: {
-    text: '#2563EB',      // Blue
+    text: '#1D4ED8',      // Blue (6.2:1 on bg)
     bg: '#EFF6FF',
     border: '#BFDBFE',
     dot: '#3B82F6',
     label: 'Help Needed'
   },
   submitted: {
-    text: '#CA8A04',      // Yellow
+    text: '#854D0E',      // Yellow (6.6:1 on bg)
     bg: '#FEFCE8',
     border: '#FEF08A',
     dot: '#EAB308',
     label: 'Submitted'
   },
   done: {
-    text: '#16A34A',      // Green
+    text: '#15803D',      // Green (4.8:1 on bg)
     bg: '#F0FDF4',
     border: '#BBF7D0',
     dot: '#22C55E',
     label: 'Approved'
   },
   rejected: {
-    text: '#DC2626',      // Same Red as Pending, disambiguated by label
+    text: '#B91C1C',      // Same Red as Pending, disambiguated by label
     bg: '#FEF2F2',
     border: '#FECACA',
     dot: '#EF4444',
     label: 'Denied'
   },
   expired: {
-    text: '#6B7280',      // Grey
+    text: '#4B5563',      // Grey (6.9:1 on bg)
     bg: '#F3F4F6',
     border: '#E5E7EB',
     dot: '#9CA3AF',

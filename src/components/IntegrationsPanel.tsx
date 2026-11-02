@@ -361,7 +361,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium text-sm text-slate-900">{svc.name}</h4>
                       {svc.enterpriseOnly && (
-                        <span className="text-[10px] uppercase font-semibold tracking-wider text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
+                        <span className="text-[11px] uppercase font-semibold tracking-wider text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
                           Enterprise
                         </span>
                       )}
@@ -377,7 +377,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
 
                 <div className="shrink-0">
                   {isEnterpriseLocked ? (
-                    <button 
+                    <button aria-label="Requires Google Workspace Enterprise" 
                       disabled 
                       className="px-3 py-1.5 text-xs text-slate-400 bg-slate-100 rounded-lg cursor-not-allowed"
                       title="Requires Google Workspace Enterprise"

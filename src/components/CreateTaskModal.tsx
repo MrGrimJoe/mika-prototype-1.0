@@ -226,7 +226,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-[#8A8578] hover:text-[#1C2438] rounded-xs transition-colors cursor-pointer"
+            className="p-1 text-[#6B665A] hover:text-[#1C2438] rounded-xs transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -252,7 +252,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold">
                 Description & Specifications:
               </label>
-              <span className="text-[10px] text-slate-400 font-mono">
+              <span className="text-[11px] text-slate-400 font-mono">
                 Type <strong className="text-indigo-600">@</strong> to reference GitHub repos, Figma, Canva, or Docs
               </span>
             </div>
@@ -277,7 +277,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             {/* Referenced Mentions Chips */}
             {mentions.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Linked:</span>
+                <span className="text-[11px] uppercase font-bold text-slate-400 font-mono">Linked:</span>
                 {mentions.map((m) => (
                   <span
                     key={m.displayName}

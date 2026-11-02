@@ -87,7 +87,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
         {/* Due date if set */}
         {task.dueDate && (
-          <div className="flex items-center gap-1 text-[11px] font-mono text-[#8A8578]">
+          <div className="flex items-center gap-1 text-[11px] font-mono text-[#6B665A]">
             <Clock className="w-3 h-3" />
             <span>Due {new Date(task.dueDate).toLocaleDateString()}</span>
           </div>
@@ -110,7 +110,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       )}
 
       {/* Bottom info row */}
-      <div className="flex items-center justify-between pt-3 border-t border-[#EFEBE2] text-xs text-[#8A8578] font-mono">
+      <div className="flex items-center justify-between pt-3 border-t border-[#EFEBE2] text-xs text-[#6B665A] font-mono">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
             <UserIcon className="w-3.5 h-3.5 text-[#5C574B]" />

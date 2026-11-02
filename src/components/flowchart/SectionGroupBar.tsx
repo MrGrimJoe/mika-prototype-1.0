@@ -70,7 +70,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
           <span className="font-bold text-neutral-900 text-xs">
             {count} {count === 1 ? 'department' : 'departments'} selected
           </span>
-          <span className="text-[10px] text-neutral-500 hidden sm:inline">
+          <span className="text-[11px] text-neutral-500 hidden sm:inline">
             (Main dept excluded)
           </span>
         </div>
@@ -114,7 +114,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                   id="existing-sections-menu"
                   className="absolute bottom-full mb-2 left-0 w-56 bg-white border border-neutral-900 rounded-xs shadow-[3px_3px_0px_#18181b] p-1 z-50 flex flex-col gap-1 max-h-48 overflow-y-auto"
                 >
-                  <div className="text-[10px] uppercase font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
+                  <div className="text-[11px] uppercase font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
                     Choose Section
                   </div>
                   {sections.map((sec) => (
@@ -128,7 +128,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                       className="flex items-center justify-between px-2 py-1 text-left hover:bg-[#f3f3f0] rounded-xs text-neutral-800 text-xs transition-colors"
                     >
                       <span className="truncate">§ {sec.name}</span>
-                      <span className="text-[10px] text-neutral-500 capitalize">{sec.shade}</span>
+                      <span className="text-[11px] text-neutral-500 capitalize">{sec.shade}</span>
                     </button>
                   ))}
                 </div>
@@ -138,7 +138,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
           {/* Remove from Section Button */}
           {anyHasSection && !isCreatingNew && (
-            <button
+            <button aria-label="Remove selected departments from their sections"
               type="button"
               id="ungroup-section-btn"
               onClick={onRemoveFromSection}
@@ -151,7 +151,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
           {/* Remove / Delete Selected Departments */}
           {!isCreatingNew && !showDeleteConfirm && (
-            <button
+            <button aria-label="Remove selected departments from diagram"
               type="button"
               id="delete-selected-departments-btn"
               onClick={() => setShowDeleteConfirm(true)}
@@ -164,7 +164,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
           )}
 
           {/* Deselect All */}
-          <button
+          <button aria-label="Deselect all"
             type="button"
             id="deselect-all-btn"
             onClick={onClearSelection}
@@ -206,10 +206,10 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Shades Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[10px] text-neutral-500 uppercase">Shade:</span>
+              <span className="text-[11px] text-neutral-500 uppercase">Shade:</span>
               <div className="flex items-center gap-1 bg-white p-1 border border-neutral-300 rounded-xs">
                 {SHADES.map((s) => (
-                  <button
+                  <button aria-label={s.label}
                     key={s.id}
                     type="button"
                     onClick={() => setSelectedShade(s.id)}
@@ -226,7 +226,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Border Style Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[10px] text-neutral-500 uppercase">Border:</span>
+              <span className="text-[11px] text-neutral-500 uppercase">Border:</span>
               <select
                 value={selectedBorderStyle}
                 onChange={(e) => setSelectedBorderStyle(e.target.value as Section['borderStyle'])}
@@ -257,7 +257,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
             Remove {count} selected department(s)? Sub-branches behavior:
           </div>
           <div className="flex items-center gap-2">
-            <button
+            <button aria-label="Delete departments and all their child branches"
               type="button"
               id="confirm-delete-all-btn"
               onClick={() => {
@@ -269,7 +269,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
             >
               Delete All Sub-Branches
             </button>
-            <button
+            <button aria-label="Preserve sub-branches by connecting them to parent"
               type="button"
               id="confirm-reparent-btn"
               onClick={() => {

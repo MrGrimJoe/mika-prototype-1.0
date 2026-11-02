@@ -218,7 +218,7 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
         {/* Search & Assign Task Action */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="relative flex-1 sm:w-56">
-            <Search className="w-3.5 h-3.5 text-[#8A8578] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#6B665A] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search assignments..."
@@ -264,9 +264,9 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
           ))
         ) : (
           <div className="bg-white border border-dashed border-[#DAD5C9] p-12 text-center rounded-xs">
-            <CheckSquare className="w-8 h-8 mx-auto text-[#8A8578] mb-2 opacity-60" />
+            <CheckSquare className="w-8 h-8 mx-auto text-[#6B665A] mb-2 opacity-60" />
             <h4 className="text-sm font-bold text-[#1C2438] uppercase tracking-wider mb-1 font-mono">No Matching Tasks</h4>
-            <p className="text-xs text-[#8A8578] max-w-sm mx-auto font-mono">
+            <p className="text-xs text-[#6B665A] max-w-sm mx-auto font-mono">
               {searchQuery || selectedColor !== 'all'
                 ? 'Adjust color or search filters to inspect assignments.'
                 : 'No active assignments in current view.'}

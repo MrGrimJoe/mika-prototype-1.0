@@ -226,7 +226,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
         id="canvas-controls-toolbar"
         className="absolute bottom-5 right-5 flex items-center bg-white border-[1.5px] border-neutral-900 rounded-sm shadow-[2.5px_2.5px_0px_#18181b] p-1 gap-1 z-30 font-mono text-xs"
       >
-        <button
+        <button aria-label="Zoom Out (-)"
           type="button"
           id="zoom-out-btn"
           onClick={handleZoomOut}
@@ -237,7 +237,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           <ZoomOut size={14} />
         </button>
 
-        <button
+        <button aria-label="Reset to 100%"
           type="button"
           id="reset-zoom-btn"
           onClick={handleResetZoom}
@@ -247,7 +247,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           {Math.round(zoom * 100)}%
         </button>
 
-        <button
+        <button aria-label="Zoom In (+)"
           type="button"
           id="zoom-in-btn"
           onClick={handleZoomIn}
@@ -260,7 +260,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
 
         <div className="w-[1px] h-4 bg-neutral-300 mx-0.5" />
 
-        <button
+        <button aria-label="Fit All on Screen"
           type="button"
           id="fit-view-btn"
           onClick={handleFitToScreen}
@@ -270,7 +270,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           <Maximize2 size={14} />
         </button>
 
-        <button
+        <button aria-label="Center Top Root"
           type="button"
           id="center-root-btn"
           onClick={() => centerRoot(true)}

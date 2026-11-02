@@ -49,7 +49,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             <h1 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900 font-sans">
               Mika Organizational Flowchart
             </h1>
-            <span className="font-mono text-[10px] font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded-xs">
+            <span className="font-mono text-[11px] font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded-xs">
               Mika Standard
             </span>
           </div>
@@ -66,30 +66,30 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       >
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-          <span className="text-[10px] uppercase text-neutral-500 font-semibold">Depts:</span>
+          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Depts:</span>
           <span className="font-bold text-neutral-900">{stats.totalDepartments}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" />
-          <span className="text-[10px] uppercase text-neutral-500 font-semibold">Sections:</span>
+          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Sections:</span>
           <span className="font-bold text-neutral-900">{stats.totalSections}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />
-          <span className="text-[10px] uppercase text-neutral-500 font-semibold">Roots:</span>
+          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Roots:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoots}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-          <span className="text-[10px] uppercase text-neutral-500 font-semibold">Roles:</span>
+          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Roles:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoles}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
-          <span className="text-[10px] uppercase text-neutral-500 font-semibold">Tiers:</span>
+          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Tiers:</span>
           <span className="font-bold text-neutral-900">{stats.maxDepth}</span>
         </div>
       </div>
@@ -97,7 +97,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       {/* Right: Section Manager & Controls */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* Assistance Button - Named "Assistance", Green with Hover and Pulse */}
-        <button
+        <button aria-label="Connect with an employee to build your organization for free on the spot"
           type="button"
           id="call-assistance-top-btn"
           onClick={() => setShowAssistance(true)}
@@ -113,7 +113,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Sections Manager Drawer Button */}
-        <button
+        <button aria-label="Manage grouped sections"
           type="button"
           id="manage-sections-btn"
           onClick={onOpenSectionsManager}
@@ -126,7 +126,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
 
         {/* Paper Style Selector */}
         <div className="hidden sm:flex items-center bg-white border border-neutral-400 rounded-xs p-0.5 text-[11px] font-mono shadow-[1px_1px_0px_#27272a]">
-          <button
+          <button aria-label="Graph Grid"
             type="button"
             id="style-grid-btn"
             onClick={() => onPaperStyleChange('grid')}
@@ -139,7 +139,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           >
             Grid
           </button>
-          <button
+          <button aria-label="Dot Matrix"
             type="button"
             id="style-dots-btn"
             onClick={() => onPaperStyleChange('dots')}
@@ -152,7 +152,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           >
             Dots
           </button>
-          <button
+          <button aria-label="Lined Ledger"
             type="button"
             id="style-ledger-btn"
             onClick={() => onPaperStyleChange('ledger')}
@@ -165,7 +165,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           >
             Ledger
           </button>
-          <button
+          <button aria-label="Clean Paper"
             type="button"
             id="style-clean-btn"
             onClick={() => onPaperStyleChange('clean')}
@@ -181,7 +181,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </div>
 
         {/* Print Button */}
-        <button
+        <button aria-label="Print or Export PDF"
           type="button"
           id="print-diagram-btn"
           onClick={() => window.print()}
@@ -192,7 +192,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Reset Button (Triggers custom confirmation dialog) */}
-        <button
+        <button aria-label="Clear diagram and reset to primary department"
           type="button"
           id="reset-diagram-btn"
           onClick={() => setShowResetConfirm(true)}
@@ -204,7 +204,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Guidance / Help Button */}
-        <button
+        <button aria-label="View organizational specification and visual guide"
           type="button"
           id="help-guidance-btn"
           onClick={() => setShowGuidance(true)}
