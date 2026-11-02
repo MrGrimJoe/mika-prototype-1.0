@@ -5,6 +5,7 @@
  */
 
 import { getAccessToken } from './firebase';
+import { confirmAction, notify } from './dialogService';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 // Declare Google API global for Picker
@@ -249,23 +250,52 @@ export async function syncToGoogleCalendar(params: CalendarEventParams): Promise
       body: JSON.stringify(eventPayload),
     });
 
-    const meetLink = data.conferenceData?.entryPoints?.find((ep: any) => ep.entryPointType === 'video')?.uri;
+    let meetLink = extractMeetLink(data);
+
+    // Google creates Meet rooms asynchronously: the first response can come back
+    // with a pending createRequest and no link yet. Poll briefly for the real one.
+    if (params.createMeetConference && !meetLink && data.id) {
+      for (let attempt = 0; attempt < 5 && !meetLink; attempt++) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const fresh = await fetchGoogleApi(
+          `https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(data.id)}?conferenceDataVersion=1`
+        );
+        meetLink = extractMeetLink(fresh);
+      }
+    }
+
+    if (params.createMeetConference && !meetLink) {
+      throw new Error('Google created the event but did not return a Meet link. Please try again.');
+    }
 
     return {
       eventId: data.id,
-      meetLink: meetLink || data.hangoutLink,
+      meetLink,
       htmlLink: data.htmlLink,
     };
   } catch (err) {
+    // A meeting needs a real Meet room. Never invent a link: surface the failure instead.
+    if (params.createMeetConference) {
+      console.error('Could not create Google Meet conference:', err);
+      throw err instanceof Error
+        ? err
+        : new Error('Could not create the Google Meet conference. Please sign in with Google and try again.');
+    }
+    // Task deadlines can still be saved locally when Calendar is unavailable.
     console.warn('Calendar sync error (gracefully fallen back):', err);
-    // Fallback: generate a valid Google Meet link format so meetings work even if scopes are pending
-    const fallbackId = `${Math.random().toString(36).substring(2, 5)}-${Math.random().toString(36).substring(2, 6)}-${Math.random().toString(36).substring(2, 5)}`;
     return {
       eventId: `local-evt-${Date.now()}`,
-      meetLink: `https://meet.google.com/${fallbackId}`,
       htmlLink: `https://calendar.google.com`,
     };
   }
+}
+
+function extractMeetLink(event: any): string | undefined {
+  return (
+    event?.conferenceData?.entryPoints?.find((ep: any) => ep.entryPointType === 'video')?.uri ||
+    event?.hangoutLink ||
+    undefined
+  );
 }
 
 /**
@@ -383,7 +413,7 @@ export async function openGooglePicker(
 ): Promise<void> {
   const token = await getAccessToken();
   if (!token) {
-    alert('Please sign in with Google to browse Drive files.');
+    notify('Sign in with Google to browse your Drive files.', 'error');
     return;
   }
 
@@ -417,7 +447,7 @@ export async function openGooglePicker(
     picker.setVisible(true);
   } catch (err) {
     console.error('Failed to open Google Picker:', err);
-    alert('Could not initialize Google Picker. Please ensure popups and third-party cookies are permitted.');
+    notify('Google Picker could not open. Allow popups and third-party cookies for this site, then try again.', 'error');
   }
 }
 
@@ -498,7 +528,11 @@ export async function sendGmailMessage(
   skipConfirmation: boolean = false
 ): Promise<{ id: string; threadId: string } | null> {
   if (!skipConfirmation) {
-    const confirmed = window.confirm(`Send email to ${params.to} with subject "${params.subject}" via your Gmail account?`);
+    const confirmed = await confirmAction({
+      title: 'Send this email?',
+      message: `"${params.subject}" will be sent to ${params.to} from your Gmail account.`,
+      confirmLabel: 'Send email',
+    });
     if (!confirmed) return null;
   }
 
@@ -578,7 +612,11 @@ export async function createGoogleTask(
   skipConfirmation: boolean = false
 ): Promise<GoogleTaskItem | null> {
   if (!skipConfirmation) {
-    const confirmed = window.confirm(`Add task "${task.title}" to your Google Tasks?`);
+    const confirmed = await confirmAction({
+      title: 'Add to Google Tasks?',
+      message: `"${task.title}" will be added to your Google Tasks.`,
+      confirmLabel: 'Add task',
+    });
     if (!confirmed) return null;
   }
 
@@ -620,7 +658,12 @@ export async function deleteGoogleTask(
   taskId: string,
   taskTitle: string = 'this task'
 ): Promise<void> {
-  const confirmed = window.confirm(`Delete "${taskTitle}" from Google Tasks? This action cannot be undone.`);
+  const confirmed = await confirmAction({
+    title: 'Delete this task?',
+    message: `"${taskTitle}" will be removed from Google Tasks. This can\'t be undone.`,
+    confirmLabel: 'Delete task',
+    destructive: true,
+  });
   if (!confirmed) return;
 
   await fetchGoogleApi(`https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(taskListId)}/tasks/${encodeURIComponent(taskId)}`, {
@@ -683,7 +726,11 @@ export async function createGoogleForm(
   skipConfirmation: boolean = false
 ): Promise<GoogleFormSummary | null> {
   if (!skipConfirmation) {
-    const confirmed = window.confirm(`Create new Google Form "${title}" in your Google account?`);
+    const confirmed = await confirmAction({
+      title: 'Create this form?',
+      message: `A new Google Form named "${title}" will be created in your Google account.`,
+      confirmLabel: 'Create form',
+    });
     if (!confirmed) return null;
   }
 
@@ -765,7 +812,11 @@ export async function createClassroomAnnouncement(
   skipConfirmation: boolean = false
 ): Promise<any> {
   if (!skipConfirmation) {
-    const confirmed = window.confirm(`Post announcement to Classroom course "${courseId}"?`);
+    const confirmed = await confirmAction({
+      title: 'Post this announcement?',
+      message: `Everyone in Classroom course "${courseId}" will see it.`,
+      confirmLabel: 'Post announcement',
+    });
     if (!confirmed) return null;
   }
 

@@ -173,14 +173,14 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white border border-stone-300 rounded-2xl shadow-xl overflow-hidden my-4">
+    <div className="max-w-2xl mx-auto bg-surface border border-stone-300 rounded-2xl shadow-xl overflow-hidden my-4">
       {/* Progress Dots Bar */}
       <div className="flex gap-1.5 p-4 pt-5 px-6">
         {[0, 1, 2, 3, 4, 5, 6].map(idx => (
           <div
             key={idx}
             className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-              idx <= currentStep ? 'bg-[#2F3B7A]' : 'bg-stone-200'
+              idx <= currentStep ? 'bg-accent' : 'bg-stone-200'
             }`}
           />
         ))}
@@ -194,10 +194,10 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 0: Landing (Log In / Create an organisation) */}
         {currentStep === 0 && (
           <div className="text-center py-6">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto mb-4 text-[#2F3B7A] shadow-xs">
-              <Layers className="w-7 h-7 text-[#2F3B7A]" />
+            <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto mb-4 text-accent-fg shadow-xs">
+              <Layers className="w-7 h-7 text-accent-fg" />
             </div>
-            <h2 className="text-3xl font-bold text-[#1C2438] mb-2 font-serif-heading">
+            <h2 className="text-3xl font-bold text-ink mb-2 font-serif-heading">
               Mika
             </h2>
             <p className="text-sm text-stone-600 mb-8 max-w-sm mx-auto leading-relaxed">
@@ -207,7 +207,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             <div className="space-y-3 max-w-xs mx-auto">
               <button
                 onClick={handleNext}
-                className="w-full h-11 bg-[#2F3B7A] hover:bg-[#232c5c] text-white font-medium rounded-lg text-sm shadow-sm transition-all cursor-pointer"
+                className="w-full h-11 bg-accent hover:bg-[#232c5c] text-white font-medium rounded-lg text-sm shadow-sm transition-all cursor-pointer"
               >
                 Create an organisation
               </button>
@@ -224,7 +224,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 1: Template Selection (School, Company, Nonprofit, Build my own) */}
         {currentStep === 1 && (
           <div>
-            <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+            <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
               Start your organisation
             </h2>
             <p className="text-xs text-stone-600 mb-5">
@@ -236,11 +236,11 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 onClick={() => { setSelectedTemplate('school'); onSelectTemplate('school'); }}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedTemplate === 'school'
-                    ? 'border-[#2F3B7A] bg-indigo-50/40 shadow-xs'
-                    : 'border-stone-200 hover:border-stone-300 bg-[#FAF9F6]'
+                    ? 'border-accent bg-indigo-50/40 shadow-xs'
+                    : 'border-stone-200 hover:border-stone-300 bg-paper'
                 }`}
               >
-                <School className="w-6 h-6 text-[#2F3B7A] mb-2" />
+                <School className="w-6 h-6 text-accent-fg mb-2" />
                 <h4 className="text-sm font-semibold text-stone-900">School</h4>
                 <p className="text-[11px] text-stone-500 mt-1">Sections, grade levels & subject departments</p>
               </div>
@@ -249,11 +249,11 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 onClick={() => { setSelectedTemplate('company'); onSelectTemplate('company'); }}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedTemplate === 'company'
-                    ? 'border-[#2F3B7A] bg-indigo-50/40 shadow-xs'
-                    : 'border-stone-200 hover:border-stone-300 bg-[#FAF9F6]'
+                    ? 'border-accent bg-indigo-50/40 shadow-xs'
+                    : 'border-stone-200 hover:border-stone-300 bg-paper'
                 }`}
               >
-                <Building className="w-6 h-6 text-[#2F3B7A] mb-2" />
+                <Building className="w-6 h-6 text-accent-fg mb-2" />
                 <h4 className="text-sm font-semibold text-stone-900">Company</h4>
                 <p className="text-[11px] text-stone-500 mt-1">Cross-functional squads, leads & platform matrix</p>
               </div>
@@ -262,11 +262,11 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 onClick={() => { setSelectedTemplate('nonprofit'); onSelectTemplate('nonprofit'); }}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedTemplate === 'nonprofit'
-                    ? 'border-[#2F3B7A] bg-indigo-50/40 shadow-xs'
-                    : 'border-stone-200 hover:border-stone-300 bg-[#FAF9F6]'
+                    ? 'border-accent bg-indigo-50/40 shadow-xs'
+                    : 'border-stone-200 hover:border-stone-300 bg-paper'
                 }`}
               >
-                <HeartHandshake className="w-6 h-6 text-[#2F3B7A] mb-2" />
+                <HeartHandshake className="w-6 h-6 text-accent-fg mb-2" />
                 <h4 className="text-sm font-semibold text-stone-900">Nonprofit</h4>
                 <p className="text-[11px] text-stone-500 mt-1">Programs, chapters & field volunteer teams</p>
               </div>
@@ -275,8 +275,8 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 onClick={() => { setSelectedTemplate('custom'); onSelectTemplate('custom'); }}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedTemplate === 'custom'
-                    ? 'border-[#2F3B7A] bg-indigo-50/40 shadow-xs'
-                    : 'border-stone-200 hover:border-stone-300 bg-[#FAF9F6]'
+                    ? 'border-accent bg-indigo-50/40 shadow-xs'
+                    : 'border-stone-200 hover:border-stone-300 bg-paper'
                 }`}
               >
                 <Sparkles className="w-6 h-6 text-[#7C3AED] mb-2" />
@@ -290,7 +290,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 2: Org Builder Canvas (Part VII §3) */}
         {currentStep === 2 && (
           <div>
-            <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+            <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
               Build your org
             </h2>
             <p className="text-xs text-stone-600 mb-3">
@@ -304,7 +304,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 placeholder="Describe your organization (e.g., 'Hospital with ICU and triage nurse leads')..."
                 value={aiGenPrompt}
                 onChange={e => setAiGenPrompt(e.target.value)}
-                className="flex-1 px-3 py-1.5 text-xs border border-stone-300 rounded-lg bg-stone-50 focus:bg-white"
+                className="flex-1 px-3 py-1.5 text-xs border border-stone-300 rounded-lg bg-stone-50 focus:bg-surface"
               />
               <button
                 type="submit"
@@ -324,16 +324,16 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             )}
 
             {/* Canvas Demo Preview */}
-            <div className="bg-[#FAF9F6] border border-stone-200 rounded-xl p-4 text-xs font-mono-code space-y-2">
+            <div className="bg-paper border border-stone-200 rounded-xl p-4 text-xs font-mono-code space-y-2">
               <div className="flex items-center gap-2 text-stone-900 font-bold">
-                <Crown className="w-4 h-4 text-[#2F3B7A]" />
+                <Crown className="w-4 h-4 text-accent-fg" />
                 <span>School</span>
                 <span className="text-stone-400 font-normal font-sans text-[11px]">root: Principal</span>
               </div>
 
               <div className="ml-4 pl-3 border-l-2 border-indigo-200 space-y-2">
-                <div className="flex items-center gap-2 text-[#2F3B7A] font-semibold">
-                  <Layers className="w-4 h-4 text-[#2F3B7A]" />
+                <div className="flex items-center gap-2 text-accent-fg font-semibold">
+                  <Layers className="w-4 h-4 text-accent-fg" />
                   <span>Middle School</span>
                   <span className="px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 text-[11px]">section</span>
                 </div>
@@ -344,10 +344,10 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                     <span>Class 6</span>
                   </div>
                   <div className="flex gap-1.5 ml-5">
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-accent-fg border border-indigo-200 text-[11px]">
                       math-teacher
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-accent-fg border border-indigo-200 text-[11px]">
                       english-teacher
                     </span>
                   </div>
@@ -357,7 +357,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                     <span>Class 7</span>
                   </div>
                   <div className="flex gap-1.5 ml-5">
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-[#2F3B7A] border border-indigo-200 text-[11px]">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-accent-fg border border-indigo-200 text-[11px]">
                       math-teacher
                     </span>
                   </div>
@@ -374,7 +374,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 3: Sizing & Storage Pricing (Part VII §4-6) */}
         {currentStep === 3 && (
           <div>
-            <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+            <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
               Priced per unit, not per block
             </h2>
             <p className="text-xs text-stone-600 mb-5">
@@ -385,7 +385,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             <div className="mb-4">
               <div className="flex items-center justify-between text-xs font-semibold text-stone-700 mb-1">
                 <span>Team Headcount</span>
-                <span className="font-mono-code text-[#2F3B7A] text-sm">{peopleCount} people</span>
+                <span className="font-mono-code text-accent-fg text-sm">{peopleCount} people</span>
               </div>
               <input
                 type="range"
@@ -393,7 +393,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 max="1000"
                 value={peopleCount}
                 onChange={e => setPeopleCount(Number(e.target.value))}
-                className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-[#2F3B7A]"
+                className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-accent"
               />
               <p className="text-[11px] text-stone-500 mt-1 font-mono-code">
                 {peopleCount} × $0.30 = ${peopleCost.toFixed(2)}/mo
@@ -404,7 +404,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             <div className="mb-4">
               <div className="flex items-center justify-between text-xs font-semibold text-stone-700 mb-1">
                 <span>Cloud Storage Capacity</span>
-                <span className="font-mono-code text-[#2F3B7A] text-sm">
+                <span className="font-mono-code text-accent-fg text-sm">
                   {bringOwnStorage ? 'Bring Your Own (Free)' : `${storageGiB} GiB`}
                 </span>
               </div>
@@ -416,7 +416,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 disabled={bringOwnStorage}
                 value={storageGiB}
                 onChange={e => setStorageGiB(Number(e.target.value))}
-                className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-[#2F3B7A] disabled:opacity-40"
+                className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-accent disabled:opacity-40"
               />
               <div className="flex items-center justify-between mt-1">
                 <p className="text-[11px] text-stone-500 font-mono-code">
@@ -434,7 +434,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             </div>
 
             {/* Total Display */}
-            <div className="border-t border-stone-200 pt-4 flex items-baseline justify-between bg-[#F7F5F0] p-4 rounded-xl border">
+            <div className="border-t border-stone-200 pt-4 flex items-baseline justify-between bg-paper p-4 rounded-xl border">
               <div>
                 <span className="text-xs uppercase font-semibold tracking-wider text-stone-500 block">Total Monthly Cost</span>
                 <span className="text-[11px] text-stone-500 font-mono-code">
@@ -442,7 +442,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-3xl font-extrabold text-[#2F3B7A] font-mono-code">
+                <span className="text-3xl font-extrabold text-accent-fg font-mono-code">
                   ${totalMonthly.toFixed(2)}
                 </span>
                 <span className="text-xs text-stone-500 font-medium"> / month</span>
@@ -455,7 +455,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {currentStep === 4 && !subStepWhoGetsAccess && (
           <div className="space-y-4">
             <div>
-              <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+              <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
                 Connect Tools & Integrations
               </h2>
               <p className="text-xs text-stone-600">
@@ -502,7 +502,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 5: Root Admin View & Invites (Part VII §8) */}
         {currentStep === 5 && (
           <div>
-            <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+            <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
               Your people & authority cascade
             </h2>
             <p className="text-xs text-stone-600 mb-3">
@@ -517,7 +517,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             )}
 
             <div className="space-y-2 mb-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[#FAF9F6] border border-stone-200">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-paper border border-stone-200">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-purple-100 text-[#7C3AED] font-bold text-xs flex items-center justify-center">
                     MH
@@ -530,7 +530,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 <span className="text-xs text-stone-500">2 active tasks</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[#FAF9F6] border border-stone-200">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-paper border border-stone-200">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-stone-200 text-stone-700 font-bold text-xs flex items-center justify-center">
                     AK
@@ -547,7 +547,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             {/* Scoped Invite Link Card */}
             <div className="bg-[#EEF2FF] border border-indigo-200 rounded-xl p-4">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-bold text-[#2F3B7A] font-mono-code">
+                <span className="text-xs font-bold text-accent-fg font-mono-code">
                   math-teacher · Class 7
                 </span>
                 <span className="text-[11px] text-indigo-700 font-medium">Expires in 4 days</span>
@@ -557,7 +557,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
               </p>
               <button
                 onClick={handleCopyDemoLink}
-                className="w-full py-2 bg-white hover:bg-stone-50 text-[#2F3B7A] border border-indigo-300 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                className="w-full py-2 bg-surface hover:bg-stone-50 text-accent-fg border border-indigo-300 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
               >
                 {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                 {copiedLink ? 'Invite Link Copied!' : 'Copy Invite Link'}
@@ -569,7 +569,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         {/* STEP 6: Staff Task Feed (Part IV §6) */}
         {currentStep === 6 && (
           <div>
-            <h2 className="text-xl font-bold text-[#1C2438] mb-1 font-serif-heading">
+            <h2 className="text-xl font-bold text-ink mb-1 font-serif-heading">
               Your tasks (Employee Feed)
             </h2>
             <p className="text-xs text-stone-600 mb-4">
@@ -577,7 +577,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             </p>
 
             <div className="space-y-2">
-              <div className="bg-white border-l-4 border-l-[#DC2626] border border-stone-200 rounded-lg p-3 shadow-xs">
+              <div className="bg-surface border-l-4 border-l-[#DC2626] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-stone-900">Term 2 Exam Math Questions</h4>
                   <span className="text-[11px] text-red-600 font-semibold font-mono-code">DUE TOMORROW</span>
@@ -585,7 +585,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
                 <p className="text-[11px] text-stone-500 mt-1">Delegated by Section Head · Middle School</p>
               </div>
 
-              <div className="bg-white border-l-4 border-l-[#16A34A] border border-stone-200 rounded-lg p-3 shadow-xs">
+              <div className="bg-surface border-l-4 border-l-[#16A34A] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-stone-900">Update lesson plan template</h4>
                   <span className="text-[11px] text-emerald-600 font-medium">Submitted & Reviewed</span>
@@ -598,7 +598,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
       </div>
 
       {/* Footer Controls */}
-      <div className="flex items-center justify-between px-6 py-4 bg-[#F7F5F0] border-t border-stone-200">
+      <div className="flex items-center justify-between px-6 py-4 bg-paper border-t border-stone-200">
         <button
           onClick={handleBack}
           disabled={currentStep === 0}
@@ -609,7 +609,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
 
         <button
           onClick={handleNext}
-          className="px-6 py-2 bg-[#2F3B7A] hover:bg-[#232c5c] text-white text-xs font-semibold rounded-lg shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer"
+          className="px-6 py-2 bg-accent hover:bg-[#232c5c] text-white text-xs font-semibold rounded-lg shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer"
         >
           {currentStep === 6 ? (
             <>

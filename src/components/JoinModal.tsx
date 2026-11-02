@@ -4,6 +4,7 @@ import { Link2, CheckCircle2, User, Mail, Shield, Building, Check, ShieldAlert }
 import confetti from 'canvas-confetti';
 import { INTEGRATION_TOOLS, IntegrationToolDefinition } from '../lib/integrationService';
 import { OAuthConnectModal } from './OAuthConnectModal';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface JoinModalProps {
   joinLink: JoinLink;
@@ -63,17 +64,17 @@ export const JoinModal: React.FC<JoinModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-stone-200">
+    <ModalOverlay onClose={onClose} className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+      <div className="bg-surface rounded-2xl shadow-2xl max-w-md w-full p-6 border border-stone-200">
         <div className="text-center pb-4 border-b border-stone-200 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-[#2F3B7A] flex items-center justify-center mx-auto mb-2">
+          <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-accent-fg flex items-center justify-center mx-auto mb-2">
             <Link2 className="w-6 h-6" />
           </div>
           <h3 className="text-xl font-bold text-stone-900 font-serif-heading">
             You've Been Invited to Join
           </h3>
           <p className="text-xs text-stone-500 mt-1">
-            Accept assignment as <strong className="text-[#2F3B7A] font-mono-code">@{joinLink.roleTitle}</strong> in {joinLink.deptName}.
+            Accept assignment as <strong className="text-accent-fg font-mono-code">@{joinLink.roleTitle}</strong> in {joinLink.deptName}.
           </p>
         </div>
 
@@ -86,7 +87,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               placeholder="e.g. Elena Rostova"
               value={fullName}
               onChange={e => setFullName(e.target.value)}
-              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white"
+              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-surface"
             />
           </div>
 
@@ -97,7 +98,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               placeholder="e.g. Elena"
               value={preferredName}
               onChange={e => setPreferredName(e.target.value)}
-              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white"
+              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-surface"
             />
           </div>
 
@@ -109,7 +110,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               placeholder="name@oakridge.edu"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white"
+              className="w-full px-3 py-2 border border-stone-300 rounded-lg bg-stone-50 focus:bg-surface"
             />
           </div>
 
@@ -158,7 +159,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                   return (
                     <div
                       key={tool.key}
-                      className="flex items-center justify-between p-2 bg-white border border-stone-200 rounded-lg text-xs"
+                      className="flex items-center justify-between p-2 bg-surface border border-stone-200 rounded-lg text-xs"
                     >
                       <div className="min-w-0 flex-1 mr-2">
                         <div className="font-semibold text-stone-900 truncate">{tool.name}</div>
@@ -183,7 +184,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                           <button
                             type="button"
                             onClick={() => setConnectingTool(tool)}
-                            className="px-2.5 py-1 bg-[#2F3B7A] hover:bg-[#232c5c] text-white text-[11px] font-medium rounded cursor-pointer"
+                            className="px-2.5 py-1 bg-accent hover:bg-[#232c5c] text-white text-[11px] font-medium rounded cursor-pointer"
                           >
                             Connect
                           </button>
@@ -196,7 +197,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
             </div>
           )}
 
-          <div className="bg-[#FAF9F6] p-3 rounded-lg border border-stone-200 text-stone-600 text-[11px] flex items-center gap-2">
+          <div className="bg-paper p-3 rounded-lg border border-stone-200 text-stone-600 text-[11px] flex items-center gap-2">
             <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
               Joining automatically establishes your role boundaries and populates your task feed.
@@ -217,7 +218,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               className={`flex-1 py-2 text-white rounded-lg font-semibold text-xs shadow-xs transition-colors ${
                 !allRequirementsSatisfied
                   ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
-                  : 'bg-[#2F3B7A] hover:bg-[#232c5c] cursor-pointer'
+                  : 'bg-accent hover:bg-[#232c5c] cursor-pointer'
               }`}
             >
               Accept & Enter Role
@@ -245,6 +246,6 @@ export const JoinModal: React.FC<JoinModalProps> = ({
           }}
         />
       )}
-    </div>
+    </ModalOverlay>
   );
 };

@@ -34,12 +34,12 @@ interface DepartmentCardProps {
 }
 
 const SHADE_CARD_STYLES: Record<Section['shade'], { bg: string; border: string; badge: string; shadow: string }> = {
-  ash: { bg: 'bg-[#fafaf8]', border: 'border-neutral-400', badge: 'bg-[#eeeeea] text-neutral-800 border-neutral-400', shadow: 'shadow-[3px_3px_0px_#52525b]' },
+  ash: { bg: 'bg-paper', border: 'border-neutral-400', badge: 'bg-[#eeeeea] text-neutral-800 border-neutral-400', shadow: 'shadow-[3px_3px_0px_#52525b]' },
   silver: { bg: 'bg-[#f4f4f5]', border: 'border-zinc-500', badge: 'bg-[#e4e4e7] text-zinc-800 border-zinc-400', shadow: 'shadow-[3px_3px_0px_#3f3f46]' },
   slate: { bg: 'bg-[#f1f5f9]', border: 'border-slate-500', badge: 'bg-[#e2e8f0] text-slate-800 border-slate-400', shadow: 'shadow-[3px_3px_0px_#334155]' },
   charcoal: { bg: 'bg-[#e4e4e7]', border: 'border-neutral-700', badge: 'bg-[#d4d4d8] text-neutral-900 border-neutral-500', shadow: 'shadow-[3px_3px_0px_#262626]' },
   graphite: { bg: 'bg-[#d4d4d8]', border: 'border-neutral-900', badge: 'bg-[#a1a1aa] text-neutral-950 border-neutral-700 font-bold', shadow: 'shadow-[3px_3px_0px_#09090b]' },
-  sand: { bg: 'bg-[#fefce8]', border: 'border-amber-400', badge: 'bg-[#fef3c7] text-amber-900 border-amber-300', shadow: 'shadow-[3px_3px_0px_#78350f]' },
+  sand: { bg: 'bg-st-submitted-bg', border: 'border-amber-400', badge: 'bg-[#fef3c7] text-amber-900 border-amber-300', shadow: 'shadow-[3px_3px_0px_#78350f]' },
   emerald: { bg: 'bg-[#ecfdf5]', border: 'border-emerald-500', badge: 'bg-[#d1fae5] text-emerald-900 border-emerald-400 font-bold', shadow: 'shadow-[3px_3px_0px_#065f46]' },
   indigo: { bg: 'bg-[#eef2ff]', border: 'border-indigo-500', badge: 'bg-[#e0e7ff] text-indigo-900 border-indigo-400 font-bold', shadow: 'shadow-[3px_3px_0px_#3730a3]' },
   amber: { bg: 'bg-[#fffbeb]', border: 'border-amber-500', badge: 'bg-[#fde68a] text-amber-950 border-amber-400 font-bold', shadow: 'shadow-[3px_3px_0px_#92400e]' },
@@ -151,12 +151,12 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       id={`dept-card-${node.id}`}
       onClick={handleCardClick}
       className={`relative w-80 select-none transition-all duration-150 rounded-sm text-neutral-900 cursor-pointer ${
-        section ? sectionStyle?.bg : 'bg-white'
+        section ? sectionStyle?.bg : 'bg-surface'
       } ${borderClasses} ${shadowClass} ${
         isMultiSelected
           ? 'ring-2 ring-emerald-600 ring-offset-2 ring-offset-[#faf9f5]'
           : isSelected
-          ? 'ring-2 ring-[#1C2438] shadow-[5px_5px_0px_#18181b]'
+          ? 'ring-2 ring-ink shadow-[5px_5px_0px_#18181b]'
           : 'hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#18181b]'
       }`}
     >
@@ -164,7 +164,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       {!isRoot && (
         <div
           id={`dock-top-${node.id}`}
-          className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[#1C2438] border border-white rounded-full z-10 shadow-xs"
+          className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-ink border border-white rounded-full z-10 shadow-xs"
         />
       )}
 
@@ -197,7 +197,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       <div
         className={`border-b-[1.5px] border-neutral-900 px-3 py-2.5 flex flex-col gap-1 transition-colors ${
           isRoot
-            ? 'bg-[#1C2438] text-white'
+            ? 'bg-ink text-white'
             : 'bg-[#f6f5f0] text-neutral-900'
         }`}
       >
@@ -223,7 +223,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 className={`flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-xs border transition-all ${
                   isMultiSelected
                     ? 'bg-emerald-700 text-white border-emerald-800 font-bold shadow-xs'
-                    : 'bg-white hover:bg-neutral-200 text-neutral-700 border-neutral-400'
+                    : 'bg-surface hover:bg-neutral-200 text-neutral-700 border-neutral-400'
                 }`}
                 title={isMultiSelected ? 'Deselect department' : 'Select department for grouping'}
               >
@@ -318,7 +318,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 }
               }}
               placeholder="Enter department name..."
-              className="w-full font-bold text-sm bg-white border border-neutral-900 px-2 py-0.5 text-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-xs"
+              className="w-full font-bold text-sm bg-surface border border-neutral-900 px-2 py-0.5 text-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-xs"
             />
           ) : (
             <h3
@@ -400,7 +400,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               onChange={(e) => setRootInput(e.target.value)}
               onKeyDown={handleRootKeyDown}
               placeholder="Type leadership root & hit Enter..."
-              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-indigo-400 focus:border-indigo-600 focus:bg-white text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-indigo-600/30 transition-all placeholder:text-neutral-400 placeholder:italic"
+              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-indigo-400 focus:border-indigo-600 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-indigo-600/30 transition-all placeholder:text-neutral-400 placeholder:italic"
             />
           </div>
         </div>
@@ -462,7 +462,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               onChange={(e) => setRoleInput(e.target.value)}
               onKeyDown={handleRoleKeyDown}
               placeholder="Type role position & hit Enter..."
-              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-slate-400 focus:border-slate-800 focus:bg-white text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-slate-800/20 transition-all placeholder:text-neutral-400 placeholder:italic"
+              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-slate-400 focus:border-slate-800 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-slate-800/20 transition-all placeholder:text-neutral-400 placeholder:italic"
             />
           </div>
         </div>
@@ -472,7 +472,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       {showDeletePrompt && (
         <div
           id={`delete-prompt-${node.id}`}
-          className="absolute inset-0 bg-white/95 backdrop-blur-[2px] z-40 p-4 flex flex-col justify-between rounded-sm border-2 border-neutral-950 font-mono text-xs"
+          className="absolute inset-0 bg-surface/95 backdrop-blur-[2px] z-40 p-4 flex flex-col justify-between rounded-sm border-2 border-neutral-950 font-mono text-xs"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="space-y-1.5">
@@ -493,7 +493,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 onDeleteNode(node.id, true);
                 setShowDeletePrompt(false);
               }}
-              className="flex items-center justify-center gap-1 bg-white hover:bg-neutral-100 text-neutral-900 border border-neutral-500 py-1 px-2 rounded-xs font-semibold text-[11px] transition-colors"
+              className="flex items-center justify-center gap-1 bg-surface hover:bg-neutral-100 text-neutral-900 border border-neutral-500 py-1 px-2 rounded-xs font-semibold text-[11px] transition-colors"
             >
               <CornerDownRight size={12} />
               <span>Keep Sub-Branches (Reparent)</span>
@@ -603,7 +603,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
             e.stopPropagation();
             onAddChild(node.id);
           }}
-          className="group absolute -bottom-3.5 w-7 h-7 bg-white hover:bg-neutral-900 text-neutral-800 hover:text-white border-[1.5px] border-neutral-900 rounded-full flex items-center justify-center shadow-[1px_1px_0px_#18181b] z-20 transition-all hover:scale-110"
+          className="group absolute -bottom-3.5 w-7 h-7 bg-surface hover:bg-neutral-900 text-neutral-800 hover:text-white border-[1.5px] border-neutral-900 rounded-full flex items-center justify-center shadow-[1px_1px_0px_#18181b] z-20 transition-all hover:scale-110"
           title="Add a new department underneath"
         >
           <Plus size={13} className="transition-transform group-hover:rotate-90 duration-200" />

@@ -167,25 +167,25 @@ export const SignInView: React.FC<SignInViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F5F0] text-[#1C2438] flex flex-col justify-between selection:bg-[#E8E4DA] selection:text-[#1C2438]">
+    <div className="min-h-screen bg-paper text-ink flex flex-col justify-between selection:bg-paper-sunken selection:text-ink">
       {/* Top Header */}
-      <header className="border-b border-[#DAD5C9] bg-[#F7F5F0] px-6 py-4">
+      <header className="border-b border-hairline bg-paper px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <button
             onClick={onBackToLanding}
-            className="flex items-center gap-2 text-xs font-mono text-[#5C574B] hover:text-[#1C2438] transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-xs font-mono text-ink-2 hover:text-ink transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return</span>
           </button>
 
-          <span className="font-serif font-bold text-xl tracking-tight text-[#1C2438]">
+          <span className="font-serif font-bold text-xl tracking-tight text-ink">
             Mika
           </span>
 
           <button
             onClick={() => onNavigateToCreateOrg(googleDataForCreate)}
-            className="text-xs font-mono text-[#2F3B7A] hover:underline font-semibold cursor-pointer"
+            className="text-xs font-mono text-accent-fg hover:underline font-semibold cursor-pointer"
           >
             Create organisation
           </button>
@@ -194,19 +194,19 @@ export const SignInView: React.FC<SignInViewProps> = ({
 
       {/* Main Authentication Card */}
       <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-[#EFEBE2] border border-[#DAD5C9] rounded-xs shadow-xs p-8">
+        <div className="w-full max-w-md bg-paper-raised border border-hairline rounded-xs shadow-xs p-8">
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-serif font-bold text-[#1C2438] tracking-tight">
+            <h1 className="text-2xl font-serif font-bold text-ink tracking-tight">
               Log in to Mika
             </h1>
-            <p className="text-xs font-mono text-[#6B665A] mt-1">
+            <p className="text-xs font-mono text-ink-3 mt-1">
               Authenticate with your verified identity.
             </p>
           </div>
 
           {/* Error Banner */}
           {errorMessage && (
-            <div className="mb-6 p-3 bg-[#FFF5F5] border border-[#FCA5A5] rounded-xs text-xs text-[#991B1B]">
+            <div className="mb-6 p-3 bg-[#FFF5F5] border border-[#FCA5A5] rounded-xs text-xs text-st-pending">
               <div className="flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <div className="leading-relaxed font-sans">{errorMessage}</div>
@@ -216,7 +216,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 <div className="mt-3 pt-2 border-t border-[#FCA5A5] flex justify-end">
                   <button
                     onClick={() => onNavigateToCreateOrg(googleDataForCreate)}
-                    className="text-[11px] font-mono font-bold text-[#2F3B7A] underline cursor-pointer"
+                    className="text-[11px] font-mono font-bold text-accent-fg underline cursor-pointer"
                   >
                     Create organisation with this account &rarr;
                   </button>
@@ -226,13 +226,13 @@ export const SignInView: React.FC<SignInViewProps> = ({
           )}
 
           {/* Tab Selection */}
-          <div className="grid grid-cols-2 gap-1 bg-[#E8E4DA] p-1 rounded-xs border border-[#DAD5C9] mb-6">
+          <div className="grid grid-cols-2 gap-1 bg-paper-sunken p-1 rounded-xs border border-hairline mb-6">
             <button
               onClick={() => { setAuthMethod('google'); setErrorMessage(null); }}
               className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
                 authMethod === 'google'
-                  ? 'bg-[#F7F5F0] text-[#1C2438] font-bold shadow-xs border border-[#DAD5C9]'
-                  : 'text-[#6B665A] hover:text-[#1C2438]'
+                  ? 'bg-paper text-ink font-bold shadow-xs border border-hairline'
+                  : 'text-ink-3 hover:text-ink'
               }`}
             >
               Google Account
@@ -241,8 +241,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
               onClick={() => { setAuthMethod('email'); setErrorMessage(null); }}
               className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
                 authMethod === 'email'
-                  ? 'bg-[#F7F5F0] text-[#1C2438] font-bold shadow-xs border border-[#DAD5C9]'
-                  : 'text-[#6B665A] hover:text-[#1C2438]'
+                  ? 'bg-paper text-ink font-bold shadow-xs border border-hairline'
+                  : 'text-ink-3 hover:text-ink'
               }`}
             >
               Email Sign-In
@@ -255,7 +255,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               <button
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-white hover:bg-neutral-50 text-[#3c4043] border border-[#dadce0] rounded-xs font-sans text-sm font-medium shadow-xs hover:shadow transition-all disabled:opacity-50 cursor-pointer"
+                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-surface hover:bg-neutral-50 text-[#3c4043] border border-[#dadce0] rounded-xs font-sans text-sm font-medium shadow-xs hover:shadow transition-all disabled:opacity-50 cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -278,7 +278,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 <span>{googleLoading ? 'Connecting...' : 'Sign in with Google'}</span>
               </button>
 
-              <div className="p-3 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs text-[11px] font-mono text-[#5C574B] leading-relaxed">
+              <div className="p-3 bg-paper border border-hairline rounded-xs text-[11px] font-mono text-ink-2 leading-relaxed">
                 Mika uses Google OAuth for verified passwordless identity. Your account will automatically resolve to your active roles.
               </div>
             </div>
@@ -288,15 +288,15 @@ export const SignInView: React.FC<SignInViewProps> = ({
           {authMethod === 'email' && (
             <div>
               {emailSent ? (
-                <div className="p-4 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs text-center">
-                  <CheckCircle2 className="w-8 h-8 text-[#2F3B7A] mx-auto mb-2" />
-                  <div className="text-sm font-bold text-[#1C2438]">Verification Dispatched</div>
-                  <p className="text-xs text-[#5C574B] mt-1 font-mono">
+                <div className="p-4 bg-paper border border-hairline rounded-xs text-center">
+                  <CheckCircle2 className="w-8 h-8 text-accent-fg mx-auto mb-2" />
+                  <div className="text-sm font-bold text-ink">Verification Dispatched</div>
+                  <p className="text-xs text-ink-2 mt-1 font-mono">
                     If {emailInput} is registered in an active organization, you will receive an entry link.
                   </p>
                   <button
                     onClick={() => setEmailSent(false)}
-                    className="mt-3 text-xs font-mono uppercase underline text-[#2F3B7A] font-semibold cursor-pointer"
+                    className="mt-3 text-xs font-mono uppercase underline text-accent-fg font-semibold cursor-pointer"
                   >
                     Try another email
                   </button>
@@ -304,18 +304,18 @@ export const SignInView: React.FC<SignInViewProps> = ({
               ) : (
                 <form onSubmit={handleEmailSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-mono text-[#5C574B] mb-1">
+                    <label className="block text-xs font-mono text-ink-2 mb-1">
                       Institutional Email Address
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6B665A]" />
+                      <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
                       <input
                         type="email"
                         required
                         value={emailInput}
                         onChange={e => setEmailInput(e.target.value)}
                         placeholder="name@organisation.edu"
-                        className="w-full pl-9 pr-3 py-2 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs text-xs font-sans text-[#1C2438] focus:border-[#1C2438] focus:outline-none"
+                        className="w-full pl-9 pr-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none"
                       />
                     </div>
                   </div>
@@ -323,7 +323,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                   <button
                     type="submit"
                     disabled={emailLoading}
-                    className="w-full py-2.5 bg-[#2F3B7A] hover:bg-[#253064] text-[#F7F5F0] rounded-xs font-mono text-xs uppercase tracking-wider font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="w-full py-2.5 bg-accent hover:bg-accent-strong text-paper rounded-xs font-mono text-xs uppercase tracking-wider font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <span>{emailLoading ? 'Verifying...' : 'Proceed with Email'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -334,8 +334,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
           )}
 
           {/* Quick Demo Switcher */}
-          <div className="mt-8 pt-5 border-t border-[#DAD5C9]">
-            <div className="flex items-center justify-between mb-3 text-[11px] font-mono text-[#6B665A]">
+          <div className="mt-8 pt-5 border-t border-hairline">
+            <div className="flex items-center justify-between mb-3 text-[11px] font-mono text-ink-3">
               <span>SAMPLE IDENTITIES</span>
               <span>ONE-CLICK ACCESS</span>
             </div>
@@ -345,22 +345,22 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 <button
                   key={user.id}
                   onClick={() => handleSelectSeedUser(user)}
-                  className="w-full p-2 bg-[#F7F5F0] hover:bg-[#E8E4DA] border border-[#DAD5C9] rounded-xs text-left transition-all flex items-center justify-between cursor-pointer group"
+                  className="w-full p-2 bg-paper hover:bg-paper-sunken border border-hairline rounded-xs text-left transition-all flex items-center justify-between cursor-pointer group"
                 >
                   <div>
-                    <div className="text-xs font-semibold text-[#1C2438] flex items-center gap-1.5">
+                    <div className="text-xs font-semibold text-ink flex items-center gap-1.5">
                       <span>{user.fullName}</span>
                       {user.isRoot && (
-                        <span className="text-[11px] font-mono bg-[#E8E4DA] text-[#2F3B7A] px-1 py-0.2 rounded-xs font-bold">
+                        <span className="text-[11px] font-mono bg-paper-sunken text-accent-fg px-1 py-0.2 rounded-xs font-bold">
                           ROOT
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] font-mono text-[#6B665A]">
+                    <div className="text-[11px] font-mono text-ink-3">
                       {user.roleTitle} &bull; {user.deptName}
                     </div>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#6B665A] group-hover:text-[#1C2438] transition-colors" />
+                  <ChevronRight className="w-3.5 h-3.5 text-ink-3 group-hover:text-ink transition-colors" />
                 </button>
               ))}
             </div>
@@ -369,7 +369,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#DAD5C9] bg-[#F7F5F0] py-3 text-center text-xs font-mono text-[#6B665A]">
+      <footer className="border-t border-hairline bg-paper py-3 text-center text-xs font-mono text-ink-3">
         Deterministic organizational authorization &bull; {new Date().getFullYear()}
       </footer>
     </div>

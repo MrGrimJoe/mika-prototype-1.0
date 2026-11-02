@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { IntegrationToolDefinition, INTEGRATION_TOOLS } from '../lib/integrationService';
 import confetti from 'canvas-confetti';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface OAuthConnectModalProps {
   tool?: IntegrationToolDefinition;
@@ -153,18 +154,18 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
   };
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="oauth-connect-modal-backdrop"
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
     >
       <div
         id="oauth-connect-modal-container"
-        className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
+        className="w-full max-w-md bg-surface rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
       >
         {/* Header */}
         <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
+            <div className="w-9 h-9 rounded-xl bg-surface/10 flex items-center justify-center border border-white/20">
               {isGitHub ? (
                 <Github className="w-5 h-5 text-white" />
               ) : (
@@ -182,7 +183,7 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-surface/10 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -278,7 +279,7 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
                 value={accountInput}
                 onChange={(e) => setAccountInput(e.target.value)}
                 placeholder={effectiveTool.key.startsWith('google') ? 'e.g. admin@yourdomain.edu' : 'e.g. acme-corp'}
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-surface border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
               <p className="text-[11px] text-slate-400 mt-1">
                 {scope === 'org'
@@ -318,6 +319,6 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
           </form>
         )}
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

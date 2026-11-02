@@ -193,18 +193,18 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   };
 
   return (
-    <div className="bg-white border border-[#DAD5C9] rounded-xs shadow-2xs overflow-hidden h-[calc(100vh-140px)] min-h-[520px] flex font-sans">
+    <div className="bg-surface border border-hairline rounded-xs shadow-2xs overflow-hidden h-[calc(100vh-140px)] min-h-[520px] flex font-sans">
       {/* ─────────────────────────────────────────────────────────────
           LEFT PANEL: CONTEXT SWITCHER & STRICT REACHABLE CONTACTS
       ───────────────────────────────────────────────────────────── */}
-      <div className="w-80 border-r border-[#DAD5C9] bg-[#F7F5F0] flex flex-col shrink-0">
+      <div className="w-80 border-r border-hairline bg-paper flex flex-col shrink-0">
         {/* Context Switcher Block */}
-        <div className="p-3.5 border-b border-[#DAD5C9] bg-white space-y-2">
+        <div className="p-3.5 border-b border-hairline bg-surface space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A] font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3 font-bold">
               Messaging Context
             </span>
-            <span className="text-[11px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.5 rounded-xs border border-[#DAD5C9]">
+            <span className="text-[11px] font-mono bg-paper text-ink-2 px-1.5 py-0.5 rounded-xs border border-hairline">
               Rules A, B, C
             </span>
           </div>
@@ -217,7 +217,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   id="context-select"
                   value={selectedContextIndex}
                   onChange={e => setSelectedContextIndex(Number(e.target.value))}
-                  className="w-full text-xs font-mono bg-[#F7F5F0] border border-[#DAD5C9] text-[#1C2438] py-2 px-2.5 pr-8 rounded-xs focus:outline-hidden focus:border-[#1C2438] cursor-pointer appearance-none"
+                  className="w-full text-xs font-mono bg-paper border border-hairline text-ink py-2 px-2.5 pr-8 rounded-xs focus:outline-hidden focus:border-ink cursor-pointer appearance-none"
                 >
                   {userContexts.map((ctx, idx) => (
                     <option key={ctx.assignmentId} value={idx}>
@@ -225,29 +225,29 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#6B665A] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 text-ink-3 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           ) : activeContext ? (
-            <div className="text-xs font-mono text-[#1C2438] bg-[#F7F5F0] px-2.5 py-1.5 rounded-xs border border-[#DAD5C9] flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-[#2F3B7A]" />
+            <div className="text-xs font-mono text-ink bg-paper px-2.5 py-1.5 rounded-xs border border-hairline flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-accent-fg" />
               <span className="truncate">{activeContext.role.title} • {activeContext.dept.name}</span>
             </div>
           ) : (
-            <div className="text-xs text-[#DC2626] font-mono">No active assignment held.</div>
+            <div className="text-xs text-st-pending font-mono">No active assignment held.</div>
           )}
         </div>
 
         {/* Reachable Contact Search */}
-        <div className="p-2 border-b border-[#DAD5C9] bg-[#F7F5F0]">
+        <div className="p-2 border-b border-hairline bg-paper">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-[#6B665A] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-ink-3 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search eligible peers..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-2.5 py-1.5 text-xs font-mono bg-white border border-[#DAD5C9] rounded-xs focus:outline-hidden focus:border-[#1C2438] text-[#1C2438]"
+              className="w-full pl-8 pr-2.5 py-1.5 text-xs font-mono bg-surface border border-hairline rounded-xs focus:outline-hidden focus:border-ink text-ink"
             />
           </div>
         </div>
@@ -255,7 +255,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Reachable Contacts List */}
         <div className="flex-1 overflow-y-auto p-2 space-y-3">
           {reachableContacts.length === 0 ? (
-            <div className="p-4 text-center text-xs text-[#6B665A] font-mono leading-relaxed">
+            <div className="p-4 text-center text-xs text-ink-3 font-mono leading-relaxed">
               No contacts reachable under your active role/department context.
             </div>
           ) : (
@@ -264,7 +264,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
               return (
                 <div key={ruleLabel} className="space-y-1">
-                  <div className="px-1 text-[11px] font-mono uppercase tracking-wider text-[#6B665A] font-bold">
+                  <div className="px-1 text-[11px] font-mono uppercase tracking-wider text-ink-3 font-bold">
                     {ruleLabel} ({items.length})
                   </div>
 
@@ -280,8 +280,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                           key={item.user.id}
                           className={`w-full group rounded-xs transition-colors flex items-center justify-between p-2 cursor-pointer border ${
                             isSelected
-                              ? 'bg-white border-[#1C2438] shadow-2xs'
-                              : 'bg-white border-[#DAD5C9] hover:border-[#8A8578]'
+                              ? 'bg-surface border-ink shadow-2xs'
+                              : 'bg-surface border-hairline hover:border-edge'
                           }`}
                           onClick={() => setSelectedUserId(item.user.id)}
                         >
@@ -292,7 +292,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 e.stopPropagation();
                                 if (onViewProfile) onViewProfile(item.user);
                               }}
-                              className="w-7 h-7 rounded-xs bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-[11px] shrink-0 cursor-pointer"
+                              className="w-7 h-7 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-[11px] shrink-0 cursor-pointer"
                               title={`View ${item.user.fullName}'s profile`}
                             >
                               {item.user.preferredName?.[0] || item.user.fullName[0]}
@@ -300,21 +300,21 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center justify-between gap-1">
-                                <span className="font-bold text-xs text-[#1C2438] truncate text-left">
+                                <span className="font-bold text-xs text-ink truncate text-left">
                                   {item.user.fullName}
                                 </span>
                                 <span className={`text-[8px] font-mono px-1 rounded-xs uppercase tracking-wider shrink-0 font-semibold ${
                                   item.ruleType === 'rule_a' 
-                                    ? 'bg-[#F7F5F0] text-[#5C574B]'
+                                    ? 'bg-paper text-ink-2'
                                     : item.ruleType === 'rule_b'
-                                    ? 'bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]'
-                                    : 'bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE]'
+                                    ? 'bg-st-pending-bg text-st-pending border border-st-pending-border'
+                                    : 'bg-st-help-bg text-st-help border border-st-help-border'
                                 }`}>
                                   {ruleBadge}
                                 </span>
                               </div>
 
-                              <div className="text-[11px] font-mono text-[#6B665A] truncate mt-0.5">
+                              <div className="text-[11px] font-mono text-ink-3 truncate mt-0.5">
                                 {item.roleTitles.join(', ') || item.contextDescription}
                               </div>
                             </div>
@@ -333,16 +333,16 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           RIGHT PANEL: CONVERSATION STAGE
       ───────────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col bg-white">
+      <div className="flex-1 flex flex-col bg-surface">
         {activeContact ? (
           <>
             {/* Conversation Header */}
-            <div className="px-6 py-3.5 border-b border-[#DAD5C9] bg-white flex items-center justify-between">
+            <div className="px-6 py-3.5 border-b border-hairline bg-surface flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
                 <button aria-label={`View ${activeContact.user.fullName}'s profile`}
                   type="button"
                   onClick={() => onViewProfile && onViewProfile(activeContact.user)}
-                  className="w-9 h-9 rounded-xs bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-sm shrink-0 cursor-pointer"
+                  className="w-9 h-9 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-sm shrink-0 cursor-pointer"
                   title={`View ${activeContact.user.fullName}'s profile`}
                 >
                   {activeContact.user.preferredName?.[0] || activeContact.user.fullName[0]}
@@ -350,19 +350,19 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-[#1C2438] truncate text-left">
+                    <span className="font-bold text-sm text-ink truncate text-left">
                       {activeContact.user.fullName}
                     </span>
-                    <span className="text-[11px] font-mono bg-[#F7F5F0] text-[#5C574B] px-1.5 py-0.2 rounded-xs border border-[#DAD5C9]">
+                    <span className="text-[11px] font-mono bg-paper text-ink-2 px-1.5 py-0.2 rounded-xs border border-hairline">
                       {activeContact.ruleLabel}
                     </span>
                     {/* Part A5: Backed by Google Chat indicator */}
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] px-1.5 py-0.2 rounded-xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-st-help-bg text-st-help border border-st-help-border px-1.5 py-0.2 rounded-xs">
                       <Radio className="w-2.5 h-2.5" />
                       Backed by Google Chat
                     </span>
                   </div>
-                  <p className="text-[11px] font-mono text-[#6B665A] truncate">
+                  <p className="text-[11px] font-mono text-ink-3 truncate">
                     {activeContact.contextDescription} · {activeContact.user.email}
                   </p>
                 </div>
@@ -372,7 +372,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => onViewProfile(activeContact.user)}
-                  className="hidden sm:inline-flex items-center gap-1 text-xs font-mono text-[#5C574B] hover:text-[#1C2438] px-2.5 py-1 rounded-xs border border-[#DAD5C9] hover:bg-[#F7F5F0] transition-colors cursor-pointer"
+                  className="hidden sm:inline-flex items-center gap-1 text-xs font-mono text-ink-2 hover:text-ink px-2.5 py-1 rounded-xs border border-hairline hover:bg-paper transition-colors cursor-pointer"
                 >
                   <span>View Profile</span>
                   <ArrowRight className="w-3 h-3" />
@@ -381,13 +381,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             </div>
 
             {/* Conversation Message Log */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#F7F5F0]">
-              <div className="p-3 bg-white border border-[#DAD5C9] rounded-xs text-xs font-mono text-[#6B665A] space-y-1 shadow-2xs">
-                <div className="flex items-center gap-1.5 font-bold text-[#1C2438]">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A]" />
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-paper">
+              <div className="p-3 bg-surface border border-hairline rounded-xs text-xs font-mono text-ink-3 space-y-1 shadow-2xs">
+                <div className="flex items-center gap-1.5 font-bold text-ink">
+                  <ShieldCheck className="w-3.5 h-3.5 text-st-done" />
                   <span>Authoritative Channel Established</span>
                 </div>
-                <p className="text-[11px] text-[#5C574B]">
+                <p className="text-[11px] text-ink-2">
                   This conversation is strictly authorized under {activeContact.ruleLabel} ({
                     activeContact.ruleType === 'rule_a' ? 'Rule A: Shared Department' :
                     activeContact.ruleType === 'rule_b' ? 'Rule B: Direct Root Authority' :
@@ -397,7 +397,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </div>
 
               {currentMessages.length === 0 ? (
-                <div className="py-12 text-center text-xs text-[#6B665A] font-mono">
+                <div className="py-12 text-center text-xs text-ink-3 font-mono">
                   No previous messages in this channel. Send a dispatch below.
                 </div>
               ) : (
@@ -410,10 +410,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                       className={`flex flex-col ${isSelf ? 'items-end' : 'items-start'}`}
                     >
                       <div className="flex items-center gap-2 mb-1 px-1">
-                        <span className="text-[11px] font-bold text-[#1C2438] font-mono">
+                        <span className="text-[11px] font-bold text-ink font-mono">
                           {isSelf ? 'You' : msg.senderName}
                         </span>
-                        <span className="text-[11px] text-[#6B665A] font-mono">
+                        <span className="text-[11px] text-ink-3 font-mono">
                           {msg.timestamp}
                         </span>
                       </div>
@@ -421,8 +421,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                       <div
                         className={`max-w-md px-4 py-2.5 rounded-xs text-xs leading-relaxed shadow-2xs ${
                           isSelf
-                            ? 'bg-[#1C2438] text-white'
-                            : 'bg-white border border-[#DAD5C9] text-[#1C2438]'
+                            ? 'bg-ink text-white'
+                            : 'bg-surface border border-hairline text-ink'
                         }`}
                       >
                         {msg.content}
@@ -434,18 +434,18 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             </div>
 
             {/* Message Input Box */}
-            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-[#DAD5C9] flex items-center gap-2">
+            <form onSubmit={handleSendMessage} className="p-3 bg-surface border-t border-hairline flex items-center gap-2">
               <input
                 type="text"
                 placeholder={`Message ${activeContact.user.fullName}...`}
                 value={messageInput}
                 onChange={e => setMessageInput(e.target.value)}
-                className="flex-1 px-3 py-2 text-xs font-mono bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs focus:bg-white focus:outline-hidden focus:border-[#1C2438] text-[#1C2438]"
+                className="flex-1 px-3 py-2 text-xs font-mono bg-paper border border-hairline rounded-xs focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
               />
               <button
                 type="submit"
                 disabled={!messageInput.trim()}
-                className="px-4 py-2 bg-[#1C2438] hover:bg-[#12151C] disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-4 py-2 bg-ink hover:bg-[#12151C] disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Send</span>
@@ -453,14 +453,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             </form>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#F7F5F0]">
-            <div className="w-12 h-12 rounded-full bg-white border border-[#DAD5C9] flex items-center justify-center text-[#6B665A] mb-3 shadow-2xs">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-paper">
+            <div className="w-12 h-12 rounded-full bg-surface border border-hairline flex items-center justify-center text-ink-3 mb-3 shadow-2xs">
               <MessageSquare className="w-6 h-6 stroke-[1.5]" />
             </div>
-            <h3 className="font-bold text-sm text-[#1C2438]">
+            <h3 className="font-bold text-sm text-ink">
               No Contact Selected
             </h3>
-            <p className="text-xs text-[#5C574B] max-w-xs mt-1">
+            <p className="text-xs text-ink-2 max-w-xs mt-1">
               Select an authorized peer from the left panel to begin an exchange.
             </p>
           </div>

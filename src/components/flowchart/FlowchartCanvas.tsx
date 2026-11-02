@@ -177,7 +177,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className={`flex-1 w-full h-full overflow-auto bg-[#faf9f5] ${
+        className={`flex-1 w-full h-full overflow-auto bg-paper ${
           isPanning ? 'cursor-grabbing' : 'cursor-default'
         } scrollbar-thin`}
         style={getBackgroundStyle()}
@@ -224,7 +224,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
       {/* Floating Canvas Navigation & Zoom Controller */}
       <div
         id="canvas-controls-toolbar"
-        className="absolute bottom-5 right-5 flex items-center bg-white border-[1.5px] border-neutral-900 rounded-sm shadow-[2.5px_2.5px_0px_#18181b] p-1 gap-1 z-30 font-mono text-xs"
+        className="absolute bottom-5 right-5 flex items-center bg-surface border-[1.5px] border-neutral-900 rounded-sm shadow-[2.5px_2.5px_0px_#18181b] p-1 gap-1 z-30 font-mono text-xs"
       >
         <button aria-label="Zoom Out (-)"
           type="button"

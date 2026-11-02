@@ -131,7 +131,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center">
       {/* Visual Canvas Panel */}
-      <div className="relative w-full h-[460px] sm:h-[480px] bg-[#EFEBE2] border border-[#DAD5C9] rounded-sm p-4 overflow-hidden select-none">
+      <div className="relative w-full h-[460px] sm:h-[480px] bg-paper-raised border border-hairline rounded-sm p-4 overflow-hidden select-none">
         {/* Subtle ledger graph grid */}
         <div className="absolute inset-0 bg-ledger-grid opacity-60 pointer-events-none" />
 
@@ -211,31 +211,31 @@ export const OverlappingOrgShowcase: React.FC = () => {
               <div 
                 className={`px-3 py-2 rounded-xs border text-left transition-all ${
                   isHovered 
-                    ? 'bg-[#F7F5F0] border-[#2F3B7A] shadow-[0_2px_8px_rgba(47,59,122,0.18)] ring-1 ring-[#2F3B7A]' 
+                    ? 'bg-paper border-accent shadow-[0_2px_8px_rgba(47,59,122,0.18)] ring-1 ring-accent' 
                     : isConnected 
-                      ? 'bg-[#F7F5F0] border-[#2F3B7A] shadow-xs'
-                      : 'bg-[#F7F5F0] border-[#DAD5C9] hover:border-[#1C2438] shadow-xs'
+                      ? 'bg-paper border-accent shadow-xs'
+                      : 'bg-paper border-hairline hover:border-ink shadow-xs'
                 } ${node.type === 'role' ? 'min-w-[110px]' : 'min-w-[130px]'}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className={`text-[11px] font-bold tracking-tight font-serif ${
-                    isHovered || isConnected ? 'text-[#2F3B7A]' : 'text-[#1C2438]'
+                    isHovered || isConnected ? 'text-accent-fg' : 'text-ink'
                   }`}>
                     {node.label}
                   </span>
                   {node.type === 'section' && (
-                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-[#E8E4DA] text-[#5C574B] rounded-xs">
+                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       section
                     </span>
                   )}
                   {node.type === 'subject' && (
-                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-[#E8E4DA] text-[#5C574B] rounded-xs">
+                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       subject
                     </span>
                   )}
                 </div>
 
-                <div className="text-[11px] font-mono text-[#6B665A] mt-0.5 tracking-tight truncate">
+                <div className="text-[11px] font-mono text-ink-3 mt-0.5 tracking-tight truncate">
                   {node.role}
                 </div>
               </div>
@@ -244,21 +244,21 @@ export const OverlappingOrgShowcase: React.FC = () => {
         })}
 
         {/* Legend Overlay bottom-left */}
-        <div className="absolute bottom-3 left-3 z-20 bg-[#F7F5F0]/90 backdrop-blur-xs border border-[#DAD5C9] rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-[11px] font-mono text-[#5C574B]">
+        <div className="absolute bottom-3 left-3 z-20 bg-paper/90 backdrop-blur-xs border border-hairline rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-[11px] font-mono text-ink-2">
           <div className="flex items-center gap-1.5">
-            <span className="w-3.5 h-[1.5px] bg-[#1C2438] inline-block" />
+            <span className="w-3.5 h-[1.5px] bg-ink inline-block" />
             <span>Normal root nesting</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3.5 h-0 border-t border-dashed border-[#2F3B7A] inline-block" />
-            <span className="text-[#2F3B7A]">Section reach directly to roles</span>
+            <span className="w-3.5 h-0 border-t border-dashed border-accent inline-block" />
+            <span className="text-accent-fg">Section reach directly to roles</span>
           </div>
         </div>
 
         {/* Interactive inspection hint bottom-right */}
-        <div className="absolute bottom-3 right-3 z-20 text-[11px] font-mono text-[#6B665A]">
+        <div className="absolute bottom-3 right-3 z-20 text-[11px] font-mono text-ink-3">
           {activeNode ? (
-            <span className="text-[#1C2438] font-semibold">
+            <span className="text-ink font-semibold">
               Inspecting: {activeNode.label} &mdash; {activeNode.subtext}
             </span>
           ) : (
@@ -268,7 +268,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
       </div>
 
       {/* Caption beneath in muted mono text, one short line */}
-      <p className="text-xs font-mono text-[#6B665A] text-center mt-3 tracking-tight">
+      <p className="text-xs font-mono text-ink-3 text-center mt-3 tracking-tight">
         Structures overlap without merging. Authority flows by relationship semantics, never diagram position.
       </p>
     </div>

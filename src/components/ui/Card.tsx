@@ -13,10 +13,10 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    flat: 'bg-[#F7F5F0] border-[#DAD5C9]',
-    raised: 'bg-[#EFEBE2] border-[#DAD5C9] shadow-xs',
-    sunken: 'bg-[#E8E4DA] border-[#DAD5C9]',
-    ledger: 'bg-[#F7F5F0] border-[#DAD5C9] bg-ledger-grid'
+    flat: 'bg-paper border-hairline',
+    raised: 'bg-paper-raised border-hairline shadow-xs',
+    sunken: 'bg-paper-sunken border-hairline',
+    ledger: 'bg-paper border-hairline bg-ledger-grid'
   }[variant];
 
   return (

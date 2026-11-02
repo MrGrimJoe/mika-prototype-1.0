@@ -27,6 +27,7 @@ import {
   Link2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface IntegrationsPanelProps {
   organization?: Organization;
@@ -177,7 +178,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* GitHub Card */}
-          <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between">
+          <div className="p-5 rounded-xl border border-slate-200 bg-surface shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center">
@@ -228,7 +229,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
           </div>
 
           {/* Figma Card */}
-          <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between">
+          <div className="p-5 rounded-xl border border-slate-200 bg-surface shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center">
@@ -279,7 +280,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
           </div>
 
           {/* Canva Card */}
-          <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between">
+          <div className="p-5 rounded-xl border border-slate-200 bg-surface shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-lg bg-cyan-600 text-white flex items-center justify-center">
@@ -350,7 +351,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
                 className={`p-4 rounded-xl border transition flex items-start justify-between gap-3 ${
                   isEnterpriseLocked 
                     ? 'bg-slate-50/70 border-slate-200 opacity-60' 
-                    : 'bg-white border-slate-200 shadow-2xs hover:border-indigo-200'
+                    : 'bg-surface border-slate-200 shadow-2xs hover:border-indigo-200'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -416,8 +417,8 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
 
       {/* Connect Modal */}
       {activeModalApp && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
+        <ModalOverlay onClose={() => setActiveModalApp(null)} className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-surface rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-indigo-600" />
@@ -486,7 +487,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
               </button>
             </div>
           </div>
-        </div>
+        </ModalOverlay>
       )}
     </div>
   );

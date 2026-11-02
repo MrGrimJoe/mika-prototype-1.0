@@ -737,7 +737,7 @@ export default function App() {
 
   // 3. User IS authenticated -> Render Main Application
   return (
-    <div className="h-screen w-screen bg-[#F7F5F0] text-[#1C2438] flex antialiased relative overflow-hidden font-sans">
+    <div className="h-screen w-screen bg-paper text-ink flex antialiased relative overflow-hidden font-sans">
       {/* Sidebar */}
       <AppSidebar
         currentUser={currentUser}
@@ -759,15 +759,15 @@ export default function App() {
       />
 
       {/* Main Content Stage */}
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative z-10 bg-[#F7F5F0]">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative z-10 bg-paper">
         {/* Top Header Bar with active breadcrumb & Top-Right Avatar Entry Point */}
-        <header className="h-14 bg-white border-b border-[#DAD5C9] px-6 flex items-center justify-between shrink-0 z-20">
+        <header className="h-14 bg-surface border-b border-hairline px-6 flex items-center justify-between shrink-0 z-20">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#6B665A]">
+            <span className="text-xs font-mono uppercase tracking-widest text-ink-3">
               {organization?.name || 'Oakridge Academy'}
             </span>
-            <span className="text-[#DAD5C9] font-mono">/</span>
-            <span className="text-xs font-mono font-bold text-[#1C2438] capitalize">
+            <span className="text-hairline font-mono">/</span>
+            <span className="text-xs font-mono font-bold text-ink capitalize">
               {activeTab}
             </span>
           </div>
@@ -779,8 +779,8 @@ export default function App() {
               onClick={() => setActiveTab('settings')}
               className={`p-2 rounded-xs border transition-colors cursor-pointer ${
                 activeTab === 'settings'
-                  ? 'bg-[#1C2438] text-white border-[#1C2438]'
-                  : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#F7F5F0] border-[#DAD5C9]'
+                  ? 'bg-ink text-white border-ink'
+                  : 'text-ink-2 hover:text-ink hover:bg-paper border-hairline'
               }`}
               title="Settings & Integrations"
             >
@@ -792,23 +792,23 @@ export default function App() {
               <button aria-label="Account Menu"
                 id="topbar-user-avatar-button"
                 onClick={() => setShowUserDropdown(prev => !prev)}
-                className="flex items-center gap-2 p-1.5 rounded-xs hover:bg-[#F7F5F0] border border-[#DAD5C9] transition-colors cursor-pointer"
+                className="flex items-center gap-2 p-1.5 rounded-xs hover:bg-paper border border-hairline transition-colors cursor-pointer"
                 title="Account Menu"
               >
-                <div className="w-7 h-7 rounded-xs bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
+                <div className="w-7 h-7 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
                   {currentUser.preferredName?.[0] || currentUser.fullName?.[0] || 'U'}
                 </div>
-                <span className="text-xs font-semibold text-[#1C2438] hidden sm:inline max-w-[120px] truncate">
+                <span className="text-xs font-semibold text-ink hidden sm:inline max-w-[120px] truncate">
                   {currentUser.preferredName || currentUser.fullName}
                 </span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#6B665A]" />
+                <ChevronDown className="w-3.5 h-3.5 text-ink-3" />
               </button>
 
               {showUserDropdown && (
-                <div className="absolute right-0 top-full mt-1.5 w-56 bg-white border border-[#DAD5C9] shadow-lg rounded-xs py-1.5 z-50 font-mono text-xs animate-in fade-in duration-100">
-                  <div className="px-3 py-2 border-b border-[#DAD5C9] bg-[#F7F5F0]">
-                    <div className="font-bold text-[#1C2438] truncate">{currentUser.fullName}</div>
-                    <div className="text-[11px] text-[#5C574B] truncate">{currentUser.email}</div>
+                <div className="absolute right-0 top-full mt-1.5 w-56 bg-surface border border-hairline shadow-lg rounded-xs py-1.5 z-50 font-mono text-xs animate-in fade-in duration-100">
+                  <div className="px-3 py-2 border-b border-hairline bg-paper">
+                    <div className="font-bold text-ink truncate">{currentUser.fullName}</div>
+                    <div className="text-[11px] text-ink-2 truncate">{currentUser.email}</div>
                   </div>
 
                   <button
@@ -816,9 +816,9 @@ export default function App() {
                       setShowUserDropdown(false);
                       setViewingProfileUser(currentUser);
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
+                    className="w-full text-left px-3 py-2 hover:bg-paper text-ink flex items-center gap-2 cursor-pointer"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-[#6B665A]" />
+                    <UserIcon className="w-3.5 h-3.5 text-ink-3" />
                     <span>View Profile</span>
                   </button>
 
@@ -827,22 +827,22 @@ export default function App() {
                       setShowUserDropdown(false);
                       setActiveTab('settings');
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-[#F7F5F0] text-[#1C2438] flex items-center gap-2 cursor-pointer"
+                    className="w-full text-left px-3 py-2 hover:bg-paper text-ink flex items-center gap-2 cursor-pointer"
                   >
-                    <SettingsIcon className="w-3.5 h-3.5 text-[#6B665A]" />
+                    <SettingsIcon className="w-3.5 h-3.5 text-ink-3" />
                     <span>Settings & Integrations</span>
                   </button>
 
-                  <div className="border-t border-[#DAD5C9] my-1" />
+                  <div className="border-t border-hairline my-1" />
 
                   <button
                     onClick={() => {
                       setShowUserDropdown(false);
                       handleSignOut();
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-[#FFF5F5] text-[#991B1B] flex items-center gap-2 cursor-pointer"
+                    className="w-full text-left px-3 py-2 hover:bg-[#FFF5F5] text-st-pending flex items-center gap-2 cursor-pointer"
                   >
-                    <LogOut className="w-3.5 h-3.5 text-[#991B1B]" />
+                    <LogOut className="w-3.5 h-3.5 text-st-pending" />
                     <span>Sign Out</span>
                   </button>
                 </div>

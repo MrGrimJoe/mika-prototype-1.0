@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { IntegrationConnection, Role, Department } from '../types';
 import { INTEGRATION_TOOLS } from '../lib/integrationService';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface IntegrationAccessConfigModalProps {
   connections: IntegrationConnection[];
@@ -78,8 +79,11 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
     }
   };
 
+  // Inline mode renders in the page flow; modal mode gets dialog semantics and focus handling.
+  const Wrapper: React.ElementType = isInline ? 'div' : ModalOverlay;
+
   return (
-    <div
+    <Wrapper
       id="integration-access-config-container"
       className={
         isInline
@@ -91,7 +95,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
         className={
           isInline
             ? 'w-full'
-            : 'w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 max-h-[85vh] overflow-y-auto'
+            : 'w-full max-w-2xl bg-surface rounded-2xl shadow-2xl border border-slate-200 p-6 max-h-[85vh] overflow-y-auto'
         }
       >
         <div className="mb-5">
@@ -121,7 +125,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-slate-800">{toolName}</span>
-                    <span className="text-[11px] text-slate-500 font-mono-code bg-white px-2 py-0.5 rounded border border-slate-200">
+                    <span className="text-[11px] text-slate-500 font-mono-code bg-surface px-2 py-0.5 rounded border border-slate-200">
                       {conn.accountLabel}
                     </span>
                   </div>
@@ -160,7 +164,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
 
                   {/* Specific Roles Checklist */}
                   {!isAll && (
-                    <div className="ml-6 mt-3 p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                    <div className="ml-6 mt-3 p-3 bg-surface rounded-xl border border-slate-200 space-y-2">
                       <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
                         Choose eligible roles ({selectedRoleIds.length}/{roles.length} selected):
                       </div>
@@ -204,13 +208,13 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
             type="button"
             id="save-integration-access-btn"
             onClick={handleSaveAndProceed}
-            className="px-5 py-2.5 bg-[#2F3B7A] hover:bg-indigo-900 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-2 shadow-xs transition-colors"
+            className="px-5 py-2.5 bg-accent hover:bg-indigo-900 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-2 shadow-xs transition-colors"
           >
             <span>Confirm & Continue</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };

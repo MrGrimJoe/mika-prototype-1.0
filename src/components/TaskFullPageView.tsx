@@ -39,6 +39,7 @@ import {
 import confetti from 'canvas-confetti';
 import { Badge, Button } from './ui';
 import { taskStateColors, colors, typography } from '../lib/designSystem';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface TaskFullPageViewProps {
   task: Task;
@@ -298,13 +299,13 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F5F0] text-[#1C2438] pb-16 font-sans">
+    <div className="min-h-screen bg-paper text-ink pb-16 font-sans">
       {/* Top sticky navigation bar */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-[#DAD5C9] px-4 md:px-8 py-3">
+      <div className="sticky top-0 z-40 bg-surface/95 backdrop-blur-xs border-b border-hairline px-4 md:px-8 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#5C574B] hover:text-[#1C2438] transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-ink-2 hover:text-ink transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Tasks</span>
@@ -319,7 +320,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xs text-xs font-mono font-bold uppercase tracking-wider transition-all border shadow-xs cursor-pointer ${
                 isActiveForShortcut 
                   ? 'bg-amber-50 text-amber-900 border-amber-300' 
-                  : 'bg-white text-slate-700 border-[#DAD5C9] hover:bg-[#F7F5F0]'
+                  : 'bg-surface text-slate-700 border-hairline hover:bg-paper'
               }`}
               title="Set this task as the target for Ctrl+Alt+M shortcut across any browser tab"
             >
@@ -337,7 +338,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
             </button>
 
             {task.status === 'help' ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] rounded-xs text-xs font-mono font-bold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-st-help-bg text-st-help border border-st-help-border rounded-xs text-xs font-mono font-bold uppercase tracking-wider">
                 <HelpCircle className="w-4 h-4" />
                 Help Requested (Assigner Notified)
               </span>
@@ -358,7 +359,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
       <div className="max-w-5xl mx-auto px-4 md:px-8 pt-8 space-y-6">
         {/* Main Task Header Card */}
-        <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
+        <div className="bg-surface border border-hairline rounded-xs p-6 md:p-8 shadow-xs">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {/* Status Badge per B7 */}
             <Badge
@@ -373,27 +374,27 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
             </Badge>
 
             {department && (
-              <span className="px-2.5 py-1 bg-[#F7F5F0] border border-[#DAD5C9] text-xs font-mono text-[#5C574B] rounded-xs">
+              <span className="px-2.5 py-1 bg-paper border border-hairline text-xs font-mono text-ink-2 rounded-xs">
                 Dept: {department.name}
               </span>
             )}
 
             {targetRole && (
-              <span className="px-2.5 py-1 bg-[#F7F5F0] border border-[#DAD5C9] text-xs font-mono text-[#5C574B] rounded-xs">
+              <span className="px-2.5 py-1 bg-paper border border-hairline text-xs font-mono text-ink-2 rounded-xs">
                 Role: {targetRole.title}
               </span>
             )}
 
             {/* B5: Google Calendar Sync Indicator */}
             {(task.isCalendarSynced || task.calendarEventId) && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] text-xs font-mono rounded-xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-st-help-bg text-st-help border border-st-help-border text-xs font-mono rounded-xs">
                 <CalendarIcon className="w-3.5 h-3.5" />
                 Synced to Google Calendar
               </span>
             )}
 
             {task.dueDate && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F7F5F0] text-[#5C574B] border border-[#DAD5C9] text-xs font-mono rounded-xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-paper text-ink-2 border border-hairline text-xs font-mono rounded-xs">
                 <Clock className="w-3.5 h-3.5" />
                 Due: {new Date(task.dueDate).toLocaleDateString()}
               </span>
@@ -401,23 +402,23 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           </div>
 
           <h1 
-            className="text-2xl md:text-3xl font-bold tracking-tight text-[#1C2438] mb-4"
+            className="text-2xl md:text-3xl font-bold tracking-tight text-ink mb-4"
             style={{ fontFamily: typography.fontSerif }}
           >
             {task.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-6 text-xs text-[#5C574B] pt-4 border-t border-[#DAD5C9]">
+          <div className="flex flex-wrap items-center gap-6 text-xs text-ink-2 pt-4 border-t border-hairline">
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#6B665A]">Assigned by:</span>
-              <span className="font-bold text-[#1C2438]">{assigner?.fullName || 'Root Authority'}</span>
+              <span className="font-mono uppercase text-ink-3">Assigned by:</span>
+              <span className="font-bold text-ink">{assigner?.fullName || 'Root Authority'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#6B665A]">Assignee:</span>
-              <span className="font-bold text-[#1C2438]">{assignee?.fullName || targetRole?.title || 'Department Staff'}</span>
+              <span className="font-mono uppercase text-ink-3">Assignee:</span>
+              <span className="font-bold text-ink">{assignee?.fullName || targetRole?.title || 'Department Staff'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono uppercase text-[#6B665A]">Created:</span>
+              <span className="font-mono uppercase text-ink-3">Created:</span>
               <span>{new Date(task.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
@@ -425,17 +426,17 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
         {/* B3: Reference File Attachment Section */}
         {task.referenceFile && (
-          <div className="bg-white border border-[#DAD5C9] rounded-xs p-5 shadow-xs">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#5C574B] mb-3 flex items-center gap-2">
-              <Paperclip className="w-4 h-4 text-[#2F3B7A]" />
+          <div className="bg-surface border border-hairline rounded-xs p-5 shadow-xs">
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-ink-2 mb-3 flex items-center gap-2">
+              <Paperclip className="w-4 h-4 text-accent-fg" />
               Reference Context File (From Assigner)
             </h3>
-            <div className="flex items-center justify-between p-3 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs">
+            <div className="flex items-center justify-between p-3 bg-paper border border-hairline rounded-xs">
               <div className="flex items-center gap-3">
-                <FileText className="w-5 h-5 text-[#2F3B7A]" />
+                <FileText className="w-5 h-5 text-accent-fg" />
                 <div>
-                  <p className="text-xs font-bold text-[#1C2438] font-mono">{task.referenceFile.name}</p>
-                  <p className="text-[11px] text-[#6B665A] font-mono">{task.referenceFile.size || 'Attached File'}</p>
+                  <p className="text-xs font-bold text-ink font-mono">{task.referenceFile.name}</p>
+                  <p className="text-[11px] text-ink-3 font-mono">{task.referenceFile.size || 'Attached File'}</p>
                 </div>
               </div>
               {task.referenceFile.url && (
@@ -443,7 +444,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   href={task.referenceFile.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#EFEBE2] border border-[#DAD5C9] text-xs font-mono font-bold text-[#1C2438] rounded-xs transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-paper-raised border border-hairline text-xs font-mono font-bold text-ink rounded-xs transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Open Reference</span>
@@ -454,18 +455,18 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
         )}
 
         {/* Description & Objective Card */}
-        <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-3">
+        <div className="bg-surface border border-hairline rounded-xs p-6 md:p-8 shadow-xs">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-ink-3 mb-3">
             Task Description & Specifications
           </h3>
-          <div className="text-sm leading-relaxed text-[#1C2438] whitespace-pre-wrap">
+          <div className="text-sm leading-relaxed text-ink whitespace-pre-wrap">
             {task.description || 'No detailed instructions provided.'}
           </div>
 
           {/* Connected Mentions Chips (GitHub repos/files, Figma, Canva, Drive) */}
           {task.mentions && task.mentions.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-[#DAD5C9]">
-              <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-2 flex items-center gap-1.5">
+            <div className="mt-4 pt-4 border-t border-hairline">
+              <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-3 mb-2 flex items-center gap-1.5">
                 <span>Referenced Assets & Repositories</span>
                 <span className="text-[11px] bg-slate-100 px-1.5 py-0.2 rounded text-slate-600">
                   {task.mentions.length}
@@ -529,17 +530,17 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
         </div>
 
         {/* B4 & B8: Deliverable / Confirmation Section */}
-        <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-4 flex items-center justify-between">
+        <div className="bg-surface border border-hairline rounded-xs p-6 md:p-8 shadow-xs">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-ink-3 mb-4 flex items-center justify-between">
             <span>Confirmation & Completion Status</span>
-            <span className="font-normal normal-case text-xs text-[#5C574B]">
+            <span className="font-normal normal-case text-xs text-ink-2">
               Mode: {task.confirmationMode === 'yes_no' ? 'Yes/No Confirmation' : 'File Dropbox Confirmation'}
             </span>
           </h3>
 
           {/* Section 0.3: Plain-Text Response Field (Always available for quick explanations) */}
-          <div className="mb-5 pb-5 border-b border-[#DAD5C9]">
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-[#5C574B] mb-1.5">
+          <div className="mb-5 pb-5 border-b border-hairline">
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-ink-2 mb-1.5">
               Deliverable Summary / Plain Text Response:
             </label>
             {task.confirmationText ? (
@@ -557,7 +558,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   value={confirmationInputText}
                   onChange={(e) => setConfirmationInputText(e.target.value)}
                   placeholder="Provide a written summary, resolution notes, or plain-text response..."
-                  className="w-full p-2.5 text-xs border border-[#DAD5C9] bg-[#F7F5F0] focus:bg-white rounded-xs focus:outline-hidden font-sans"
+                  className="w-full p-2.5 text-xs border border-hairline bg-paper focus:bg-surface rounded-xs focus:outline-hidden font-sans"
                 />
                 <button
                   type="button"
@@ -587,7 +588,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   id="btn-export-figma"
                   onClick={handleFigmaExport}
                   disabled={isExportingFigma}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-purple-50 border border-slate-200 hover:border-purple-300 text-purple-700 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-purple-50 border border-slate-200 hover:border-purple-300 text-purple-700 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
                 >
                   <Figma className="w-3.5 h-3.5" />
                   <span>{isExportingFigma ? 'Exporting...' : 'Export from Figma Frame'}</span>
@@ -598,7 +599,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   id="btn-export-canva"
                   onClick={handleCanvaExport}
                   disabled={isExportingCanva}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 text-cyan-700 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 text-cyan-700 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
                 >
                   <Layers className="w-3.5 h-3.5" />
                   <span>{isExportingCanva ? 'Exporting...' : 'Export from Canva Design'}</span>
@@ -608,7 +609,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   type="button"
                   id="btn-trigger-shortcut-submit"
                   onClick={handleSubmitShortcut}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-amber-800 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-amber-800 text-xs font-mono font-bold rounded-xs transition cursor-pointer"
                 >
                   <Keyboard className="w-3.5 h-3.5 text-amber-600" />
                   <span>Simulate Ctrl+Alt+M Shortcut</span>
@@ -621,12 +622,12 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {task.confirmationMode !== 'yes_no' && (
             <div className="space-y-4">
               {task.confirmationFile ? (
-                <div className="p-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded-xs flex items-center justify-between">
+                <div className="p-4 bg-st-done-bg border border-st-done-border rounded-xs flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#16A34A]" />
+                    <CheckCircle2 className="w-5 h-5 text-st-done" />
                     <div>
-                      <p className="text-xs font-bold text-[#16A34A] font-mono">Deliverable File Submitted</p>
-                      <p className="text-xs text-[#1C2438]">{task.confirmationFile.name}</p>
+                      <p className="text-xs font-bold text-st-done font-mono">Deliverable File Submitted</p>
+                      <p className="text-xs text-ink">{task.confirmationFile.name}</p>
                     </div>
                   </div>
                   {task.confirmationFile.url && (
@@ -634,7 +635,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                       href={task.confirmationFile.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#BBF7D0] text-xs font-mono text-[#16A34A] rounded-xs hover:bg-[#F0FDF4]"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-st-done-border text-xs font-mono text-st-done rounded-xs hover:bg-st-done-bg"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download</span>
@@ -647,14 +648,14 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={handleDropFile}
                   className={`border-2 border-dashed rounded-xs p-8 text-center transition-colors ${
-                    isDragging ? 'border-[#2F3B7A] bg-[#EFF6FF]' : 'border-[#DAD5C9] bg-[#F7F5F0]'
+                    isDragging ? 'border-accent bg-st-help-bg' : 'border-hairline bg-paper'
                   }`}
                 >
-                  <Upload className="w-8 h-8 mx-auto text-[#6B665A] mb-2" />
-                  <p className="text-xs font-bold font-mono uppercase text-[#1C2438] mb-1">
+                  <Upload className="w-8 h-8 mx-auto text-ink-3 mb-2" />
+                  <p className="text-xs font-bold font-mono uppercase text-ink mb-1">
                     Drop Deliverable File Here
                   </p>
-                  <p className="text-xs text-[#6B665A] mb-4">
+                  <p className="text-xs text-ink-3 mb-4">
                     Attach required deliverable to submit task for authority review
                   </p>
                   <input
@@ -665,7 +666,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2 bg-white hover:bg-[#EFEBE2] border border-[#DAD5C9] text-xs font-mono font-bold text-[#1C2438] rounded-xs cursor-pointer shadow-xs"
+                    className="px-4 py-2 bg-surface hover:bg-paper-raised border border-hairline text-xs font-mono font-bold text-ink rounded-xs cursor-pointer shadow-xs"
                   >
                     Select File from Device
                   </button>
@@ -678,10 +679,10 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {task.confirmationMode === 'yes_no' && (
             <div className="space-y-4">
               {task.status === 'pending' || task.status === 'help' || task.status === 'rejected' ? (
-                <div className="p-4 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs flex items-center justify-between">
+                <div className="p-4 bg-paper border border-hairline rounded-xs flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold font-mono uppercase text-[#1C2438]">Ready to submit?</p>
-                    <p className="text-xs text-[#6B665A]">Tap Mark Done to alert root authority for review.</p>
+                    <p className="text-xs font-bold font-mono uppercase text-ink">Ready to submit?</p>
+                    <p className="text-xs text-ink-3">Tap Mark Done to alert root authority for review.</p>
                   </div>
                   <button
                     id="btn-mark-done-yesno"
@@ -692,7 +693,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   </button>
                 </div>
               ) : task.status === 'submitted' ? (
-                <div className="p-4 bg-[#FEFCE8] border border-[#FEF08A] rounded-xs flex items-center gap-3 text-[#CA8A04]">
+                <div className="p-4 bg-st-submitted-bg border border-st-submitted-border rounded-xs flex items-center gap-3 text-st-submitted">
                   <Clock className="w-5 h-5" />
                   <div>
                     <p className="text-xs font-bold font-mono uppercase">Submitted — Awaiting Review</p>
@@ -705,12 +706,12 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
           {/* Denied status notice */}
           {task.status === 'rejected' && task.rejectionReason && (
-            <div className="mt-4 p-4 bg-[#FEF2F2] border border-[#FECACA] rounded-xs flex items-start gap-3 text-[#DC2626]">
+            <div className="mt-4 p-4 bg-st-pending-bg border border-st-pending-border rounded-xs flex items-start gap-3 text-st-pending">
               <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold font-mono uppercase">Task Denied by Root Authority</p>
-                <p className="text-xs text-[#991B1B] mt-1">{task.rejectionReason}</p>
-                <p className="text-[11px] text-[#B91C1C] mt-2 font-mono">
+                <p className="text-xs text-st-pending mt-1">{task.rejectionReason}</p>
+                <p className="text-[11px] text-st-pending mt-2 font-mono">
                   Please revise your work and resubmit when ready.
                 </p>
               </div>
@@ -719,23 +720,23 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
           {/* B8: Root Review Decision Controls (Pass / Deny) */}
           {hasAuthorityToReview && task.status === 'submitted' && (
-            <div className="mt-6 pt-6 border-t border-[#DAD5C9] bg-[#F7F5F0] p-4 rounded-xs">
+            <div className="mt-6 pt-6 border-t border-hairline bg-paper p-4 rounded-xs">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#1C2438] flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#2F3B7A]" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-accent-fg" />
                   Root Authority Review Actions
                 </span>
-                <span className="text-[11px] font-mono text-[#6B665A]">Decision Required</span>
+                <span className="text-[11px] font-mono text-ink-3">Decision Required</span>
               </div>
 
               {/* Submitted deliverable summary for reviewer */}
               {(task.confirmationText || task.submissionEvidence || task.confirmationFile) && (
-                <div className="mb-4 p-3 bg-white border border-[#DAD5C9] rounded-xs text-xs space-y-2">
-                  <div className="font-mono font-bold uppercase tracking-wider text-[11px] text-[#5C574B]">
+                <div className="mb-4 p-3 bg-surface border border-hairline rounded-xs text-xs space-y-2">
+                  <div className="font-mono font-bold uppercase tracking-wider text-[11px] text-ink-2">
                     Submitted Deliverables for Inspection:
                   </div>
                   {task.confirmationText && (
-                    <div className="p-2 bg-[#F7F5F0] rounded border border-slate-200">
+                    <div className="p-2 bg-paper rounded border border-slate-200">
                       <span className="font-bold text-slate-700">Assignee Text Response:</span>
                       <p className="mt-1 text-slate-800 whitespace-pre-wrap">{task.confirmationText}</p>
                     </div>
@@ -757,7 +758,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
               {/* Star rating picker for root */}
               <div className="mb-4 flex items-center gap-2">
-                <span className="text-xs text-[#5C574B] font-mono">Execution Score:</span>
+                <span className="text-xs text-ink-2 font-mono">Execution Score:</span>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -768,7 +769,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                     >
                       <Star
                         className={`w-4 h-4 ${
-                          star <= ratingScore ? 'fill-[#EAB308] text-[#EAB308]' : 'text-[#DAD5C9]'
+                          star <= ratingScore ? 'fill-[#EAB308] text-[#EAB308]' : 'text-hairline'
                         }`}
                       />
                     </button>
@@ -800,7 +801,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
           {/* Approved notice */}
           {task.status === 'done' && (
-            <div className="mt-4 p-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded-xs flex items-center gap-3 text-[#16A34A]">
+            <div className="mt-4 p-4 bg-st-done-bg border border-st-done-border rounded-xs flex items-center gap-3 text-st-done">
               <CheckCircle2 className="w-5 h-5" />
               <div>
                 <p className="text-xs font-bold font-mono uppercase">Approved and Completed</p>
@@ -811,8 +812,8 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
         </div>
 
         {/* Comments & Discussion Thread */}
-        <div className="bg-white border border-[#DAD5C9] rounded-xs p-6 md:p-8 shadow-xs">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#6B665A] mb-4">
+        <div className="bg-surface border border-hairline rounded-xs p-6 md:p-8 shadow-xs">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-ink-3 mb-4">
             Activity & Comment Thread ({taskComments.length})
           </h3>
 
@@ -823,19 +824,19 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   key={comment.id}
                   className={`p-3 rounded-xs border ${
                     comment.isHelpNotice 
-                      ? 'bg-[#EFF6FF] border-[#BFDBFE] text-[#1E40AF]' 
-                      : 'bg-[#F7F5F0] border-[#DAD5C9] text-[#1C2438]'
+                      ? 'bg-st-help-bg border-st-help-border text-st-help' 
+                      : 'bg-paper border-hairline text-ink'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-mono text-[#6B665A] mb-1">
-                    <span className="font-bold text-[#1C2438]">{comment.authorName}</span>
+                  <div className="flex items-center justify-between text-[11px] font-mono text-ink-3 mb-1">
+                    <span className="font-bold text-ink">{comment.authorName}</span>
                     <span>{new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                   <p className="text-xs leading-relaxed">{comment.content}</p>
                 </div>
               ))
             ) : (
-              <p className="text-xs text-[#6B665A] italic font-mono">No comments on this assignment yet.</p>
+              <p className="text-xs text-ink-3 italic font-mono">No comments on this assignment yet.</p>
             )}
           </div>
 
@@ -846,12 +847,12 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               placeholder="Post a follow-up or reply..."
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className="flex-1 px-3 py-2 text-xs border border-[#DAD5C9] bg-[#F7F5F0] focus:bg-white rounded-xs focus:outline-hidden font-sans"
+              className="flex-1 px-3 py-2 text-xs border border-hairline bg-paper focus:bg-surface rounded-xs focus:outline-hidden font-sans"
             />
             <button
               type="submit"
               disabled={!commentText.trim()}
-              className="px-4 py-2 bg-[#1C2438] hover:bg-[#12151C] text-white text-xs font-mono font-bold uppercase tracking-wider rounded-xs cursor-pointer disabled:opacity-40 flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 bg-ink hover:bg-[#12151C] text-white text-xs font-mono font-bold uppercase tracking-wider rounded-xs cursor-pointer disabled:opacity-40 flex items-center gap-1.5 transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Send</span>
@@ -862,13 +863,13 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
       {/* Denial Reason Modal */}
       {denialModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#DAD5C9] rounded-xs max-w-md w-full p-6 shadow-2xl">
-            <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#DC2626] mb-2 flex items-center gap-2">
+        <ModalOverlay onClose={() => setDenialModalOpen(false)} className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-surface border border-hairline rounded-xs max-w-md w-full p-6 shadow-2xl">
+            <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-st-pending mb-2 flex items-center gap-2">
               <XCircle className="w-5 h-5" />
               State Reason for Denial
             </h3>
-            <p className="text-xs text-[#5C574B] mb-4">
+            <p className="text-xs text-ink-2 mb-4">
               Explain why this assignment is denied. The assignee will be alerted and invited to address issues.
             </p>
             <textarea
@@ -876,12 +877,12 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               value={denialReason}
               onChange={(e) => setDenialReason(e.target.value)}
               placeholder="Provide specific feedback..."
-              className="w-full p-3 text-xs border border-[#DAD5C9] rounded-xs mb-4 focus:outline-hidden font-sans"
+              className="w-full p-3 text-xs border border-hairline rounded-xs mb-4 focus:outline-hidden font-sans"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setDenialModalOpen(false)}
-                className="px-3 py-1.5 border border-[#DAD5C9] text-xs font-mono text-[#5C574B] rounded-xs hover:bg-[#F7F5F0] cursor-pointer"
+                className="px-3 py-1.5 border border-hairline text-xs font-mono text-ink-2 rounded-xs hover:bg-paper cursor-pointer"
               >
                 Cancel
               </button>
@@ -894,13 +895,13 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               </button>
             </div>
           </div>
-        </div>
+        </ModalOverlay>
       )}
       {/* Userscript Shortcut Modal (Section 0.2) */}
       {showUserscriptModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#DAD5C9] rounded-xs max-w-lg w-full p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-[#DAD5C9] mb-4">
+        <ModalOverlay onClose={() => setShowUserscriptModal(false)} className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-surface border border-hairline rounded-xs max-w-lg w-full p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-hairline mb-4">
               <div className="flex items-center gap-2">
                 <Keyboard className="w-5 h-5 text-amber-600" />
                 <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-900">
@@ -924,7 +925,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <div className="font-bold text-slate-900">How it works:</div>
                 <div>1. Click <strong className="text-amber-700">Set Active (Ctrl+Alt+M)</strong> on this task.</div>
                 <div>2. Switch to your work in Figma, Canva, or Google Docs.</div>
-                <div>3. Press <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded shadow-2xs font-bold text-slate-900">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded shadow-2xs font-bold text-slate-900">Alt</kbd> + <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded shadow-2xs font-bold text-slate-900">M</kbd>.</div>
+                <div>3. Press <kbd className="px-1.5 py-0.5 bg-surface border border-slate-300 rounded shadow-2xs font-bold text-slate-900">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-surface border border-slate-300 rounded shadow-2xs font-bold text-slate-900">Alt</kbd> + <kbd className="px-1.5 py-0.5 bg-surface border border-slate-300 rounded shadow-2xs font-bold text-slate-900">M</kbd>.</div>
                 <div>4. Mika captures the active URL & metadata and submits the deliverable!</div>
               </div>
 
@@ -947,16 +948,16 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               </div>
             </div>
 
-            <div className="mt-6 pt-3 border-t border-[#DAD5C9] flex justify-end">
+            <div className="mt-6 pt-3 border-t border-hairline flex justify-end">
               <button
                 onClick={() => setShowUserscriptModal(false)}
-                className="px-4 py-1.5 bg-[#1C2438] text-white text-xs font-mono font-bold uppercase rounded-xs"
+                className="px-4 py-1.5 bg-ink text-white text-xs font-mono font-bold uppercase rounded-xs"
               >
                 Close
               </button>
             </div>
           </div>
-        </div>
+        </ModalOverlay>
       )}
     </div>
   );

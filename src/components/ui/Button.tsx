@@ -24,15 +24,15 @@ export const Button: React.FC<ButtonProps> = ({
   }[size];
 
   const variantStyles = {
-    primary: 'bg-[#1C2438] text-[#F7F5F0] border border-[#1C2438] hover:bg-[#2F3B7A] hover:border-[#2F3B7A] disabled:bg-[#8A8578] disabled:border-[#8A8578]',
-    secondary: 'bg-[#EFEBE2] text-[#1C2438] border border-[#DAD5C9] hover:bg-[#E8E4DA] hover:border-[#8A8578] disabled:opacity-50',
-    ghost: 'bg-transparent text-[#5C574B] border border-transparent hover:bg-[#EFEBE2] hover:text-[#1C2438] disabled:opacity-40',
+    primary: 'bg-ink text-paper border border-ink hover:bg-accent hover:border-accent disabled:bg-edge disabled:border-edge',
+    secondary: 'bg-paper-raised text-ink border border-hairline hover:bg-paper-sunken hover:border-edge disabled:opacity-50',
+    ghost: 'bg-transparent text-ink-2 border border-transparent hover:bg-paper-raised hover:text-ink disabled:opacity-40',
     danger: 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 disabled:opacity-50'
   }[variant];
 
   return (
     <button
-      className={`inline-flex items-center justify-center font-medium rounded-xs transition-colors whitespace-nowrap cursor-pointer disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F3B7A] ${sizeStyles} ${variantStyles} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-xs transition-colors whitespace-nowrap cursor-pointer disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${sizeStyles} ${variantStyles} ${className}`}
       disabled={disabled}
       {...props}
     >

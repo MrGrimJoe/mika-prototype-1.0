@@ -32,7 +32,7 @@ export const AuthorityBadge: React.FC<AuthorityBadgeProps> = ({
   if (resolvedIsLead) {
     return (
       <span
-        className={`inline-flex items-center font-medium rounded-xs border whitespace-nowrap bg-[#2F3B7A] text-white border-[#2F3B7A] ${sizeClasses} ${className}`}
+        className={`inline-flex items-center font-medium rounded-xs border whitespace-nowrap bg-accent text-white border-accent ${sizeClasses} ${className}`}
       >
         <ShieldCheck className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
         <span>{displayLabel}</span>
@@ -42,7 +42,7 @@ export const AuthorityBadge: React.FC<AuthorityBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-xs border whitespace-nowrap bg-[#EFEBE2] text-[#5C574B] border-[#DAD5C9] ${sizeClasses} ${className}`}
+      className={`inline-flex items-center font-medium rounded-xs border whitespace-nowrap bg-paper-raised text-ink-2 border-hairline ${sizeClasses} ${className}`}
     >
       <User className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
       <span>{displayLabel}</span>

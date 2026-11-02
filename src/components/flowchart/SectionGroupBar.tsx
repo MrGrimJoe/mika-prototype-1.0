@@ -61,7 +61,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
   return (
     <div
       id="selection-group-dock"
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white border-2 border-neutral-900 rounded-sm shadow-[4px_4px_0px_#18181b] p-2.5 z-40 flex flex-col gap-2 max-w-2xl w-[94vw] sm:w-auto animate-in slide-in-from-bottom-3 duration-150 font-mono text-xs select-none"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border-2 border-neutral-900 rounded-sm shadow-[4px_4px_0px_#18181b] p-2.5 z-40 flex flex-col gap-2 max-w-2xl w-[94vw] sm:w-auto animate-in slide-in-from-bottom-3 duration-150 font-mono text-xs select-none"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Selection Count Badge */}
@@ -104,7 +104,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                   setIsAssignDropdownOpen(!isAssignDropdownOpen);
                   setShowDeleteConfirm(false);
                 }}
-                className="flex items-center gap-1 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-400 hover:border-neutral-900 px-2 py-1.5 rounded-xs transition-colors"
+                className="flex items-center gap-1 bg-surface hover:bg-neutral-100 text-neutral-800 border border-neutral-400 hover:border-neutral-900 px-2 py-1.5 rounded-xs transition-colors"
               >
                 <span>Add to Existing ({sections.length})</span>
               </button>
@@ -112,7 +112,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
               {isAssignDropdownOpen && (
                 <div
                   id="existing-sections-menu"
-                  className="absolute bottom-full mb-2 left-0 w-56 bg-white border border-neutral-900 rounded-xs shadow-[3px_3px_0px_#18181b] p-1 z-50 flex flex-col gap-1 max-h-48 overflow-y-auto"
+                  className="absolute bottom-full mb-2 left-0 w-56 bg-surface border border-neutral-900 rounded-xs shadow-[3px_3px_0px_#18181b] p-1 z-50 flex flex-col gap-1 max-h-48 overflow-y-auto"
                 >
                   <div className="text-[11px] uppercase font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
                     Choose Section
@@ -180,7 +180,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
       {isCreatingNew && (
         <form
           onSubmit={handleCreateSubmit}
-          className="border-t border-neutral-200 pt-2.5 flex flex-col gap-2 bg-[#fafaf8] p-2 rounded-xs"
+          className="border-t border-neutral-200 pt-2.5 flex flex-col gap-2 bg-paper p-2 rounded-xs"
         >
           <div className="flex items-center justify-between">
             <span className="font-bold text-xs text-neutral-900">Create New Section</span>
@@ -201,13 +201,13 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
               onChange={(e) => setNewSectionName(e.target.value)}
               placeholder="e.g. Finance Division, Technical Ops..."
               autoFocus
-              className="flex-1 bg-white border border-neutral-400 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
+              className="flex-1 bg-surface border border-neutral-400 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
             />
 
             {/* Shades Selector */}
             <div className="flex items-center gap-1">
               <span className="text-[11px] text-neutral-500 uppercase">Shade:</span>
-              <div className="flex items-center gap-1 bg-white p-1 border border-neutral-300 rounded-xs">
+              <div className="flex items-center gap-1 bg-surface p-1 border border-neutral-300 rounded-xs">
                 {SHADES.map((s) => (
                   <button aria-label={s.label}
                     key={s.id}
@@ -230,7 +230,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
               <select
                 value={selectedBorderStyle}
                 onChange={(e) => setSelectedBorderStyle(e.target.value as Section['borderStyle'])}
-                className="bg-white border border-neutral-300 text-[11px] px-1.5 py-1 rounded-xs focus:outline-none"
+                className="bg-surface border border-neutral-300 text-[11px] px-1.5 py-1 rounded-xs focus:outline-none"
               >
                 <option value="dashed">Dashed</option>
                 <option value="solid">Solid</option>
@@ -276,7 +276,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                 onDeleteSelected(true);
                 setShowDeleteConfirm(false);
               }}
-              className="bg-white hover:bg-neutral-200 border border-neutral-400 text-neutral-900 px-2.5 py-1 rounded-xs text-[11px] transition-colors"
+              className="bg-surface hover:bg-neutral-200 border border-neutral-400 text-neutral-900 px-2.5 py-1 rounded-xs text-[11px] transition-colors"
               title="Preserve sub-branches by connecting them to parent"
             >
               Reparent Sub-Branches

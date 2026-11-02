@@ -312,7 +312,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
             return (
               <div
                 key={tool.key}
-                className="flex items-center justify-between p-2.5 bg-white border border-stone-200 rounded-xs text-xs shadow-2xs"
+                className="flex items-center justify-between p-2.5 bg-surface border border-stone-200 rounded-xs text-xs shadow-2xs"
               >
                 <div className="min-w-0 flex-1 mr-3">
                   <div className="font-semibold text-stone-900 truncate flex items-center gap-1.5">
@@ -343,7 +343,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setConnectingTool(tool)}
-                      className="px-3 py-1.5 bg-[#1A1A1A] hover:bg-stone-800 text-white text-xs font-mono uppercase tracking-wider font-semibold rounded-xs transition-colors cursor-pointer"
+                      className="px-3 py-1.5 bg-ink hover:bg-stone-800 text-white text-xs font-mono uppercase tracking-wider font-semibold rounded-xs transition-colors cursor-pointer"
                     >
                       Connect Account
                     </button>
@@ -359,10 +359,10 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-paper flex items-center justify-center p-4">
         <div className="text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-[#1A1A1A] border-t-transparent animate-spin rounded-full mx-auto" />
-          <p className="text-xs font-mono uppercase tracking-widest text-[#737373]">Resolving Invite Token...</p>
+          <div className="w-8 h-8 border-2 border-ink border-t-transparent animate-spin rounded-full mx-auto" />
+          <p className="text-xs font-mono uppercase tracking-widest text-ink-3">Resolving Invite Token...</p>
         </div>
       </div>
     );
@@ -370,16 +370,16 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
   if (error && !linkInfo) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white border border-[#E5E5E5] p-8 rounded-none shadow-xs text-center space-y-4">
+      <div className="min-h-screen bg-paper flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-surface border border-hairline p-8 rounded-none shadow-xs text-center space-y-4">
           <div className="w-12 h-12 bg-red-50 text-red-600 flex items-center justify-center mx-auto">
             <AlertCircle className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-[#1A1A1A]">Invite Link Unavailable</h2>
-          <p className="text-xs text-[#737373] leading-relaxed">{error}</p>
+          <h2 className="text-lg font-bold text-ink">Invite Link Unavailable</h2>
+          <p className="text-xs text-ink-3 leading-relaxed">{error}</p>
           <button
             onClick={onCancel}
-            className="w-full py-2.5 bg-[#1A1A1A] text-white text-xs font-mono uppercase tracking-widest hover:bg-[#333333] transition-colors"
+            className="w-full py-2.5 bg-ink text-white text-xs font-mono uppercase tracking-widest hover:bg-ink transition-colors"
           >
             Return to Login
           </button>
@@ -390,20 +390,20 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
   if (linkInfo?.isExpired) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white border border-[#E5E5E5] p-8 rounded-none shadow-xs text-center space-y-4">
+      <div className="min-h-screen bg-paper flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-surface border border-hairline p-8 rounded-none shadow-xs text-center space-y-4">
           <div className="w-12 h-12 bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
             <Clock className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-[#1A1A1A]">Time Window Expired</h2>
-          <p className="text-xs text-[#737373] leading-relaxed">
+          <h2 className="text-lg font-bold text-ink">Time Window Expired</h2>
+          <p className="text-xs text-ink-3 leading-relaxed">
             The active time window for this role link expired on{' '}
-            <span className="font-mono text-[#1A1A1A]">{new Date(linkInfo.expiresAt).toLocaleDateString()}</span>.
+            <span className="font-mono text-ink">{new Date(linkInfo.expiresAt).toLocaleDateString()}</span>.
             Please request an updated link from your department lead.
           </p>
           <button
             onClick={onCancel}
-            className="w-full py-2.5 bg-[#1A1A1A] text-white text-xs font-mono uppercase tracking-widest hover:bg-[#333333] transition-colors"
+            className="w-full py-2.5 bg-ink text-white text-xs font-mono uppercase tracking-widest hover:bg-ink transition-colors"
           >
             Go to Landing Page
           </button>
@@ -415,55 +415,55 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
   const daysLeft = Math.max(0, Math.ceil((new Date(linkInfo?.expiresAt || '').getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-[#1A1A1A] flex flex-col justify-center items-center p-4 sm:p-6 relative antialiased">
+    <div className="min-h-screen bg-paper text-ink flex flex-col justify-center items-center p-4 sm:p-6 relative antialiased">
       {/* Background Geometric Grid */}
       <div className="fixed inset-0 bg-geometric-grid opacity-[0.035] pointer-events-none z-0"></div>
 
-      <div className="max-w-md w-full bg-white border border-[#E5E5E5] shadow-xs relative z-10">
+      <div className="max-w-md w-full bg-surface border border-hairline shadow-xs relative z-10">
         {/* Top Header Banner */}
-        <div className="p-6 border-b border-[#E5E5E5] bg-[#F5F5F5]/60">
+        <div className="p-6 border-b border-hairline bg-paper-raised/60">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-[#1A1A1A] text-white flex items-center justify-center font-bold text-xs">
+              <div className="w-7 h-7 bg-ink text-white flex items-center justify-center font-bold text-xs">
                 M.
               </div>
-              <span className="text-xs font-mono font-bold tracking-tight text-[#1A1A1A]">MIKA AUTH</span>
+              <span className="text-xs font-mono font-bold tracking-tight text-ink">MIKA AUTH</span>
             </div>
             <span className="text-[11px] font-mono uppercase px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200">
               Role Link Verified
             </span>
           </div>
 
-          <h2 className="text-xl font-bold tracking-tight text-[#1A1A1A]">
+          <h2 className="text-xl font-bold tracking-tight text-ink">
             Join {linkInfo?.orgName}
           </h2>
-          <p className="text-xs text-[#737373] mt-1">
+          <p className="text-xs text-ink-3 mt-1">
             You've been invited to accept an assigned role in this organization.
           </p>
         </div>
 
         {/* Role & Department Card */}
-        <div className="p-6 border-b border-[#E5E5E5] bg-white space-y-3">
-          <div className="p-4 bg-[#FAFAFA] border border-[#E5E5E5] space-y-2">
-            <div className="text-[11px] font-mono uppercase text-[#737373]">Target Role & Department</div>
+        <div className="p-6 border-b border-hairline bg-surface space-y-3">
+          <div className="p-4 bg-paper border border-hairline space-y-2">
+            <div className="text-[11px] font-mono uppercase text-ink-3">Target Role & Department</div>
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-sm font-bold text-[#1A1A1A] flex items-center gap-1.5 font-mono">
+                <div className="text-sm font-bold text-ink flex items-center gap-1.5 font-mono">
                   <span className="text-blue-600">@</span>{linkInfo?.roleName}
                 </div>
                 <div className="text-xs text-[#525252] flex items-center gap-1.5 mt-0.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#737373]" />
+                  <Building2 className="w-3.5 h-3.5 text-ink-3" />
                   {linkInfo?.deptName}
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-[11px] font-mono px-2 py-1 bg-white border border-[#E5E5E5] text-[#525252] flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#737373]" />
+                <span className="text-[11px] font-mono px-2 py-1 bg-surface border border-hairline text-[#525252] flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-ink-3" />
                   {daysLeft}d left
                 </span>
               </div>
             </div>
-            <div className="pt-2 border-t border-[#E5E5E5] text-[11px] text-[#737373] leading-relaxed flex items-center gap-1.5">
+            <div className="pt-2 border-t border-hairline text-[11px] text-ink-3 leading-relaxed flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-blue-600 shrink-0" />
               <span>Time-windowed cohort link • Unlimited signups during window</span>
             </div>
@@ -478,7 +478,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
         </div>
 
         {/* Dynamic Section: Google Sign-in OR Minimal Form OR Merge Confirmation */}
-        <div className="p-6 bg-white space-y-4">
+        <div className="p-6 bg-surface space-y-4">
           
           {/* SCENARIO A: Existing Account Found -> Merge Confirmation */}
           {existingAccountData && existingAccountData.promptMerge ? (
@@ -507,7 +507,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   className={`w-full py-2.5 text-xs font-mono uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 ${
                     !allRequirementsSatisfied
                       ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
-                      : 'bg-[#1A1A1A] text-white hover:bg-[#333333] cursor-pointer'
+                      : 'bg-ink text-white hover:bg-ink cursor-pointer'
                   }`}
                 >
                   {submitting ? 'Merging Role...' : 'Yes, Add Role to My Account'}
@@ -517,7 +517,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   type="button"
                   onClick={handleCancelMerge}
                   disabled={submitting}
-                  className="w-full py-2 bg-white text-[#525252] border border-[#E5E5E5] text-xs font-mono uppercase tracking-wider hover:bg-[#FAFAFA]"
+                  className="w-full py-2 bg-surface text-[#525252] border border-hairline text-xs font-mono uppercase tracking-wider hover:bg-paper"
                 >
                   No, Cancel Join
                 </button>
@@ -527,10 +527,10 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
             /* SCENARIO B: Initial State -> Prompt Google Sign-In */
             <div className="space-y-4">
               <div className="text-center space-y-1">
-                <p className="text-xs font-medium text-[#1A1A1A]">
+                <p className="text-xs font-medium text-ink">
                   Sign in with Google to accept this assignment
                 </p>
-                <p className="text-[11px] text-[#737373]">
+                <p className="text-[11px] text-ink-3">
                   Authentication is Google Sign-In only. No passwords required.
                 </p>
               </div>
@@ -540,7 +540,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 type="button"
                 onClick={() => handleGoogleSignIn()}
                 disabled={submitting}
-                className="w-full py-3 bg-[#1A1A1A] text-white hover:bg-[#333333] transition-all flex items-center justify-center gap-3 text-xs font-semibold shadow-xs cursor-pointer"
+                className="w-full py-3 bg-ink text-white hover:bg-ink transition-all flex items-center justify-center gap-3 text-xs font-semibold shadow-xs cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -553,10 +553,10 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
               <div className="relative my-3">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[#E5E5E5]" />
+                  <div className="w-full border-t border-hairline" />
                 </div>
                 <div className="relative flex justify-center text-[11px] uppercase font-mono">
-                  <span className="bg-white px-2 text-[#737373]">Or select test account</span>
+                  <span className="bg-surface px-2 text-ink-3">Or select test account</span>
                 </div>
               </div>
 
@@ -569,11 +569,11 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     fullName: 'Elena Rostova',
                     google_sub: 'google_sub_physics_003'
                   })}
-                  className="w-full text-left p-2.5 border border-[#E5E5E5] hover:border-[#1A1A1A] transition-colors text-xs flex items-center justify-between"
+                  className="w-full text-left p-2.5 border border-hairline hover:border-ink transition-colors text-xs flex items-center justify-between"
                 >
                   <div>
-                    <div className="font-semibold text-[#1A1A1A]">Elena Rostova (Existing Account)</div>
-                    <div className="text-[11px] text-[#737373]">elena.rostova@mika-org.edu • Tests Account Merge</div>
+                    <div className="font-semibold text-ink">Elena Rostova (Existing Account)</div>
+                    <div className="text-[11px] text-ink-3">elena.rostova@mika-org.edu • Tests Account Merge</div>
                   </div>
                   <span className="text-[11px] font-mono text-amber-600">Merge test →</span>
                 </button>
@@ -585,11 +585,11 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     fullName: 'Dr. Arthur Pendelton',
                     google_sub: `sub_${Date.now()}`
                   })}
-                  className="w-full text-left p-2.5 border border-[#E5E5E5] hover:border-[#1A1A1A] transition-colors text-xs flex items-center justify-between"
+                  className="w-full text-left p-2.5 border border-hairline hover:border-ink transition-colors text-xs flex items-center justify-between"
                 >
                   <div>
-                    <div className="font-semibold text-[#1A1A1A]">New Incoming Teacher (First-Time)</div>
-                    <div className="text-[11px] text-[#737373]">Simulate first-time Google sign up</div>
+                    <div className="font-semibold text-ink">New Incoming Teacher (First-Time)</div>
+                    <div className="text-[11px] text-ink-3">Simulate first-time Google sign up</div>
                   </div>
                   <span className="text-[11px] font-mono text-emerald-600">New signup →</span>
                 </button>
@@ -598,13 +598,13 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
           ) : (
             /* SCENARIO C: First-time Google user -> Minimal Signup Fields */
             <form onSubmit={handleCompleteNewSignup} className="space-y-3.5">
-              <div className="p-3 bg-[#FAFAFA] border border-[#E5E5E5] text-xs">
-                <div className="text-[11px] font-mono uppercase text-[#737373] mb-1">Authenticated Google Email</div>
-                <div className="font-mono font-bold text-[#1A1A1A]">{googleAuthData.email}</div>
+              <div className="p-3 bg-paper border border-hairline text-xs">
+                <div className="text-[11px] font-mono uppercase text-ink-3 mb-1">Authenticated Google Email</div>
+                <div className="font-mono font-bold text-ink">{googleAuthData.email}</div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A1A1A] mb-1">
+                <label className="block text-xs font-semibold text-ink mb-1">
                   Full Name
                 </label>
                 <input
@@ -612,13 +612,13 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   required
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-[#E5E5E5] focus:border-[#1A1A1A] outline-none"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none"
                   placeholder="e.g. Dr. Arthur Pendelton"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A1A1A] mb-1">
+                <label className="block text-xs font-semibold text-ink mb-1">
                   Preferred Name / Call Name
                 </label>
                 <input
@@ -626,19 +626,19 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   required
                   value={preferredName}
                   onChange={e => setPreferredName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-[#E5E5E5] focus:border-[#1A1A1A] outline-none"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none"
                   placeholder="e.g. Arthur"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A1A1A] mb-1">
+                <label className="block text-xs font-semibold text-ink mb-1">
                   Gender (Administrative Profile)
                 </label>
                 <select
                   value={gender}
                   onChange={e => setGender(e.target.value as any)}
-                  className="w-full px-3 py-2 text-xs border border-[#E5E5E5] focus:border-[#1A1A1A] outline-none bg-white"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none bg-surface"
                 >
                   <option value="female">Female</option>
                   <option value="male">Male</option>
@@ -663,7 +663,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 className={`w-full py-2.5 text-xs font-mono uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 ${
                   !allRequirementsSatisfied
                     ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
-                    : 'bg-[#1A1A1A] text-white hover:bg-[#333333] cursor-pointer'
+                    : 'bg-ink text-white hover:bg-ink cursor-pointer'
                 }`}
               >
                 {submitting ? 'Creating Account & Binding...' : 'Accept Assignment & Enter Dashboard'}
@@ -672,16 +672,16 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
             </form>
           )}
 
-          <div className="pt-2 border-t border-[#E5E5E5] flex justify-between items-center text-xs">
+          <div className="pt-2 border-t border-hairline flex justify-between items-center text-xs">
             <button
               type="button"
               onClick={onCancel}
-              className="text-[#737373] hover:text-[#1A1A1A] text-[11px] flex items-center gap-1"
+              className="text-ink-3 hover:text-ink text-[11px] flex items-center gap-1"
             >
               <ArrowLeft className="w-3 h-3" />
               Cancel & Return
             </button>
-            <span className="text-[11px] font-mono text-[#737373]">
+            <span className="text-[11px] font-mono text-ink-3">
               Mika Auth Subsystem v2.6
             </span>
           </div>

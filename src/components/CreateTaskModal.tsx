@@ -15,6 +15,7 @@ import { AuthorizationEngine } from '../lib/authorizationEngine';
 import { canCreateTask, hasDirectAuthority } from '../lib/orgRules';
 import { openGooglePicker } from '../lib/workspace';
 import { MentionDropdown } from './MentionDropdown';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface CreateTaskModalProps {
   currentUser: User;
@@ -189,44 +190,44 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
   if (authorizedDepts.length === 0) {
     return (
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 font-sans">
-        <div className="bg-white rounded-xs shadow-2xl max-w-md w-full p-6 border border-[#DAD5C9]">
-          <div className="flex items-center gap-2 text-[#DC2626] mb-3">
+      <ModalOverlay onClose={onClose} className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 font-sans">
+        <div className="bg-surface rounded-xs shadow-2xl max-w-md w-full p-6 border border-hairline">
+          <div className="flex items-center gap-2 text-st-pending mb-3">
             <ShieldAlert className="w-5 h-5" />
             <h3 className="text-sm font-bold uppercase tracking-wider font-mono">
               Authority Required
             </h3>
           </div>
-          <p className="text-xs text-[#5C574B] leading-relaxed mb-5">
+          <p className="text-xs text-ink-2 leading-relaxed mb-5">
             Only a department root or section root can create and assign tasks. You do not currently hold root authority over any department or section.
           </p>
           <div className="flex justify-end">
             <button
               onClick={onClose}
-              className="px-4 py-1.5 bg-[#1C2438] hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer"
+              className="px-4 py-1.5 bg-ink hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer"
             >
               Close
             </button>
           </div>
         </div>
-      </div>
+      </ModalOverlay>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 font-sans">
-      <div className="bg-white rounded-xs shadow-2xl max-w-xl w-full p-6 border border-[#DAD5C9] max-h-[90vh] overflow-y-auto">
+    <ModalOverlay onClose={onClose} className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 font-sans">
+      <div className="bg-surface rounded-xs shadow-2xl max-w-xl w-full p-6 border border-hairline max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3.5 border-b border-[#DAD5C9] mb-4">
+        <div className="flex items-center justify-between pb-3.5 border-b border-hairline mb-4">
           <div className="flex items-center gap-2">
-            <CheckSquare className="w-4 h-4 text-[#1C2438]" />
-            <h3 className="text-sm font-bold text-[#1C2438] uppercase tracking-wider font-mono">
+            <CheckSquare className="w-4 h-4 text-ink" />
+            <h3 className="text-sm font-bold text-ink uppercase tracking-wider font-mono">
               Assign Authoritative Task
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-[#6B665A] hover:text-[#1C2438] rounded-xs transition-colors cursor-pointer"
+            className="p-1 text-ink-3 hover:text-ink rounded-xs transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -234,7 +235,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
           <div>
-            <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-1">
+            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
               Task Title:
             </label>
             <input
@@ -243,13 +244,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               placeholder="e.g. Submit Q1 Assessment Plan or Curriculum Draft"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] focus:bg-white focus:outline-hidden focus:border-[#1C2438] text-[#1C2438]"
+              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
             />
           </div>
 
           <div className="relative">
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold">
+              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold">
                 Description & Specifications:
               </label>
               <span className="text-[11px] text-slate-400 font-mono">
@@ -262,7 +263,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               placeholder="Specify required deliverables... Type @repo or @file to reference connected assets"
               value={description}
               onChange={handleDescriptionChange}
-              className="w-full px-3 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] focus:bg-white focus:outline-hidden focus:border-[#1C2438] text-[#1C2438]"
+              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
             />
 
             {/* Mention Dropdown Popover */}
@@ -299,13 +300,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-1">
+              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
                 Authorized Department:
               </label>
               <select
                 value={selectedDeptId}
                 onChange={e => setSelectedDeptId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] text-[#1C2438] focus:outline-hidden focus:border-[#1C2438] cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
               >
                 {authorizedDepts.map(d => (
                   <option key={d.id} value={d.id}>{d.name}</option>
@@ -314,13 +315,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-1">
+              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
                 Target Role:
               </label>
               <select
                 value={selectedRoleId}
                 onChange={e => setSelectedRoleId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] text-[#1C2438] focus:outline-hidden focus:border-[#1C2438] cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
               >
                 {availableRoles.map(r => (
                   <option key={r.id} value={r.id}>{r.title}</option>
@@ -331,13 +332,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-1">
+              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
                 Assign to Member:
               </label>
               <select
                 value={selectedUserId}
                 onChange={e => setSelectedUserId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] text-[#1C2438] focus:outline-hidden focus:border-[#1C2438] cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
               >
                 {availableMembers.map(u => (
                   <option key={u.id} value={u.id}>{u.fullName}</option>
@@ -346,28 +347,28 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-1">
+              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
                 Due Date (Google Calendar Sync):
               </label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={e => setDueDate(e.target.value)}
-                className="w-full px-2.5 py-2 border border-[#DAD5C9] rounded-xs bg-[#F7F5F0] text-[#1C2438] focus:outline-hidden focus:border-[#1C2438]"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
               />
             </div>
           </div>
 
           {/* B4: Confirmation Mode Selection */}
           <div className="pt-2">
-            <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-2">
+            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-2">
               Confirmation Mode (Creator Choice):
             </label>
             <div className="grid grid-cols-2 gap-3">
               <label className={`p-3 border rounded-xs cursor-pointer transition-all flex flex-col justify-between ${
                 confirmationMode === 'file' 
-                  ? 'border-[#2F3B7A] bg-[#EFF6FF]' 
-                  : 'border-[#DAD5C9] bg-[#F7F5F0] hover:bg-[#EFEBE2]'
+                  ? 'border-accent bg-st-help-bg' 
+                  : 'border-hairline bg-paper hover:bg-paper-raised'
               }`}>
                 <div className="flex items-center gap-2 mb-1">
                   <input
@@ -376,19 +377,19 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                     value="file"
                     checked={confirmationMode === 'file'}
                     onChange={() => setConfirmationMode('file')}
-                    className="accent-[#2F3B7A]"
+                    className="accent-accent"
                   />
-                  <span className="font-bold text-[#1C2438] text-xs">File Dropbox Mode</span>
+                  <span className="font-bold text-ink text-xs">File Dropbox Mode</span>
                 </div>
-                <p className="text-[11px] text-[#5C574B] pl-5 leading-normal">
+                <p className="text-[11px] text-ink-2 pl-5 leading-normal">
                   Assignee must submit a deliverable file before moving to review.
                 </p>
               </label>
 
               <label className={`p-3 border rounded-xs cursor-pointer transition-all flex flex-col justify-between ${
                 confirmationMode === 'yes_no' 
-                  ? 'border-[#2F3B7A] bg-[#EFF6FF]' 
-                  : 'border-[#DAD5C9] bg-[#F7F5F0] hover:bg-[#EFEBE2]'
+                  ? 'border-accent bg-st-help-bg' 
+                  : 'border-hairline bg-paper hover:bg-paper-raised'
               }`}>
                 <div className="flex items-center gap-2 mb-1">
                   <input
@@ -397,11 +398,11 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                     value="yes_no"
                     checked={confirmationMode === 'yes_no'}
                     onChange={() => setConfirmationMode('yes_no')}
-                    className="accent-[#2F3B7A]"
+                    className="accent-accent"
                   />
-                  <span className="font-bold text-[#1C2438] text-xs">Yes/No Mode</span>
+                  <span className="font-bold text-ink text-xs">Yes/No Mode</span>
                 </div>
-                <p className="text-[11px] text-[#5C574B] pl-5 leading-normal">
+                <p className="text-[11px] text-ink-2 pl-5 leading-normal">
                   Assignee marks task done with a single action, no file required.
                 </p>
               </label>
@@ -410,26 +411,26 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           {/* B3: Reference File Context Attachment */}
           <div className="pt-2">
-            <label className="block text-[11px] uppercase tracking-wider text-[#5C574B] font-bold mb-2">
+            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-2">
               Reference Context File (Optional):
             </label>
             {referenceFile ? (
-              <div className="p-3 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs flex items-center justify-between">
+              <div className="p-3 bg-paper border border-hairline rounded-xs flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#2F3B7A]" />
-                  <span className="text-xs text-[#1C2438] font-bold">{referenceFile.name}</span>
+                  <FileText className="w-4 h-4 text-accent-fg" />
+                  <span className="text-xs text-ink font-bold">{referenceFile.name}</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setReferenceFile(undefined)}
-                  className="text-xs text-[#DC2626] hover:underline cursor-pointer"
+                  className="text-xs text-st-pending hover:underline cursor-pointer"
                 >
                   Remove
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7F5F0] hover:bg-[#EFEBE2] border border-[#DAD5C9] rounded-xs cursor-pointer text-xs font-mono text-[#1C2438]">
+                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-paper hover:bg-paper-raised border border-hairline rounded-xs cursor-pointer text-xs font-mono text-ink">
                   <Upload className="w-3.5 h-3.5" />
                   <span>Attach File</span>
                   <input
@@ -441,7 +442,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 <button
                   type="button"
                   onClick={handlePickFromDrive}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7F5F0] hover:bg-[#EFEBE2] border border-[#DAD5C9] rounded-xs cursor-pointer text-xs font-mono text-[#2F3B7A]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-paper hover:bg-paper-raised border border-hairline rounded-xs cursor-pointer text-xs font-mono text-accent-fg"
                 >
                   <FolderOpen className="w-3.5 h-3.5" />
                   <span>Pick from Google Drive</span>
@@ -450,23 +451,23 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             )}
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-[#DAD5C9]">
+          <div className="flex justify-end gap-2 pt-4 border-t border-hairline">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-mono text-[#5C574B] hover:text-[#1C2438] rounded-xs transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-mono text-ink-2 hover:text-ink rounded-xs transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#1C2438] hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer shadow-xs"
+              className="px-4 py-2 bg-ink hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer shadow-xs"
             >
               Assign Deliverable
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

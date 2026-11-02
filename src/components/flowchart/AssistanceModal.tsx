@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, PhoneCall, Send, X, Phone, RefreshCw, Sparkles, CheckCircle2, User, ChevronRight } from 'lucide-react';
 import { DepartmentNode, Section } from './flowchartTypes';
 import { createInitialTree } from './treeUtils';
+import { ModalOverlay } from '../ui/ModalOverlay';
 
 interface AssistanceModalProps {
   isOpen: boolean;
@@ -435,14 +436,14 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
   };
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="assistance-overlay"
       className="fixed inset-0 bg-neutral-950/50 backdrop-blur-[2px] flex items-center justify-center p-3 sm:p-4 z-50 font-mono select-none"
       onClick={onClose}
     >
       <div
         id="assistance-dialog"
-        className="w-full max-w-xl bg-white border-2 border-neutral-900 rounded-sm shadow-[8px_8px_0px_#18181b] text-neutral-900 flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-150"
+        className="w-full max-w-xl bg-surface border-2 border-neutral-900 rounded-sm shadow-[8px_8px_0px_#18181b] text-neutral-900 flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* If user hasn't confirmed name yet, show brief explanation popup with name input */}
@@ -502,7 +503,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                   value={nameInput}
                   onChange={(e) => setNameInput(e.target.value)}
                   placeholder="Enter your name (e.g. Jordan Smith)"
-                  className="w-full bg-white border-2 border-neutral-300 focus:border-neutral-900 px-3 py-2.5 text-sm rounded-xs text-neutral-900 focus:outline-none transition-colors shadow-inner"
+                  className="w-full bg-surface border-2 border-neutral-300 focus:border-neutral-900 px-3 py-2.5 text-sm rounded-xs text-neutral-900 focus:outline-none transition-colors shadow-inner"
                 />
                 <p className="text-[11px] text-neutral-500 font-sans">
                   The helper will greet you by name and format your chart in real time.
@@ -532,13 +533,13 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
           /* Live Chat UI with Employee Helper */
           <div className="flex flex-col h-[80vh]">
             {/* Chat Top Bar */}
-            <div className="bg-[#1C2438] text-white px-4 py-3 border-b-2 border-neutral-900 flex items-center justify-between">
+            <div className="bg-ink text-white px-4 py-3 border-b-2 border-neutral-900 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                     MS
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#1C2438] rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-ink rounded-full animate-pulse" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -591,7 +592,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
 
             {/* Optional Call Assistance banner dropdown */}
             {showCallOption && (
-              <div className="bg-[#f0fdf4] border-b border-emerald-300 p-3 text-xs space-y-2 text-neutral-900 animate-in slide-in-from-top-2 duration-150">
+              <div className="bg-st-done-bg border-b border-emerald-300 p-3 text-xs space-y-2 text-neutral-900 animate-in slide-in-from-top-2 duration-150">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-[11px] text-emerald-950 uppercase tracking-wide flex items-center gap-1.5">
                     <Phone size={13} className="text-emerald-700" />
@@ -606,7 +607,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between bg-white border border-emerald-300 p-2 rounded-xs">
+                <div className="flex items-center justify-between bg-surface border border-emerald-300 p-2 rounded-xs">
                   <span className="text-xs font-bold text-neutral-800">
                     Toll-Free Helpline: +1 (800) 555-0199
                   </span>
@@ -633,7 +634,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                       placeholder="Or enter your phone number for callback..."
                       value={callbackNumber}
                       onChange={(e) => setCallbackNumber(e.target.value)}
-                      className="flex-1 bg-white border border-neutral-300 px-2 py-1 text-xs rounded-xs focus:outline-none focus:border-neutral-900"
+                      className="flex-1 bg-surface border border-neutral-300 px-2 py-1 text-xs rounded-xs focus:outline-none focus:border-neutral-900"
                     />
                     <button
                       type="submit"
@@ -652,7 +653,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
             )}
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#faf9f5]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-paper">
               {messages.map((msg) => {
                 const isHelper = msg.sender === 'helper';
                 return (
@@ -671,7 +672,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                     <div
                       className={`max-w-[85%] rounded-sm p-3 text-xs leading-relaxed space-y-2 ${
                         isHelper
-                          ? 'bg-white border-[1.5px] border-neutral-900 shadow-[2px_2px_0px_#18181b] text-neutral-900'
+                          ? 'bg-surface border-[1.5px] border-neutral-900 shadow-[2px_2px_0px_#18181b] text-neutral-900'
                           : 'bg-emerald-700 text-white shadow-[2px_2px_0px_#064e3b]'
                       }`}
                     >
@@ -716,7 +717,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
             </div>
 
             {/* Quick Prompt Suggestions */}
-            <div className="border-t border-neutral-200 bg-white px-3 py-2 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+            <div className="border-t border-neutral-200 bg-surface px-3 py-2 flex items-center gap-1.5 overflow-x-auto text-[11px]">
               <span className="text-[11px] text-neutral-400 font-bold uppercase shrink-0">
                 Quick Prompts:
               </span>
@@ -756,7 +757,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Tell the helper what structure or departments you need..."
-                className="flex-1 bg-white border border-neutral-300 focus:border-neutral-900 px-3 py-2 text-xs rounded-xs text-neutral-900 focus:outline-none transition-colors font-sans"
+                className="flex-1 bg-surface border border-neutral-300 focus:border-neutral-900 px-3 py-2 text-xs rounded-xs text-neutral-900 focus:outline-none transition-colors font-sans"
               />
               <button aria-label="Send Message"
                 type="submit"
@@ -770,6 +771,6 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

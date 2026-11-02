@@ -26,14 +26,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F5F0] text-[#1C2438] selection:bg-[#E8E4DA] selection:text-[#1C2438] font-sans antialiased">
+    <div className="min-h-screen bg-paper text-ink selection:bg-paper-sunken selection:text-ink font-sans antialiased">
       {/* ─────────────────────────────────────────────────────────────
           1. STICKY NAV BAR
       ───────────────────────────────────────────────────────────── */}
       <header 
         className={`sticky top-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'bg-[#F7F5F0]/95 backdrop-blur-md border-b border-[#DAD5C9] shadow-[0_1px_3px_rgba(0,0,0,0.03)]' 
+            ? 'bg-paper/95 backdrop-blur-md border-b border-hairline shadow-[0_1px_3px_rgba(0,0,0,0.03)]' 
             : 'bg-transparent border-b border-transparent'
         }`}
       >
@@ -41,34 +41,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* Wordmark */}
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-            className="text-2xl font-serif font-bold tracking-tight text-[#1C2438] hover:opacity-85 transition-opacity cursor-pointer text-left"
+            className="text-2xl font-serif font-bold tracking-tight text-ink hover:opacity-85 transition-opacity cursor-pointer text-left"
           >
             Mika
           </button>
 
           {/* Minimal Links */}
-          <div className="flex items-center gap-7 text-xs font-mono text-[#5C574B]">
+          <div className="flex items-center gap-7 text-xs font-mono text-ink-2">
             <a 
               href="#how-it-works" 
-              className="hover:text-[#1C2438] transition-colors"
+              className="hover:text-ink transition-colors"
             >
               How it works
             </a>
             <a 
               href="#graph-showcase" 
-              className="hover:text-[#1C2438] transition-colors"
+              className="hover:text-ink transition-colors"
             >
               Structure
             </a>
             <button
               onClick={onNavigateToSignIn}
-              className="text-[#1C2438] hover:underline transition-all cursor-pointer font-medium"
+              className="text-ink hover:underline transition-all cursor-pointer font-medium"
             >
               Log in
             </button>
             <button
               onClick={onNavigateToCreateOrg}
-              className="px-4 py-2 bg-[#2F3B7A] hover:bg-[#253064] text-[#F7F5F0] rounded-xs font-mono text-xs font-medium tracking-wide shadow-xs transition-all cursor-pointer hover:shadow-sm"
+              className="px-4 py-2 bg-accent hover:bg-accent-strong text-paper rounded-xs font-mono text-xs font-medium tracking-wide shadow-xs transition-all cursor-pointer hover:shadow-sm"
             >
               Get started
             </button>
@@ -107,12 +107,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#1C2438] tracking-tight leading-[1.15]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-ink tracking-tight leading-[1.15]">
             Every team has its own shape.<br />
             Mika finally has a place for it.
           </h1>
 
-          <p className="mt-7 text-base sm:text-lg text-[#5C574B] leading-relaxed max-w-2xl mx-auto font-normal">
+          <p className="mt-7 text-base sm:text-lg text-ink-2 leading-relaxed max-w-2xl mx-auto font-normal">
             Schools, companies, agencies &mdash; Mika models the way your organization actually operates. 
             Tasks and authority flow to exactly the right person, with nothing to configure by hand.
           </p>
@@ -121,20 +121,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onNavigateToCreateOrg}
-              className="w-full sm:w-auto px-7 py-3.5 bg-[#2F3B7A] hover:bg-[#253064] text-[#F7F5F0] rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all hover:shadow-sm cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-accent hover:bg-accent-strong text-paper rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all hover:shadow-sm cursor-pointer"
             >
               Create an organisation
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-[#EFEBE2] text-[#1C2438] border border-[#DAD5C9] hover:border-[#1C2438] rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paper-raised text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>
           </div>
 
           {/* Subtle Invite Link Token Trigger */}
-          <div className="mt-5 flex items-center justify-center gap-2 text-xs font-mono text-[#5C574B]">
+          <div className="mt-5 flex items-center justify-center gap-2 text-xs font-mono text-ink-2">
             {showTokenInput ? (
               <form
                 onSubmit={(e) => {
@@ -143,26 +143,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     onOpenJoinToken(joinTokenInput.trim());
                   }
                 }}
-                className="flex items-center gap-2 bg-[#EFEBE2] p-1.5 rounded-xs border border-[#DAD5C9]"
+                className="flex items-center gap-2 bg-paper-raised p-1.5 rounded-xs border border-hairline"
               >
                 <input
                   type="text"
                   placeholder="Paste invite token..."
                   value={joinTokenInput}
                   onChange={(e) => setJoinTokenInput(e.target.value)}
-                  className="bg-[#F7F5F0] text-[#1C2438] px-2.5 py-1 text-xs font-mono rounded-xs border border-[#DAD5C9] focus:outline-hidden focus:border-[#2F3B7A] w-52"
+                  className="bg-paper text-ink px-2.5 py-1 text-xs font-mono rounded-xs border border-hairline focus:outline-hidden focus:border-accent w-52"
                   autoFocus
                 />
                 <button
                   type="submit"
-                  className="px-2.5 py-1 bg-[#2F3B7A] text-[#F7F5F0] text-xs font-mono rounded-xs hover:bg-[#253064] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-accent text-paper text-xs font-mono rounded-xs hover:bg-accent-strong transition-colors cursor-pointer"
                 >
                   Join
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowTokenInput(false)}
-                  className="px-1.5 text-xs text-[#6B665A] hover:text-[#1C2438] cursor-pointer"
+                  className="px-1.5 text-xs text-ink-3 hover:text-ink cursor-pointer"
                 >
                   ✕
                 </button>
@@ -171,10 +171,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <button
                 type="button"
                 onClick={() => setShowTokenInput(true)}
-                className="hover:text-[#1C2438] hover:underline transition-all cursor-pointer inline-flex items-center gap-1.5"
+                className="hover:text-ink hover:underline transition-all cursor-pointer inline-flex items-center gap-1.5"
               >
                 <span>Have an invite token?</span>
-                <span className="text-[#2F3B7A] font-semibold underline">Enter here &rarr;</span>
+                <span className="text-accent-fg font-semibold underline">Enter here &rarr;</span>
               </button>
             )}
           </div>
@@ -184,66 +184,66 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           3. "HOW IT'S DIFFERENT" SECTION
       ───────────────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 border-t border-[#DAD5C9] bg-[#EFEBE2]">
+      <section id="how-it-works" className="py-24 px-6 border-t border-hairline bg-paper-raised">
         <div className="max-w-5xl mx-auto">
           <div className="mb-14 text-center max-w-2xl mx-auto">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
               FOUNDATIONAL ARCHITECTURE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C2438] mt-2 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">
               A typed relationship graph, not rigid boxes.
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {/* Block 1 */}
-            <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
+            <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
                 01 // DIMENSIONAL OVERLAY
               </span>
-              <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
+              <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 One structure, every dimension.
               </h3>
-              <p className="text-sm text-[#5C574B] leading-relaxed">
+              <p className="text-sm text-ink-2 leading-relaxed">
                 A team, a class, a subject, a project &mdash; the same person can belong to all of them at once without duplicate accounts or conflicting hierarchies.
               </p>
             </div>
 
             {/* Block 2 */}
-            <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
+            <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
                 02 // DIRECTED PERMISSIONS
               </span>
-              <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
+              <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Authority that makes sense.
               </h3>
-              <p className="text-sm text-[#5C574B] leading-relaxed">
+              <p className="text-sm text-ink-2 leading-relaxed">
                 Tasks and permissions flow to exactly the right person, automatically &mdash; no manual permission-wrangling or redundant administrative overrides.
               </p>
             </div>
 
             {/* Block 3 */}
-            <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
+            <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
                 03 // AUTOMATIC REASONING
               </span>
-              <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
+              <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Nothing to configure by hand.
               </h3>
-              <p className="text-sm text-[#5C574B] leading-relaxed">
+              <p className="text-sm text-ink-2 leading-relaxed">
                 Build your org visually or let it write itself from a conversation; the underlying recursive structure is calculated and handled for you.
               </p>
             </div>
 
             {/* Block 4 */}
-            <div className="p-8 bg-[#F7F5F0] border border-[#DAD5C9] rounded-xs hover:border-[#8A8578] transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] block mb-3">
+            <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
                 04 // RULE OF LAW
               </span>
-              <h3 className="text-xl font-serif font-bold text-[#1C2438] mb-2 tracking-tight">
+              <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Deterministic, always.
               </h3>
-              <p className="text-sm text-[#5C574B] leading-relaxed">
+              <p className="text-sm text-ink-2 leading-relaxed">
                 Every decision about who can assign, approve, or access files is enforced by fixed mathematical rules &mdash; not probabilistic guesses.
               </p>
             </div>
@@ -254,13 +254,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           4. VISUAL "GRAPH" SHOWCASE SECTION
       ───────────────────────────────────────────────────────────── */}
-      <section id="graph-showcase" className="py-24 px-6 border-t border-[#DAD5C9] bg-[#F7F5F0]">
+      <section id="graph-showcase" className="py-24 px-6 border-t border-hairline bg-paper">
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
               RELATIONSHIP TOPOLOGY
             </span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C2438] mt-2 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">
               The structure is the interface.
             </h2>
           </div>
@@ -272,22 +272,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           5. CLOSING CTA BAND
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 border-t border-[#DAD5C9] bg-[#EFEBE2]">
+      <section className="py-20 px-6 border-t border-hairline bg-paper-raised">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1C2438] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-ink tracking-tight">
             Build the structure your team already has.
           </h2>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onNavigateToCreateOrg}
-              className="w-full sm:w-auto px-6 py-3 bg-[#2F3B7A] hover:bg-[#253064] text-[#F7F5F0] rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-accent hover:bg-accent-strong text-paper rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all cursor-pointer"
             >
               Create an organisation
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-[#E8E4DA] text-[#1C2438] border border-[#DAD5C9] hover:border-[#1C2438] rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>
@@ -298,16 +298,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           6. FOOTER
       ───────────────────────────────────────────────────────────── */}
-      <footer className="py-8 px-6 border-t border-[#DAD5C9] bg-[#F7F5F0]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#6B665A]">
+      <footer className="py-8 px-6 border-t border-hairline bg-paper">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-ink-3">
           <div className="flex items-center gap-2">
-            <span className="font-serif font-bold text-[#1C2438] text-sm">Mika</span>
+            <span className="font-serif font-bold text-ink text-sm">Mika</span>
             <span>&copy; {new Date().getFullYear()}</span>
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="#privacy" className="hover:text-[#1C2438] transition-colors">Privacy</a>
-            <a href="#terms" className="hover:text-[#1C2438] transition-colors">Terms</a>
+            <a href="#privacy" className="hover:text-ink transition-colors">Privacy</a>
+            <a href="#terms" className="hover:text-ink transition-colors">Terms</a>
           </div>
         </div>
       </footer>

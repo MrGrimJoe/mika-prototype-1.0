@@ -1,5 +1,6 @@
 import React from 'react';
 import { RotateCcw, X, AlertTriangle } from 'lucide-react';
+import { ModalOverlay } from '../ui/ModalOverlay';
 
 interface ResetConfirmModalProps {
   isOpen: boolean;
@@ -15,14 +16,14 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="reset-confirm-overlay"
       className="fixed inset-0 bg-neutral-950/45 backdrop-blur-[1px] flex items-center justify-center p-4 z-50 font-mono select-none"
       onClick={onClose}
     >
       <div
         id="reset-confirm-dialog"
-        className="w-full max-w-md bg-white border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 p-5 space-y-4"
+        className="w-full max-w-md bg-surface border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 p-5 space-y-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-neutral-200 pb-2.5">
@@ -65,7 +66,7 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
             type="button"
             id="cancel-reset-btn"
             onClick={onClose}
-            className="px-3 py-1.5 bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-300 rounded-xs text-xs font-semibold transition-colors"
+            className="px-3 py-1.5 bg-surface hover:bg-neutral-100 text-neutral-700 border border-neutral-300 rounded-xs text-xs font-semibold transition-colors"
           >
             Cancel
           </button>
@@ -83,6 +84,6 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

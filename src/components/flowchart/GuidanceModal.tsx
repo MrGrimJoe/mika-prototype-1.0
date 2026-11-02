@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen, Layers, GitFork, ShieldCheck, CheckCircle2, ChevronRight, X, Info } from 'lucide-react';
+import { ModalOverlay } from '../ui/ModalOverlay';
 
 interface GuidanceModalProps {
   isOpen: boolean;
@@ -12,14 +13,14 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
   if (!isOpen) return null;
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="guidance-overlay"
       className="fixed inset-0 bg-neutral-950/45 backdrop-blur-[1px] flex items-center justify-center p-4 z-50 font-mono select-none"
       onClick={onClose}
     >
       <div
         id="guidance-dialog"
-        className="w-full max-w-2xl bg-white border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 flex flex-col max-h-[90vh] overflow-hidden"
+        className="w-full max-w-2xl bg-surface border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 flex flex-col max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -54,7 +55,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             onClick={() => setActiveSection('model')}
             className={`py-2 px-3 text-center font-semibold whitespace-nowrap transition-colors border-r border-neutral-300 ${
               activeSection === 'model'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -65,7 +66,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             onClick={() => setActiveSection('sections')}
             className={`py-2 px-3 text-center font-semibold whitespace-nowrap transition-colors border-r border-neutral-300 ${
               activeSection === 'sections'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -76,7 +77,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             onClick={() => setActiveSection('mainRoot')}
             className={`py-2 px-3 text-center font-semibold whitespace-nowrap transition-colors border-r border-neutral-300 ${
               activeSection === 'mainRoot'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -87,7 +88,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             onClick={() => setActiveSection('workflow')}
             className={`py-2 px-3 text-center font-semibold whitespace-nowrap transition-colors border-r border-neutral-300 ${
               activeSection === 'workflow'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -98,7 +99,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             onClick={() => setActiveSection('rules')}
             className={`py-2 px-3 text-center font-semibold whitespace-nowrap transition-colors ${
               activeSection === 'rules'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-neutral-900 font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -110,7 +111,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
         <div className="p-5 overflow-y-auto max-h-[60vh] text-xs space-y-4 leading-relaxed text-neutral-800">
           {activeSection === 'model' && (
             <div className="space-y-3">
-              <div className="border border-neutral-300 bg-[#fafaf8] p-3.5 rounded-xs space-y-2">
+              <div className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-2">
                 <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
                   <GitFork size={14} className="text-neutral-700" />
                   The Recursive Triple: Department &rarr; Root &rarr; Roles
@@ -121,7 +122,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="border border-neutral-200 bg-white p-3 rounded-xs space-y-1.5">
+                <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
                   <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
                     Department Primitive
                   </span>
@@ -130,7 +131,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-3 rounded-xs space-y-1.5">
+                <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
                   <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
                     Roots (Leadership)
                   </span>
@@ -139,7 +140,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-3 rounded-xs space-y-1.5">
+                <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
                   <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
                     Roles (Functional Positions)
                   </span>
@@ -148,7 +149,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-3 rounded-xs space-y-1.5">
+                <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
                   <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
                     Direct vs. Indirect Authority
                   </span>
@@ -162,7 +163,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
           {activeSection === 'sections' && (
             <div className="space-y-3">
-              <div className="border border-neutral-300 bg-[#fafaf8] p-3.5 rounded-xs space-y-2">
+              <div className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-2">
                 <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
                   <Layers size={14} className="text-neutral-700" />
                   Why Sections Exist: Solving Overlapping Dimensions
@@ -181,7 +182,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 </p>
               </div>
 
-              <div className="border border-neutral-200 bg-white p-3 rounded-xs space-y-1.5 text-[11px] text-neutral-700">
+              <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5 text-[11px] text-neutral-700">
                 <span className="font-bold text-neutral-900 block">Matrix Example:</span>
                 <p className="text-neutral-600">
                   A school can simultaneously have grade-level classes (Class 6, 7, 8) and a subject coordinator (e.g. Physics Department). By grouping Class 6, 7, and 8 into a Physics section:
@@ -208,7 +209,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="space-y-2">
-                <div className="border border-neutral-300 bg-white p-3 rounded-xs flex items-start gap-2.5">
+                <div className="border border-neutral-300 bg-surface p-3 rounded-xs flex items-start gap-2.5">
                   <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     1
                   </span>
@@ -220,7 +221,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </div>
                 </div>
 
-                <div className="border border-neutral-300 bg-white p-3 rounded-xs flex items-start gap-2.5">
+                <div className="border border-neutral-300 bg-surface p-3 rounded-xs flex items-start gap-2.5">
                   <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     2
                   </span>
@@ -237,7 +238,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
           {activeSection === 'workflow' && (
             <div className="space-y-3">
-              <div className="border border-neutral-300 bg-[#fafaf8] p-3 rounded-xs space-y-2">
+              <div className="border border-neutral-300 bg-paper p-3 rounded-xs space-y-2">
                 <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide">
                   Visual Flowchart Operations:
                 </span>
@@ -247,7 +248,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="space-y-2">
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Selecting Departments:</span>
                     <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">[SELECT] Button</span>
@@ -257,7 +258,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Grouping into a Section:</span>
                     <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Floating Dock</span>
@@ -267,7 +268,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Branch Removal & Reparenting:</span>
                     <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Trash Icon</span>
@@ -277,7 +278,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </p>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs space-y-1">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 text-[11px]">Adding Roots & Roles:</span>
                     <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Enter Key</span>
@@ -292,7 +293,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
           {activeSection === 'rules' && (
             <div className="space-y-3">
-              <div className="border border-neutral-300 bg-[#fafaf8] p-3 rounded-xs space-y-2">
+              <div className="border border-neutral-300 bg-paper p-3 rounded-xs space-y-2">
                 <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide">
                   Core Invariants & Boundaries
                 </span>
@@ -302,7 +303,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="space-y-2 text-[11px]">
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs flex items-start gap-2">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs flex items-start gap-2">
                   <CheckCircle2 size={14} className="text-neutral-900 shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-neutral-950">Membership does not equal Authority:</strong>
@@ -312,7 +313,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </div>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs flex items-start gap-2">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs flex items-start gap-2">
                   <CheckCircle2 size={14} className="text-neutral-900 shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-neutral-950">Downward Flow of Authority:</strong>
@@ -322,7 +323,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </div>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs flex items-start gap-2">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs flex items-start gap-2">
                   <CheckCircle2 size={14} className="text-neutral-900 shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-neutral-950">Contextual Role Assignments:</strong>
@@ -332,7 +333,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   </div>
                 </div>
 
-                <div className="border border-neutral-200 bg-white p-2.5 rounded-xs flex items-start gap-2">
+                <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs flex items-start gap-2">
                   <CheckCircle2 size={14} className="text-neutral-900 shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-neutral-950">Non-Destructive Sections:</strong>
@@ -361,6 +362,6 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
           </button>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

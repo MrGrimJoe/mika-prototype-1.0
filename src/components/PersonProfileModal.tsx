@@ -33,6 +33,7 @@ import {
   INTEGRATION_TOOLS,
 } from '../lib/integrationService';
 import { OAuthConnectModal } from './OAuthConnectModal';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface PersonProfileModalProps {
   user: User;
@@ -133,22 +134,22 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
     : null;
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="person-profile-modal-backdrop"
       className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 font-sans animate-in fade-in duration-150"
     >
       <div
         id="person-profile-modal-container"
-        className="bg-white border border-[#DAD5C9] rounded-xl max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-surface border border-hairline rounded-xl max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header bar */}
-        <div className="px-6 py-4 border-b border-[#DAD5C9] flex items-center justify-between bg-[#FAF9F6]">
+        <div className="px-6 py-4 border-b border-hairline flex items-center justify-between bg-paper">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A] font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3 font-bold">
               Personnel Profile
             </span>
             {isSelf && (
-              <span className="text-[11px] font-mono bg-[#2F3B7A] text-white px-2 py-0.5 rounded-full font-bold">
+              <span className="text-[11px] font-mono bg-accent text-white px-2 py-0.5 rounded-full font-bold">
                 You
               </span>
             )}
@@ -161,7 +162,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           <button
             onClick={onClose}
             id="close-profile-modal-btn"
-            className="p-1 text-[#6B665A] hover:text-[#1C2438] rounded-md transition-colors cursor-pointer"
+            className="p-1 text-ink-3 hover:text-ink rounded-md transition-colors cursor-pointer"
             aria-label="Close profile"
           >
             <X className="w-4 h-4" />
@@ -172,20 +173,20 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Identity Section */}
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-xl bg-[#1C2438] text-white flex items-center justify-center font-mono font-bold text-lg shrink-0 shadow-xs">
+            <div className="w-14 h-14 rounded-xl bg-ink text-white flex items-center justify-center font-mono font-bold text-lg shrink-0 shadow-xs">
               {user.preferredName?.[0] || user.fullName[0]}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#1C2438] tracking-tight truncate">
+                <h2 className="text-xl font-bold text-ink tracking-tight truncate">
                   {user.fullName}
                 </h2>
               </div>
               {user.preferredName && user.preferredName !== user.fullName && (
-                <p className="text-xs text-[#6B665A]">Known as "{user.preferredName}"</p>
+                <p className="text-xs text-ink-3">Known as "{user.preferredName}"</p>
               )}
-              <div className="mt-1 flex items-center gap-1.5 text-xs font-mono text-[#5C574B]">
-                <Mail className="w-3.5 h-3.5 text-[#6B665A]" />
+              <div className="mt-1 flex items-center gap-1.5 text-xs font-mono text-ink-2">
+                <Mail className="w-3.5 h-3.5 text-ink-3" />
                 <span className="truncate">{user.email}</span>
               </div>
             </div>
@@ -195,14 +196,14 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {isSelf && isTargetAnyRoot && onOpenSettings && (
             <div className="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#2F3B7A] text-white flex items-center justify-center shadow-2xs">
+                <div className="w-8 h-8 rounded-lg bg-accent text-white flex items-center justify-center shadow-2xs">
                   <SettingsIcon className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-[#1C2438]">
+                  <div className="text-xs font-bold text-ink">
                     Workspace & Integration Settings
                   </div>
-                  <div className="text-[11px] text-[#5C574B]">
+                  <div className="text-[11px] text-ink-2">
                     Manage tools, OAuth connectors, and role permissions
                   </div>
                 </div>
@@ -214,7 +215,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                   onClose();
                   onOpenSettings();
                 }}
-                className="px-3 py-1.5 bg-[#2F3B7A] hover:bg-indigo-900 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                className="px-3 py-1.5 bg-accent hover:bg-indigo-900 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
               >
                 <SettingsIcon className="w-3.5 h-3.5" />
                 <span>Settings</span>
@@ -224,13 +225,13 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Organizational Assignments */}
           <div className="pt-2">
-            <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <Building2 className="w-3.5 h-3.5" />
               <span>Assigned Positions ({rolesWithDepts.length})</span>
             </h3>
 
             {rolesWithDepts.length === 0 ? (
-              <p className="text-xs text-[#6B665A] italic">No active roles currently assigned.</p>
+              <p className="text-xs text-ink-3 italic">No active roles currently assigned.</p>
             ) : (
               <div className="space-y-2">
                 {rolesWithDepts.map(({ role, dept }, idx) => {
@@ -241,14 +242,14 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                   return (
                     <div 
                       key={idx}
-                      className="p-3 bg-[#FAF9F6] border border-[#DAD5C9] rounded-lg flex items-center justify-between"
+                      className="p-3 bg-paper border border-hairline rounded-lg flex items-center justify-between"
                     >
                       <div>
-                        <div className="font-bold text-xs text-[#1C2438]">
+                        <div className="font-bold text-xs text-ink">
                           {role?.title || 'Staff Role'}
                         </div>
-                        <div className="text-[11px] text-[#6B665A] mt-0.5">
-                          Department: <span className="font-medium text-[#5C574B]">{dept?.name || 'Unknown'}</span>
+                        <div className="text-[11px] text-ink-3 mt-0.5">
+                          Department: <span className="font-medium text-ink-2">{dept?.name || 'Unknown'}</span>
                         </div>
                       </div>
 
@@ -275,8 +276,8 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           </div>
 
           {/* Integration Access Section (Section 4.1) */}
-          <div className="pt-2 border-t border-[#DAD5C9]">
-            <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
+          <div className="pt-2 border-t border-hairline">
+            <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Available Connected Tools ({accessSummary.length})</span>
             </h3>
@@ -285,7 +286,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
               {accessSummary.map((item) => (
                 <div
                   key={item.tool.key}
-                  className="p-2.5 bg-white border border-[#DAD5C9] rounded-lg flex items-center justify-between text-xs"
+                  className="p-2.5 bg-surface border border-hairline rounded-lg flex items-center justify-between text-xs"
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-slate-800">{item.tool.name}</span>
@@ -303,8 +304,8 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Required Integrations Section (Section 4.2) */}
           {requiredList.length > 0 && (
-            <div className="pt-2 border-t border-[#DAD5C9]">
-              <h3 className="text-[11px] font-mono uppercase tracking-wider text-[#6B665A] mb-2.5 flex items-center gap-1.5 font-bold">
+            <div className="pt-2 border-t border-hairline">
+              <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
                 <span>Role Required Connectors</span>
               </h3>
@@ -355,13 +356,13 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           )}
 
           {/* Member Meta */}
-          <div className="pt-2 border-t border-[#DAD5C9] grid grid-cols-2 gap-3 text-xs font-mono text-[#6B665A]">
+          <div className="pt-2 border-t border-hairline grid grid-cols-2 gap-3 text-xs font-mono text-ink-3">
             <div>
-              <span className="text-[11px] uppercase text-[#6B665A] block">Personnel ID</span>
-              <span className="text-[#1C2438]">{user.id}</span>
+              <span className="text-[11px] uppercase text-ink-3 block">Personnel ID</span>
+              <span className="text-ink">{user.id}</span>
             </div>
             <div>
-              <span className="text-[11px] uppercase text-[#6B665A] block">Account Status</span>
+              <span className="text-[11px] uppercase text-ink-3 block">Account Status</span>
               <span className="text-[#059669] font-medium flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                 Active Enrolled
@@ -371,10 +372,10 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-3.5 bg-[#FAF9F6] border-t border-[#DAD5C9] flex items-center justify-between">
+        <div className="px-6 py-3.5 bg-paper border-t border-hairline flex items-center justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-mono text-[#5C574B] hover:text-[#1C2438] rounded-md transition-colors cursor-pointer"
+            className="px-4 py-2 text-xs font-mono text-ink-2 hover:text-ink rounded-md transition-colors cursor-pointer"
           >
             Close
           </button>
@@ -385,7 +386,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                 onStartMessage(user.id);
                 onClose();
               }}
-              className="px-4 py-2 bg-[#1C2438] hover:bg-black text-white text-xs font-mono uppercase tracking-wider font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-2 bg-ink hover:bg-black text-white text-xs font-mono uppercase tracking-wider font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Send Message</span>
@@ -407,7 +408,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           onClose={() => setConnectingToolKey(null)}
         />
       )}
-    </div>
+    </ModalOverlay>
   );
 };
 

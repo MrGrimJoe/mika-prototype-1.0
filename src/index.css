@@ -1,10 +1,153 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Mika design tokens. Light is the default; dark follows the system
+   setting (prefers-color-scheme), with no in-app appearance switch.
+   Values mirror src/lib/designSystem.ts.
+------------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+
+  --paper: #F7F5F0;
+  --paper-raised: #EFEBE2;
+  --paper-sunken: #E8E4DA;
+  --surface: #FFFFFF;
+  --hairline: #DAD5C9;
+  --edge: #8A8578;
+  --ink: #1C2438;
+  --ink-2: #5C574B;
+  --ink-3: #6B665A;
+  --accent: #2F3B7A;
+  --accent-strong: #253063;
+  --accent-fg: #2F3B7A;
+
+  --status-pending-text: #B91C1C;  --status-pending-bg: #FEF2F2;  --status-pending-border: #FECACA;  --status-pending-dot: #EF4444;
+  --status-help-text: #1D4ED8;     --status-help-bg: #EFF6FF;     --status-help-border: #BFDBFE;     --status-help-dot: #3B82F6;
+  --status-submitted-text: #854D0E;--status-submitted-bg: #FEFCE8;--status-submitted-border: #FEF08A;--status-submitted-dot: #EAB308;
+  --status-done-text: #15803D;     --status-done-bg: #F0FDF4;     --status-done-border: #BBF7D0;     --status-done-dot: #22C55E;
+  --status-expired-text: #4B5563;  --status-expired-bg: #F3F4F6;  --status-expired-border: #E5E7EB;  --status-expired-dot: #9CA3AF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #12151C;
+    --paper-raised: #181C26;
+    --paper-sunken: #0E1017;
+    --surface: #1A1F2B;
+    --hairline: #2B3345;
+    --edge: #5A6478;
+    --ink: #E8ECF5;
+    --ink-2: #A5AFC4;
+    --ink-3: #9AA4BA;
+    --accent: #5668D4;
+    --accent-strong: #4757B8;
+    --accent-fg: #8D9CF2;
+
+    --status-pending-text: #FCA5A5;  --status-pending-bg: #2A1517;  --status-pending-border: #5B2528;  --status-pending-dot: #EF4444;
+    --status-help-text: #93C5FD;     --status-help-bg: #13203A;     --status-help-border: #26407A;     --status-help-dot: #60A5FA;
+    --status-submitted-text: #FCD34D;--status-submitted-bg: #2A2210;--status-submitted-border: #5C4A14;--status-submitted-dot: #EAB308;
+    --status-done-text: #86EFAC;     --status-done-bg: #10261A;     --status-done-border: #1F5236;     --status-done-dot: #22C55E;
+    --status-expired-text: #B6BECB;  --status-expired-bg: #1F232C;  --status-expired-border: #343B49;  --status-expired-dot: #8892A3;
+
+    /* Flip Tailwind's neutral families so existing utilities (text-neutral-900, bg-slate-50, ...) follow the theme */
+    --color-slate-50: oklch(12.9% 0.042 264.695);
+    --color-slate-100: oklch(20.8% 0.042 265.755);
+    --color-slate-200: oklch(27.9% 0.041 260.031);
+    --color-slate-300: oklch(37.2% 0.044 257.287);
+    --color-slate-400: oklch(44.6% 0.043 257.281);
+    --color-slate-500: oklch(55.4% 0.046 257.417);
+    --color-slate-600: oklch(70.4% 0.04 256.788);
+    --color-slate-700: oklch(86.9% 0.022 252.894);
+    --color-slate-800: oklch(92.9% 0.013 255.508);
+    --color-slate-900: oklch(96.8% 0.007 247.896);
+    --color-slate-950: oklch(98.4% 0.003 247.858);
+    --color-gray-50: oklch(13% 0.028 261.692);
+    --color-gray-100: oklch(21% 0.034 264.665);
+    --color-gray-200: oklch(27.8% 0.033 256.848);
+    --color-gray-300: oklch(37.3% 0.034 259.733);
+    --color-gray-400: oklch(44.6% 0.03 256.802);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-gray-600: oklch(70.7% 0.022 261.325);
+    --color-gray-700: oklch(87.2% 0.01 258.338);
+    --color-gray-800: oklch(92.8% 0.006 264.531);
+    --color-gray-900: oklch(96.7% 0.003 264.542);
+    --color-gray-950: oklch(98.5% 0.002 247.839);
+    --color-zinc-50: oklch(14.1% 0.005 285.823);
+    --color-zinc-100: oklch(21% 0.006 285.885);
+    --color-zinc-200: oklch(27.4% 0.006 286.033);
+    --color-zinc-300: oklch(37% 0.013 285.805);
+    --color-zinc-400: oklch(44.2% 0.017 285.786);
+    --color-zinc-500: oklch(55.2% 0.016 285.938);
+    --color-zinc-600: oklch(70.5% 0.015 286.067);
+    --color-zinc-700: oklch(87.1% 0.006 286.286);
+    --color-zinc-800: oklch(92% 0.004 286.32);
+    --color-zinc-900: oklch(96.7% 0.001 286.375);
+    --color-zinc-950: oklch(98.5% 0 none);
+    --color-neutral-50: oklch(14.5% 0 none);
+    --color-neutral-100: oklch(20.5% 0 none);
+    --color-neutral-200: oklch(26.9% 0 none);
+    --color-neutral-300: oklch(37.1% 0 none);
+    --color-neutral-400: oklch(43.9% 0 none);
+    --color-neutral-500: oklch(55.6% 0 none);
+    --color-neutral-600: oklch(70.8% 0 none);
+    --color-neutral-700: oklch(87% 0 none);
+    --color-neutral-800: oklch(92.2% 0 none);
+    --color-neutral-900: oklch(97% 0 none);
+    --color-neutral-950: oklch(98.5% 0 none);
+    --color-stone-50: oklch(14.7% 0.004 49.25);
+    --color-stone-100: oklch(21.6% 0.006 56.043);
+    --color-stone-200: oklch(26.8% 0.007 34.298);
+    --color-stone-300: oklch(37.4% 0.01 67.558);
+    --color-stone-400: oklch(44.4% 0.011 73.639);
+    --color-stone-500: oklch(55.3% 0.013 58.071);
+    --color-stone-600: oklch(70.9% 0.01 56.259);
+    --color-stone-700: oklch(86.9% 0.005 56.366);
+    --color-stone-800: oklch(92.3% 0.003 48.717);
+    --color-stone-900: oklch(97% 0.001 106.424);
+    --color-stone-950: oklch(98.5% 0.001 106.423);
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunken: var(--paper-sunken);
+  --color-surface: var(--surface);
+  --color-hairline: var(--hairline);
+  --color-edge: var(--edge);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-fg: var(--accent-fg);
+  --color-st-pending: var(--status-pending-text);
+  --color-st-pending-bg: var(--status-pending-bg);
+  --color-st-pending-border: var(--status-pending-border);
+  --color-st-help: var(--status-help-text);
+  --color-st-help-bg: var(--status-help-bg);
+  --color-st-help-border: var(--status-help-border);
+  --color-st-submitted: var(--status-submitted-text);
+  --color-st-submitted-bg: var(--status-submitted-bg);
+  --color-st-submitted-border: var(--status-submitted-border);
+  --color-st-done: var(--status-done-text);
+  --color-st-done-bg: var(--status-done-bg);
+  --color-st-done-border: var(--status-done-border);
+  --color-st-expired: var(--status-expired-text);
+  --color-st-expired-bg: var(--status-expired-bg);
+  --color-st-expired-border: var(--status-expired-border);
+}
+
 /* Typefaces from the Mika design system (src/lib/designSystem.ts) */
 @theme {
   --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Source Serif 4", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
 }
 
 /* Used by headings across onboarding, landing and auth screens */
@@ -14,7 +157,7 @@
 
 /* Visible keyboard focus everywhere, without changing mouse behavior */
 :focus-visible {
-  outline: 2px solid #2F3B7A;
+  outline: 2px solid var(--accent-fg);
   outline-offset: 2px;
 }
 

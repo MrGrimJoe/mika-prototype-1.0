@@ -21,6 +21,7 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface RolesDashboardProps {
   currentUser: User;
@@ -125,29 +126,29 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
   if (hasNoEmployees) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center font-sans">
-        <div className="w-full max-w-md bg-white border border-[#E5E7EB] rounded-xs p-8 sm:p-10 shadow-xs flex flex-col items-center">
+        <div className="w-full max-w-md bg-surface border border-hairline rounded-xs p-8 sm:p-10 shadow-xs flex flex-col items-center">
           {/* Subtle Icon */}
-          <div className="w-14 h-14 rounded-full bg-[#F3F4F6] border border-[#E5E7EB] flex items-center justify-center mb-5 text-[#6B7280]">
+          <div className="w-14 h-14 rounded-full bg-paper-raised border border-hairline flex items-center justify-center mb-5 text-ink-3">
             <Users className="w-7 h-7 stroke-[1.5]" />
           </div>
 
           {/* Primary Message */}
-          <h2 className="text-xl sm:text-2xl font-bold text-[#111827] tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             No employees yet
           </h2>
 
-          <p className="mt-2 text-sm text-[#4B5563] leading-relaxed max-w-sm">
+          <p className="mt-2 text-sm text-ink-2 leading-relaxed max-w-sm">
             There are currently no employees in the organization. When staff members accept an invitation link and join a role, they will appear here.
           </p>
 
           {/* Minimal, discrete test tools */}
-          <div className="mt-6 pt-6 border-t border-[#F3F4F6] w-full flex flex-col sm:flex-row items-center justify-center gap-2.5">
+          <div className="mt-6 pt-6 border-t border-paper-raised w-full flex flex-col sm:flex-row items-center justify-center gap-2.5">
             {onGenerateInviteLink && (
               <button
                 onClick={() => onGenerateInviteLink('', '')}
-                className="w-full sm:w-auto px-4 py-2 text-xs font-mono uppercase tracking-wider font-semibold text-[#374151] bg-[#F9FAFB] hover:bg-[#F3F4F6] border border-[#D1D5DB] rounded-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                className="w-full sm:w-auto px-4 py-2 text-xs font-mono uppercase tracking-wider font-semibold text-[#374151] bg-paper hover:bg-paper-raised border border-hairline rounded-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
               >
-                <Link2 className="w-3.5 h-3.5 text-[#6B7280]" />
+                <Link2 className="w-3.5 h-3.5 text-ink-3" />
                 <span>Invite Staff</span>
               </button>
             )}
@@ -158,7 +159,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                   setSimRoleDept({ roleId: vacantRoles[0].id, deptId: vacantRoles[0].deptId });
                   setShowSimulateModal(true);
                 }}
-                className="w-full sm:w-auto px-4 py-2 text-xs font-mono uppercase tracking-wider font-bold text-white bg-[#1F2937] hover:bg-[#111827] rounded-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
+                className="w-full sm:w-auto px-4 py-2 text-xs font-mono uppercase tracking-wider font-bold text-white bg-ink hover:bg-ink rounded-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Simulate Join</span>
@@ -169,15 +170,15 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
 
         {/* Simulation Modal (Only opens if user clicks 'Simulate Join') */}
         {showSimulateModal && (
-          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border border-[#E5E7EB] rounded-xs p-6 max-w-md w-full shadow-xl text-left">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
-                <h3 className="font-bold text-sm text-[#111827] uppercase tracking-wider font-mono">
+          <ModalOverlay onClose={() => setShowSimulateModal(false)} className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-surface border border-hairline rounded-xs p-6 max-w-md w-full shadow-xl text-left">
+              <div className="flex items-center justify-between pb-3 border-b border-hairline">
+                <h3 className="font-bold text-sm text-ink uppercase tracking-wider font-mono">
                   Simulate Employee Join
                 </h3>
                 <button 
                   onClick={() => setShowSimulateModal(false)}
-                  className="text-xs font-mono text-[#6B7280] hover:text-[#111827]"
+                  className="text-xs font-mono text-ink-3 hover:text-ink"
                 >
                   ✕
                 </button>
@@ -185,7 +186,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
 
               <form onSubmit={handleSimulateSubmit} className="mt-4 space-y-4">
                 <div>
-                  <label className="block text-xs font-mono text-[#4B5563] mb-1">
+                  <label className="block text-xs font-mono text-ink-2 mb-1">
                     Select Role to Fill:
                   </label>
                   <select
@@ -196,7 +197,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                         setSimRoleDept({ roleId: selectedRole.id, deptId: selectedRole.deptId });
                       }
                     }}
-                    className="w-full px-3 py-2 bg-[#F9FAFB] border border-[#D1D5DB] rounded-xs text-xs font-mono text-[#111827]"
+                    className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-mono text-ink"
                   >
                     {vacantRoles.map(r => {
                       const dept = allDepts.find(d => d.id === r.deptId);
@@ -210,7 +211,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-[#4B5563] mb-1">
+                  <label className="block text-xs font-mono text-ink-2 mb-1">
                     Full Name:
                   </label>
                   <input
@@ -218,12 +219,12 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     required
                     value={simName}
                     onChange={e => setSimName(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#FFFFFF] border border-[#D1D5DB] rounded-xs text-xs font-sans text-[#111827]"
+                    className="w-full px-3 py-2 bg-[#FFFFFF] border border-hairline rounded-xs text-xs font-sans text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-[#4B5563] mb-1">
+                  <label className="block text-xs font-mono text-ink-2 mb-1">
                     Email Address:
                   </label>
                   <input
@@ -231,7 +232,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     required
                     value={simEmail}
                     onChange={e => setSimEmail(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#FFFFFF] border border-[#D1D5DB] rounded-xs text-xs font-mono text-[#111827]"
+                    className="w-full px-3 py-2 bg-[#FFFFFF] border border-hairline rounded-xs text-xs font-mono text-ink"
                   />
                 </div>
 
@@ -239,20 +240,20 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowSimulateModal(false)}
-                    className="px-3.5 py-1.5 text-xs font-mono text-[#6B7280] hover:text-[#111827] cursor-pointer"
+                    className="px-3.5 py-1.5 text-xs font-mono text-ink-3 hover:text-ink cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#1F2937] hover:bg-[#111827] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs cursor-pointer shadow-xs"
+                    className="px-4 py-2 bg-ink hover:bg-ink text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs cursor-pointer shadow-xs"
                   >
                     Join Role
                   </button>
                 </div>
               </form>
             </div>
-          </div>
+          </ModalOverlay>
         )}
       </div>
     );
@@ -264,12 +265,12 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-[#111827] tracking-tight">
+          <h1 className="text-2xl font-bold text-ink tracking-tight">
             Employees ({employees.length})
           </h1>
-          <p className="text-xs text-[#6B7280] mt-0.5">
+          <p className="text-xs text-ink-3 mt-0.5">
             Active staff members currently enrolled in your organization.
           </p>
         </div>
@@ -278,7 +279,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
           {onResetEmployees && (
             <button aria-label="Reset all employees back to empty state"
               onClick={onResetEmployees}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-[#991B1B] hover:bg-[#FEF2F2] border border-[#FCA5A5] rounded-xs transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-st-pending hover:bg-st-pending-bg border border-[#FCA5A5] rounded-xs transition-colors cursor-pointer"
               title="Reset all employees back to empty state"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -289,7 +290,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
           {onGenerateInviteLink && (
             <button
               onClick={() => onGenerateInviteLink('', '')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider font-bold text-white bg-[#1F2937] hover:bg-[#111827] rounded-xs transition-colors cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider font-bold text-white bg-ink hover:bg-ink rounded-xs transition-colors cursor-pointer shadow-xs"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>Invite New Employee</span>
@@ -299,10 +300,10 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
       </div>
 
       {/* Employees Table / Cards */}
-      <div className="bg-white border border-[#E5E7EB] rounded-xs shadow-xs overflow-hidden">
+      <div className="bg-surface border border-hairline rounded-xs shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#F9FAFB] border-b border-[#E5E7EB] text-[11px] font-mono uppercase tracking-wider text-[#6B7280]">
+            <thead className="bg-paper border-b border-hairline text-[11px] font-mono uppercase tracking-wider text-ink-3">
               <tr>
                 <th className="px-5 py-3 font-medium">Employee</th>
                 <th className="px-5 py-3 font-medium">Email</th>
@@ -311,26 +312,26 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                 <th className="px-5 py-3 font-medium">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-hairline">
               {employees.map(({ user, roles }) => (
-                <tr key={user.id} className="hover:bg-[#F9FAFB] transition-colors">
+                <tr key={user.id} className="hover:bg-paper transition-colors">
                   <td className="px-5 py-4">
                     <button aria-label={`View ${user.fullName}'s profile`}
                       onClick={() => onViewProfile && onViewProfile(user)}
                       className="flex items-center gap-3 text-left group cursor-pointer"
                       title={`View ${user.fullName}'s profile`}
                     >
-                      <div className="w-8 h-8 rounded-full bg-[#1F2937] text-white flex items-center justify-center font-mono font-bold text-xs shrink-0 group-hover:ring-2 group-hover:ring-[#1F2937] group-hover:ring-offset-1 transition-all">
+                      <div className="w-8 h-8 rounded-full bg-ink text-white flex items-center justify-center font-mono font-bold text-xs shrink-0 group-hover:ring-2 group-hover:ring-ink group-hover:ring-offset-1 transition-all">
                         {user.preferredName?.[0] || user.fullName[0]}
                       </div>
                       <div>
-                        <div className="font-bold text-[#111827] group-hover:underline">{user.fullName}</div>
-                        <div className="text-[11px] font-mono text-[#6B7280]">ID: {user.id}</div>
+                        <div className="font-bold text-ink group-hover:underline">{user.fullName}</div>
+                        <div className="text-[11px] font-mono text-ink-3">ID: {user.id}</div>
                       </div>
                     </button>
                   </td>
 
-                  <td className="px-5 py-4 font-mono text-[#4B5563]">
+                  <td className="px-5 py-4 font-mono text-ink-2">
                     {user.email}
                   </td>
 
@@ -338,11 +339,11 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     <div className="space-y-1">
                       {roles.map((r, i) => (
                         <div key={i} className="flex items-center gap-1.5">
-                          <span className="font-semibold text-[#111827]">
+                          <span className="font-semibold text-ink">
                             {r.role?.title || 'Unknown Role'}
                           </span>
-                          <span className="text-[#9CA3AF]">·</span>
-                          <span className="text-[#4B5563] text-[11px]">
+                          <span className="text-ink-3">·</span>
+                          <span className="text-ink-2 text-[11px]">
                             {r.dept?.name || 'Department'}
                           </span>
                         </div>

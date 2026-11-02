@@ -41,7 +41,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
     >
       {/* Title & Branding */}
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 bg-[#1C2438] text-white flex items-center justify-center rounded-xs font-mono font-bold text-xs shadow-[2px_2px_0px_#2F3B7A]">
+        <div className="w-7 h-7 bg-ink text-white flex items-center justify-center rounded-xs font-mono font-bold text-xs shadow-[2px_2px_0px_#2F3B7A]">
           MK
         </div>
         <div>
@@ -62,7 +62,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       {/* Center: Live Stats Counters with Lively Colored Status Badges */}
       <div
         id="stats-counters"
-        className="hidden md:flex items-center gap-2 text-xs font-mono bg-white border border-neutral-300 rounded-xs px-2.5 py-1 shadow-xs"
+        className="hidden md:flex items-center gap-2 text-xs font-mono bg-surface border border-neutral-300 rounded-xs px-2.5 py-1 shadow-xs"
       >
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
@@ -117,7 +117,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           type="button"
           id="manage-sections-btn"
           onClick={onOpenSectionsManager}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-400 hover:border-neutral-900 rounded-xs shadow-[1.5px_1.5px_0px_#27272a] text-xs font-mono transition-all hover:-translate-y-0.5 cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-surface hover:bg-neutral-100 text-neutral-800 border border-neutral-400 hover:border-neutral-900 rounded-xs shadow-[1.5px_1.5px_0px_#27272a] text-xs font-mono transition-all hover:-translate-y-0.5 cursor-pointer"
           title="Manage grouped sections"
         >
           <Layers size={13} className="text-neutral-700" />
@@ -125,14 +125,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Paper Style Selector */}
-        <div className="hidden sm:flex items-center bg-white border border-neutral-400 rounded-xs p-0.5 text-[11px] font-mono shadow-[1px_1px_0px_#27272a]">
+        <div className="hidden sm:flex items-center bg-surface border border-neutral-400 rounded-xs p-0.5 text-[11px] font-mono shadow-[1px_1px_0px_#27272a]">
           <button aria-label="Graph Grid"
             type="button"
             id="style-grid-btn"
             onClick={() => onPaperStyleChange('grid')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'grid'
-                ? 'bg-[#1C2438] text-white font-bold'
+                ? 'bg-ink text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Graph Grid"
@@ -145,7 +145,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('dots')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'dots'
-                ? 'bg-[#1C2438] text-white font-bold'
+                ? 'bg-ink text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Dot Matrix"
@@ -158,7 +158,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('ledger')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'ledger'
-                ? 'bg-[#1C2438] text-white font-bold'
+                ? 'bg-ink text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Lined Ledger"
@@ -171,7 +171,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('clean')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'clean'
-                ? 'bg-[#1C2438] text-white font-bold'
+                ? 'bg-ink text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Clean Paper"
@@ -185,7 +185,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           type="button"
           id="print-diagram-btn"
           onClick={() => window.print()}
-          className="p-1.5 bg-white hover:bg-neutral-100 text-neutral-700 hover:text-neutral-950 border border-neutral-400 rounded-xs shadow-[1px_1px_0px_#27272a] transition-all hover:-translate-y-0.5 cursor-pointer"
+          className="p-1.5 bg-surface hover:bg-neutral-100 text-neutral-700 hover:text-neutral-950 border border-neutral-400 rounded-xs shadow-[1px_1px_0px_#27272a] transition-all hover:-translate-y-0.5 cursor-pointer"
           title="Print or Export PDF"
         >
           <Printer size={14} />
@@ -196,7 +196,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           type="button"
           id="reset-diagram-btn"
           onClick={() => setShowResetConfirm(true)}
-          className="flex items-center gap-1 px-2 py-1.5 bg-white hover:bg-rose-50 text-neutral-700 hover:text-rose-700 border border-neutral-400 hover:border-rose-400 rounded-xs shadow-[1px_1px_0px_#27272a] text-xs font-mono transition-all hover:-translate-y-0.5 cursor-pointer"
+          className="flex items-center gap-1 px-2 py-1.5 bg-surface hover:bg-rose-50 text-neutral-700 hover:text-rose-700 border border-neutral-400 hover:border-rose-400 rounded-xs shadow-[1px_1px_0px_#27272a] text-xs font-mono transition-all hover:-translate-y-0.5 cursor-pointer"
           title="Clear diagram and reset to primary department"
         >
           <RotateCcw size={12} />

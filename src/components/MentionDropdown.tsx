@@ -135,7 +135,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
   return (
     <div 
       id="mention-dropdown-root" 
-      className="absolute left-0 top-full mt-1 w-80 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-50 overflow-hidden"
+      className="absolute left-0 top-full mt-1 w-80 bg-surface rounded-xl shadow-xl border border-slate-200 py-2 z-50 overflow-hidden"
     >
       <div className="px-3 py-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-100">
         <span>{isRepoFileDrilldown ? `Files in @${drillRepo}` : 'Reference an Asset or Repo'}</span>
@@ -155,7 +155,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
               onClick={() => onSelect(item)}
               className="w-full px-3.5 py-2 text-left hover:bg-indigo-50 flex items-center gap-2.5 transition text-xs group"
             >
-              <div className="shrink-0 p-1 rounded bg-slate-100 group-hover:bg-white transition">
+              <div className="shrink-0 p-1 rounded bg-slate-100 group-hover:bg-surface transition">
                 {getIcon(item.type)}
               </div>
               <div className="min-w-0 flex-1">
@@ -173,7 +173,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
 
       {!isRepoFileDrilldown && (
         <div className="px-3 py-1.5 bg-slate-50 text-[11px] text-slate-500 border-t border-slate-100">
-          Tip: Type <code className="text-slate-800 bg-white px-1 py-0.5 rounded border border-slate-200">@repo-name/</code> to drill down into repo files!
+          Tip: Type <code className="text-slate-800 bg-surface px-1 py-0.5 rounded border border-slate-200">@repo-name/</code> to drill down into repo files!
         </div>
       )}
     </div>

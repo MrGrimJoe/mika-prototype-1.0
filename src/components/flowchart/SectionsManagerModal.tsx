@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Section, DepartmentNode } from './flowchartTypes';
 import { Layers, Trash2, Edit3, Check, X, ShieldAlert } from 'lucide-react';
+import { ModalOverlay } from '../ui/ModalOverlay';
+import { confirmAction } from '../../lib/dialogService';
 
 interface SectionsManagerModalProps {
   isOpen: boolean;
@@ -60,14 +62,14 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
   ];
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="sections-manager-overlay"
       className="fixed inset-0 bg-neutral-950/40 backdrop-blur-[1px] flex items-center justify-center p-4 z-50 font-mono select-none"
       onClick={onClose}
     >
       <div
         id="sections-manager-dialog"
-        className="w-full max-w-lg bg-white border-2 border-neutral-900 p-6 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 space-y-4 max-h-[85vh] flex flex-col"
+        className="w-full max-w-lg bg-surface border-2 border-neutral-900 p-6 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 space-y-4 max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -111,7 +113,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                 <div
                   key={section.id}
                   id={`section-item-${section.id}`}
-                  className="border border-neutral-300 bg-[#fafaf8] p-3 rounded-xs space-y-2"
+                  className="border border-neutral-300 bg-paper p-3 rounded-xs space-y-2"
                 >
                   {isEditing ? (
                     <div className="space-y-2 border-b border-neutral-200 pb-2">
@@ -119,7 +121,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                         type="text"
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
-                        className="w-full bg-white border border-neutral-900 px-2 py-1 text-xs rounded-xs text-neutral-900 font-bold"
+                        className="w-full bg-surface border border-neutral-900 px-2 py-1 text-xs rounded-xs text-neutral-900 font-bold"
                         autoFocus
                       />
                       <div className="flex items-center justify-between text-xs">
@@ -184,8 +186,14 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                         </button>
                         <button aria-label="Delete Section (Ungroup all members)"
                           type="button"
-                          onClick={() => {
-                            if (window.confirm(`Ungroup section "${section.name}"? (Departments will remain)`)) {
+                          onClick={async () => {
+                            const confirmed = await confirmAction({
+                              title: 'Ungroup this section?',
+                              message: `"${section.name}" will be removed. Its departments stay in the chart.`,
+                              confirmLabel: 'Ungroup section',
+                              destructive: true,
+                            });
+                            if (confirmed) {
                               onDeleteSection(section.id);
                             }
                           }}
@@ -204,7 +212,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                       {assignedDepts.map((dept) => (
                         <div
                           key={dept.id}
-                          className="flex items-center gap-1 bg-white border border-neutral-300 px-2 py-0.5 rounded-xs text-[11px] text-neutral-800"
+                          className="flex items-center gap-1 bg-surface border border-neutral-300 px-2 py-0.5 rounded-xs text-[11px] text-neutral-800"
                         >
                           <span>{dept.name}</span>
                           <button aria-label="Remove department from this section"
@@ -238,6 +246,6 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

@@ -194,22 +194,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#DAD5C9]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#6B665A]">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
               ORGANISATION SETTINGS
             </span>
             {isMasterRoot && (
-              <span className="text-[11px] font-mono bg-[#1C2438] text-white px-1.5 py-0.5 rounded-xs">
+              <span className="text-[11px] font-mono bg-ink text-white px-1.5 py-0.5 rounded-xs">
                 MASTER ROOT
               </span>
             )}
           </div>
-          <h1 className="text-2xl font-serif font-bold text-[#1C2438] tracking-tight mt-0.5">
+          <h1 className="text-2xl font-serif font-bold text-ink tracking-tight mt-0.5">
             Settings & Integrations
           </h1>
-          <p className="text-xs text-[#5C574B] mt-0.5">
+          <p className="text-xs text-ink-2 mt-0.5">
             Configure {currentOrg?.name || 'Mika'} connected workspaces, storage endpoints, and authority governance.
           </p>
         </div>
@@ -217,7 +217,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         {onClose && (
           <button
             onClick={onClose}
-            className="self-start sm:self-auto text-xs font-mono text-[#5C574B] hover:text-[#1C2438] underline"
+            className="self-start sm:self-auto text-xs font-mono text-ink-2 hover:text-ink underline"
           >
             &larr; Back to Dashboard
           </button>
@@ -225,29 +225,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       </div>
 
       {statusFeedback && (
-        <div className="p-3 bg-[#EFF6FF] border border-[#BFDBFE] text-xs text-[#1E40AF] rounded-xs flex items-center justify-between font-mono">
+        <div className="p-3 bg-st-help-bg border border-st-help-border text-xs text-st-help rounded-xs flex items-center justify-between font-mono">
           <span>{statusFeedback}</span>
-          <button onClick={() => setStatusFeedback(null)} className="text-[#1E40AF] hover:underline">
+          <button onClick={() => setStatusFeedback(null)} className="text-st-help hover:underline">
             Dismiss
           </button>
         </div>
       )}
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex border-b border-[#DAD5C9] bg-[#EFEBE2] p-1 rounded-xs gap-1">
+      <div className="flex border-b border-hairline bg-paper-raised p-1 rounded-xs gap-1">
         <button
           onClick={() => setActiveTab('integrations')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'integrations'
-              ? 'bg-[#1C2438] text-white shadow-xs font-bold'
-              : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#E8E4DA]'
+              ? 'bg-ink text-white shadow-xs font-bold'
+              : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
           <LinkIcon className="w-3.5 h-3.5" />
           <span>Integrations & OAuth</span>
           {connections.length > 0 && (
             <span className={`text-[11px] px-1.5 py-0.2 rounded-xs ${
-              activeTab === 'integrations' ? 'bg-white/20 text-white' : 'bg-[#DAD5C9] text-[#1C2438]'
+              activeTab === 'integrations' ? 'bg-surface/20 text-white' : 'bg-hairline text-ink'
             }`}>
               {connections.length}
             </span>
@@ -258,8 +258,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('general')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'general'
-              ? 'bg-[#1C2438] text-white shadow-xs font-bold'
-              : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#E8E4DA]'
+              ? 'bg-ink text-white shadow-xs font-bold'
+              : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
           <SettingsIcon className="w-3.5 h-3.5" />
@@ -270,8 +270,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('storage')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'storage'
-              ? 'bg-[#1C2438] text-white shadow-xs font-bold'
-              : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#E8E4DA]'
+              ? 'bg-ink text-white shadow-xs font-bold'
+              : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
           <HardDrive className="w-3.5 h-3.5" />
@@ -282,8 +282,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('roles')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'roles'
-              ? 'bg-[#1C2438] text-white shadow-xs font-bold'
-              : 'text-[#5C574B] hover:text-[#1C2438] hover:bg-[#E8E4DA]'
+              ? 'bg-ink text-white shadow-xs font-bold'
+              : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
           <Shield className="w-3.5 h-3.5" />
@@ -295,38 +295,38 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {activeTab === 'integrations' && (
         <div className="space-y-6">
           {/* My Access Summary Card */}
-          <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-5 rounded-xs space-y-3">
+          <div className="bg-paper-raised border border-hairline p-5 rounded-xs space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-serif font-bold text-[#1C2438]">
+                <h3 className="text-sm font-serif font-bold text-ink">
                   Your Personal Tool Access
                 </h3>
-                <p className="text-[11px] font-mono text-[#5C574B]">
+                <p className="text-[11px] font-mono text-ink-2">
                   Inherited from your active roles: {userAssignments.map(a => `@${roles.find(r => r.id === a.roleId)?.title || 'Role'}`).join(', ') || 'None'}
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-[#2F3B7A] bg-white px-2 py-1 rounded-xs border border-[#DAD5C9]">
+              <span className="text-[11px] font-mono text-accent-fg bg-surface px-2 py-1 rounded-xs border border-hairline">
                 {currentUser.email}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-2 border-t border-[#DAD5C9]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-2 border-t border-hairline">
               {userAccessSummary.map((detail) => (
                 <div
                   key={detail.tool.key}
                   className={`p-3 rounded-xs border text-xs font-mono flex items-center justify-between ${
                     detail.hasAccess
-                      ? 'bg-white border-[#DAD5C9] text-[#1C2438]'
-                      : 'bg-[#F7F5F0] border-[#E8E4DA] text-[#6B665A]'
+                      ? 'bg-surface border-hairline text-ink'
+                      : 'bg-paper border-paper-sunken text-ink-3'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-xs bg-[#EFEBE2] flex items-center justify-center shrink-0">
-                      <LinkIcon className="w-3.5 h-3.5 text-[#1C2438]" />
+                    <div className="w-6 h-6 rounded-xs bg-paper-raised flex items-center justify-center shrink-0">
+                      <LinkIcon className="w-3.5 h-3.5 text-ink" />
                     </div>
                     <div>
                       <div className="font-bold">{detail.tool.name}</div>
-                      <div className="text-[11px] text-[#5C574B]">
+                      <div className="text-[11px] text-ink-2">
                         {detail.hasAccess ? (
                           detail.grantedByLabel || 'Active Connection'
                         ) : (
@@ -338,7 +338,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   {detail.hasAccess ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   ) : (
-                    <Lock className="w-3.5 h-3.5 text-[#6B665A] shrink-0" />
+                    <Lock className="w-3.5 h-3.5 text-ink-3 shrink-0" />
                   )}
                 </div>
               ))}
@@ -346,22 +346,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           {/* Org Integrations Checklist */}
-          <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-6 rounded-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#DAD5C9]">
+          <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
-                <h3 className="text-base font-serif font-bold text-[#1C2438]">
+                <h3 className="text-base font-serif font-bold text-ink">
                   Connected Tools & External Services
                 </h3>
-                <p className="text-xs text-[#5C574B] mt-0.5">
+                <p className="text-xs text-ink-2 mt-0.5">
                   Link Google Drive, GitHub repositories, Figma teams, and Canva folders to automate folder provisioning and task sync.
                 </p>
               </div>
               {isAnyRoot ? (
-                <span className="text-[11px] font-mono uppercase bg-[#2F3B7A] text-white px-2 py-1 rounded-xs">
+                <span className="text-[11px] font-mono uppercase bg-accent text-white px-2 py-1 rounded-xs">
                   {isMasterRoot ? 'Master Root Permitted' : 'Root Authority Permitted'}
                 </span>
               ) : (
-                <span className="text-[11px] font-mono text-[#6B665A] bg-[#E8E4DA] px-2 py-1 rounded-xs">
+                <span className="text-[11px] font-mono text-ink-3 bg-paper-sunken px-2 py-1 rounded-xs">
                   View-Only
                 </span>
               )}
@@ -381,28 +381,28 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           {/* Browser Userscript Integration Guide */}
-          <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-5 rounded-xs space-y-3 font-mono text-xs">
+          <div className="bg-paper-raised border border-hairline p-5 rounded-xs space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between">
-              <h4 className="font-bold text-[#1C2438] flex items-center gap-2">
+              <h4 className="font-bold text-ink flex items-center gap-2">
                 <span>⚡ Browser Userscript (Ctrl+Alt+M)</span>
               </h4>
-              <span className="text-[11px] text-[#2F3B7A] bg-[#EFF6FF] border border-[#BFDBFE] px-2 py-0.5 rounded-xs font-semibold">
+              <span className="text-[11px] text-accent-fg bg-st-help-bg border border-st-help-border px-2 py-0.5 rounded-xs font-semibold">
                 Tampermonkey Ready
               </span>
             </div>
-            <p className="text-[#5C574B] text-[11px] leading-relaxed">
-              Mika integrates into Google Drive, GitHub, Figma, and Canva tabs with a quick-capture overlay. Press <kbd className="px-1.5 py-0.5 bg-white border border-[#DAD5C9] rounded-xs font-bold text-[#1C2438]">Ctrl+Alt+M</kbd> to file tasks and share references with your team instantly.
+            <p className="text-ink-2 text-[11px] leading-relaxed">
+              Mika integrates into Google Drive, GitHub, Figma, and Canva tabs with a quick-capture overlay. Press <kbd className="px-1.5 py-0.5 bg-surface border border-hairline rounded-xs font-bold text-ink">Ctrl+Alt+M</kbd> to file tasks and share references with your team instantly.
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
                 href="/mika-companion.user.js"
                 download
-                className="px-3 py-1.5 bg-[#1C2438] text-white rounded-xs text-[11px] font-mono font-bold hover:bg-[#253064] transition-colors inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-ink text-white rounded-xs text-[11px] font-mono font-bold hover:bg-accent-strong transition-colors inline-flex items-center gap-1.5"
               >
                 <span>Download Userscript</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
-              <span className="text-[11px] text-[#6B665A]">
+              <span className="text-[11px] text-ink-3">
                 Works with Violentmonkey or Tampermonkey.
               </span>
             </div>
@@ -412,39 +412,39 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: GENERAL */}
       {activeTab === 'general' && (
-        <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-6 rounded-xs space-y-6">
+        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-6">
           <div>
-            <h3 className="text-base font-serif font-bold text-[#1C2438]">
+            <h3 className="text-base font-serif font-bold text-ink">
               Organisation Identity
             </h3>
-            <p className="text-xs text-[#5C574B] mt-0.5">
+            <p className="text-xs text-ink-2 mt-0.5">
               General metadata for {currentOrg?.name || 'Mika'}.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl font-mono text-xs">
             <div>
-              <label className="block text-[#5C574B] mb-1">Organisation Name</label>
+              <label className="block text-ink-2 mb-1">Organisation Name</label>
               <input
                 type="text"
                 disabled={!isMasterRoot}
                 defaultValue={currentOrg?.name || 'Acme Corp'}
-                className="w-full bg-white border border-[#DAD5C9] px-3 py-2 rounded-xs text-[#1C2438]"
+                className="w-full bg-surface border border-hairline px-3 py-2 rounded-xs text-ink"
               />
             </div>
 
             <div>
-              <label className="block text-[#5C574B] mb-1">Slug / Identifier</label>
+              <label className="block text-ink-2 mb-1">Slug / Identifier</label>
               <input
                 type="text"
                 disabled
                 defaultValue={currentOrg?.slug || 'acme-corp'}
-                className="w-full bg-[#E8E4DA] border border-[#DAD5C9] px-3 py-2 rounded-xs text-[#6B665A]"
+                className="w-full bg-paper-sunken border border-hairline px-3 py-2 rounded-xs text-ink-3"
               />
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#DAD5C9] text-xs text-[#5C574B]">
+          <div className="pt-4 border-t border-hairline text-xs text-ink-2">
             To rename or archive the organization, contact Master Root or invoke the authority re-delegation protocol.
           </div>
         </div>
@@ -452,12 +452,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: STORAGE */}
       {activeTab === 'storage' && (
-        <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-6 rounded-xs space-y-6">
+        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-6">
           <div>
-            <h3 className="text-base font-serif font-bold text-[#1C2438]">
+            <h3 className="text-base font-serif font-bold text-ink">
               File Vault & Storage Backend
             </h3>
-            <p className="text-xs text-[#5C574B] mt-0.5">
+            <p className="text-xs text-ink-2 mt-0.5">
               Current storage tier and provider configuration.
             </p>
           </div>
@@ -465,11 +465,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className={`p-4 rounded-xs border font-mono text-xs space-y-2 ${
               currentOrg?.storageType === 'byod'
-                ? 'bg-white border-[#2F3B7A] shadow-xs'
-                : 'bg-[#F7F5F0] border-[#DAD5C9]'
+                ? 'bg-surface border-accent shadow-xs'
+                : 'bg-paper border-hairline'
             }`}>
-              <div className="font-bold text-[#1C2438]">Bring Your Own Drive (BYOD)</div>
-              <p className="text-[11px] text-[#5C574B]">
+              <div className="font-bold text-ink">Bring Your Own Drive (BYOD)</div>
+              <p className="text-[11px] text-ink-2">
                 Files live inside your organization's verified Google Drive domain.
               </p>
               {currentOrg?.storageType === 'byod' && (
@@ -481,11 +481,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
             <div className={`p-4 rounded-xs border font-mono text-xs space-y-2 ${
               currentOrg?.storageType === 'mika' || !currentOrg?.storageType
-                ? 'bg-white border-[#2F3B7A] shadow-xs'
-                : 'bg-[#F7F5F0] border-[#DAD5C9]'
+                ? 'bg-surface border-accent shadow-xs'
+                : 'bg-paper border-hairline'
             }`}>
-              <div className="font-bold text-[#1C2438]">Mika Managed Vault</div>
-              <p className="text-[11px] text-[#5C574B]">
+              <div className="font-bold text-ink">Mika Managed Vault</div>
+              <p className="text-[11px] text-ink-2">
                 Zero-knowledge encrypted cloud storage at linear continuous rates.
               </p>
               {(currentOrg?.storageType === 'mika' || !currentOrg?.storageType) && (
@@ -497,11 +497,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
             <div className={`p-4 rounded-xs border font-mono text-xs space-y-2 ${
               currentOrg?.storageType === 'self_host'
-                ? 'bg-white border-[#2F3B7A] shadow-xs'
-                : 'bg-[#F7F5F0] border-[#DAD5C9]'
+                ? 'bg-surface border-accent shadow-xs'
+                : 'bg-paper border-hairline'
             }`}>
-              <div className="font-bold text-[#1C2438]">Self-Hosted Node</div>
-              <p className="text-[11px] text-[#5C574B]">
+              <div className="font-bold text-ink">Self-Hosted Node</div>
+              <p className="text-[11px] text-ink-2">
                 On-premise S3 or MinIO bucket endpoint for sovereign airgapped networks.
               </p>
               {currentOrg?.storageType === 'self_host' && (
@@ -516,29 +516,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: ROLES */}
       {activeTab === 'roles' && (
-        <div className="bg-[#EFEBE2] border border-[#DAD5C9] p-6 rounded-xs space-y-4">
+        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-4">
           <div>
-            <h3 className="text-base font-serif font-bold text-[#1C2438]">
+            <h3 className="text-base font-serif font-bold text-ink">
               Authority Tree & Role Governance
             </h3>
-            <p className="text-xs text-[#5C574B] mt-0.5">
+            <p className="text-xs text-ink-2 mt-0.5">
               Review roles, department roots, and delegation chains.
             </p>
           </div>
 
-          <div className="divide-y divide-[#DAD5C9] border border-[#DAD5C9] rounded-xs bg-white">
+          <div className="divide-y divide-hairline border border-hairline rounded-xs bg-surface">
             {departments.map(dept => {
               const deptRoles = roles.filter(r => r.departmentId === dept.id);
               const leadRole = deptRoles.find(r => r.isDepartmentRoot);
               return (
                 <div key={dept.id} className="p-4 flex items-center justify-between font-mono text-xs">
                   <div>
-                    <div className="font-bold text-[#1C2438]">{dept.name}</div>
-                    <div className="text-[11px] text-[#5C574B]">
+                    <div className="font-bold text-ink">{dept.name}</div>
+                    <div className="text-[11px] text-ink-2">
                       Lead: {leadRole ? `@${leadRole.title}` : 'Unassigned'} • {deptRoles.length} Defined Roles
                     </div>
                   </div>
-                  <span className="text-[11px] bg-[#F7F5F0] px-2 py-1 rounded-xs border border-[#DAD5C9] text-[#1C2438]">
+                  <span className="text-[11px] bg-paper px-2 py-1 rounded-xs border border-hairline text-ink">
                     {dept.isSection ? 'Section' : 'Department'}
                   </span>
                 </div>

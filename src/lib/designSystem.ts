@@ -19,64 +19,68 @@ export const colors = {
   ink: '#1C2438',
   accent: '#2F3B7A',
 
-  // Dark mode inversion
+  // Dark appearance. Mirrors the CSS variables in src/index.css, which follow
+  // the system setting (prefers-color-scheme); there is no in-app switch.
   dark: {
     paper: '#12151C',
     paperRaised: '#181C26',
     paperSunken: '#0E1017',
-    hairline: '#282F40',
-    mutedText: '#7B8499',
+    surface: '#1A1F2B',
+    hairline: '#2B3345',
+    mutedText: '#9AA4BA',
     secondaryText: '#A5AFC4',
     ink: '#E8ECF5',
-    accent: '#5E72D9',
+    accent: '#5668D4',
+    accentText: '#8D9CF2',
   }
 } as const;
 
 /**
  * The authoritative task-state definitions and colors (Red, Blue, Yellow, Green, Grey, Red-Denied).
  * Functional status colors ONLY — never reused decoratively.
+ * Values are CSS variables (light/dark defined in src/index.css); the hex is the light fallback.
  */
 export const taskStateColors = {
   pending: {
-    text: '#B91C1C',      // Red (5.9:1 on bg)
-    bg: '#FEF2F2',
-    border: '#FECACA',
-    dot: '#EF4444',
+    text: 'var(--status-pending-text, #B91C1C)',      // Red (5.9:1 on bg)
+    bg: 'var(--status-pending-bg, #FEF2F2)',
+    border: 'var(--status-pending-border, #FECACA)',
+    dot: 'var(--status-pending-dot, #EF4444)',
     label: 'Pending'
   },
   help: {
-    text: '#1D4ED8',      // Blue (6.2:1 on bg)
-    bg: '#EFF6FF',
-    border: '#BFDBFE',
-    dot: '#3B82F6',
+    text: 'var(--status-help-text, #1D4ED8)',      // Blue (6.2:1 on bg)
+    bg: 'var(--status-help-bg, #EFF6FF)',
+    border: 'var(--status-help-border, #BFDBFE)',
+    dot: 'var(--status-help-dot, #3B82F6)',
     label: 'Help Needed'
   },
   submitted: {
-    text: '#854D0E',      // Yellow (6.6:1 on bg)
-    bg: '#FEFCE8',
-    border: '#FEF08A',
-    dot: '#EAB308',
+    text: 'var(--status-submitted-text, #854D0E)',      // Yellow (6.6:1 on bg)
+    bg: 'var(--status-submitted-bg, #FEFCE8)',
+    border: 'var(--status-submitted-border, #FEF08A)',
+    dot: 'var(--status-submitted-dot, #EAB308)',
     label: 'Submitted'
   },
   done: {
-    text: '#15803D',      // Green (4.8:1 on bg)
-    bg: '#F0FDF4',
-    border: '#BBF7D0',
-    dot: '#22C55E',
+    text: 'var(--status-done-text, #15803D)',      // Green (4.8:1 on bg)
+    bg: 'var(--status-done-bg, #F0FDF4)',
+    border: 'var(--status-done-border, #BBF7D0)',
+    dot: 'var(--status-done-dot, #22C55E)',
     label: 'Approved'
   },
   rejected: {
-    text: '#B91C1C',      // Same Red as Pending, disambiguated by label
-    bg: '#FEF2F2',
-    border: '#FECACA',
-    dot: '#EF4444',
+    text: 'var(--status-pending-text, #B91C1C)',      // Same Red as Pending, disambiguated by label
+    bg: 'var(--status-pending-bg, #FEF2F2)',
+    border: 'var(--status-pending-border, #FECACA)',
+    dot: 'var(--status-pending-dot, #EF4444)',
     label: 'Denied'
   },
   expired: {
-    text: '#4B5563',      // Grey (6.9:1 on bg)
-    bg: '#F3F4F6',
-    border: '#E5E7EB',
-    dot: '#9CA3AF',
+    text: 'var(--status-expired-text, #4B5563)',      // Grey (6.9:1 on bg)
+    bg: 'var(--status-expired-bg, #F3F4F6)',
+    border: 'var(--status-expired-border, #E5E7EB)',
+    dot: 'var(--status-expired-dot, #9CA3AF)',
     label: 'Expired'
   }
 } as const;

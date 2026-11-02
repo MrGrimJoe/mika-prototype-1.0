@@ -23,6 +23,7 @@ import {
 } from '../lib/integrationService';
 import { IntegrationConnection } from '../types';
 import { OAuthConnectModal } from './OAuthConnectModal';
+import { confirmAction } from '../lib/dialogService';
 
 interface IntegrationChecklistProps {
   connections: IntegrationConnection[];
@@ -157,7 +158,7 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
             className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
               isConnected
                 ? 'bg-indigo-50/40 border-indigo-200'
-                : 'bg-white border-slate-200 hover:border-slate-300'
+                : 'bg-surface border-slate-200 hover:border-slate-300'
             }`}
           >
             <div className="flex items-center gap-3">
@@ -165,10 +166,15 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
               <button
                 type="button"
                 id={`tool-checkbox-${tool.key}`}
-                onClick={() => {
+                onClick={async () => {
                   if (isConnected) {
                     if (onDisconnect && currentConn) {
-                      if (window.confirm(`Disconnect ${tool.name}?`)) {
+                      if (await confirmAction({
+                        title: `Disconnect ${tool.name}?`,
+                        message: 'People in your organization will lose access to this integration until you connect it again.',
+                        confirmLabel: 'Disconnect',
+                        destructive: true,
+                      })) {
                         onDisconnect(currentConn.id);
                       }
                     }
@@ -179,7 +185,7 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
                 className={`w-5 h-5 rounded-md flex items-center justify-center border transition-colors cursor-pointer ${
                   isConnected
                     ? 'bg-indigo-600 border-indigo-600 text-white'
-                    : 'border-slate-300 bg-white hover:border-indigo-400'
+                    : 'border-slate-300 bg-surface hover:border-indigo-400'
                 }`}
               >
                 {isConnected && <Check className="w-3.5 h-3.5" />}
@@ -213,8 +219,13 @@ export const IntegrationChecklist: React.FC<IntegrationChecklistProps> = ({
                   {onDisconnect && currentConn && (
                     <button aria-label="Disconnect integration"
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(`Disconnect ${tool.name}?`)) {
+                      onClick={async () => {
+                        if (await confirmAction({
+                          title: `Disconnect ${tool.name}?`,
+                          message: 'People in your organization will lose access to this integration until you connect it again.',
+                          confirmLabel: 'Disconnect',
+                          destructive: true,
+                        })) {
                           onDisconnect(currentConn.id);
                         }
                       }}

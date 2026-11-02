@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import { upsertFileItem, removeFileItem, subscribeFiles } from '../lib/firestoreService';
 import confetti from 'canvas-confetti';
+import { ModalOverlay } from './ui/ModalOverlay';
+import { confirmAction } from '../lib/dialogService';
 
 interface FileVaultProps {
   currentUser?: User | null;
@@ -195,7 +197,13 @@ export const FileVault: React.FC<FileVaultProps> = ({
   };
 
   const handleRemoveFromVault = async (fileId: string) => {
-    if (window.confirm('Remove this entry from Mika File Vault? (The original document or design is never deleted).')) {
+    const confirmed = await confirmAction({
+      title: 'Remove from File Vault?',
+      message: 'This removes the entry from Mika. The original document or design is never deleted.',
+      confirmLabel: 'Remove entry',
+      destructive: true,
+    });
+    if (confirmed) {
       setVaultFiles(prev => prev.filter(f => f.id !== fileId));
       await removeFileItem(fileId);
       setActiveMenuFileId(null);
@@ -298,7 +306,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
           <button
             id="btn-upload-file"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50 transition shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-surface text-slate-700 text-sm font-medium hover:bg-slate-50 transition shadow-sm"
           >
             <Upload className="w-4 h-4 text-slate-500" />
             Upload File
@@ -315,7 +323,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
       </div>
 
       {/* Destination Tabs & Filter */}
-      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 bg-surface p-3 rounded-xl border border-slate-200 shadow-sm">
         {/* Department / Myself Navigation */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button
@@ -358,13 +366,13 @@ export const FileVault: React.FC<FileVaultProps> = ({
             placeholder="Search vault files..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            className="w-full pl-9 pr-3 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-surface transition"
           />
         </div>
       </div>
 
       {/* Flat File List Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-surface rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         {filteredFiles.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400">
@@ -468,7 +476,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
                         {/* Dropdown Menu */}
                         {isMenuOpen && (
                           <div 
-                            className="absolute right-4 top-10 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-30 text-left"
+                            className="absolute right-4 top-10 w-56 bg-surface rounded-xl shadow-lg border border-slate-200 py-1.5 z-30 text-left"
                             onClick={(e) => e.stopPropagation()}
                           >
                             {/* Toggle destination */}
@@ -540,8 +548,8 @@ export const FileVault: React.FC<FileVaultProps> = ({
 
       {/* Add Entry Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
+        <ModalOverlay onClose={() => setShowAddModal(false)} className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-surface rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
             <h2 className="text-lg font-semibold text-slate-900">Add Entry to File Vault</h2>
             <p className="text-xs text-slate-500 mt-1">
               Add a live design or document reference from Figma, Canva, Google Drive, or GitHub.
@@ -657,7 +665,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
               </div>
             </form>
           </div>
-        </div>
+        </ModalOverlay>
       )}
     </div>
   );

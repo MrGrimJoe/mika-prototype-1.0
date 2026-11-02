@@ -390,7 +390,7 @@ export function DepartmentFlowchartBuilder({
   return (
     <div
       id="flowchart-app"
-      className={`flex flex-col ${isEmbedded ? 'h-full w-full min-h-[680px]' : 'h-screen w-screen'} overflow-hidden bg-[#faf9f5]`}
+      className={`flex flex-col ${isEmbedded ? 'h-full w-full min-h-[680px]' : 'h-screen w-screen'} overflow-hidden bg-paper`}
     >
       {/* Integration Bar for Landing / Auth flows / Embedded step */}
       {(onBack || onContinue || onBackToLanding || onApplyToOrg || onNavigateToSignIn) && (

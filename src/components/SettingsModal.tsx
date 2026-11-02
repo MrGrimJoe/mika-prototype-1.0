@@ -33,6 +33,7 @@ import { IntegrationChecklist } from './IntegrationChecklist';
 import { IntegrationAccessConfigModal } from './IntegrationAccessConfigModal';
 import { OAuthConnectModal } from './OAuthConnectModal';
 import { upsertIntegrationConnection, removeIntegrationConnection, upsertUserCompliance } from '../lib/firestoreService';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface SettingsModalProps {
   currentUser: User;
@@ -120,18 +121,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="settings-modal-backdrop"
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
     >
       <div
         id="settings-modal-container"
-        className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full max-w-4xl bg-surface rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-[#FAF9F6]">
+        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-paper">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#2F3B7A] text-white flex items-center justify-center shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-accent text-white flex items-center justify-center shadow-xs">
               <SettingsIcon className="w-5 h-5" />
             </div>
             <div>
@@ -168,7 +169,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('integrations')}
             className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === 'integrations'
-                ? 'border-[#2F3B7A] text-[#2F3B7A]'
+                ? 'border-accent text-accent-fg'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -180,7 +181,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('general')}
             className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === 'general'
-                ? 'border-[#2F3B7A] text-[#2F3B7A]'
+                ? 'border-accent text-accent-fg'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -192,7 +193,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('authority')}
             className={`py-3 border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === 'authority'
-                ? 'border-[#2F3B7A] text-[#2F3B7A]'
+                ? 'border-accent text-accent-fg'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -230,7 +231,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     type="button"
                     id="manage-role-access-btn"
                     onClick={() => setShowRoleConfig(true)}
-                    className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2F3B7A] border border-indigo-200 rounded-lg text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+                    className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-accent-fg border border-indigo-200 rounded-lg text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
                   >
                     <Users className="w-3.5 h-3.5" />
                     <span>Manage Role Permissions</span>
@@ -292,7 +293,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           key={item.tool.key}
                           className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
                             item.hasAccess
-                              ? 'bg-white border-slate-200 shadow-2xs'
+                              ? 'bg-surface border-slate-200 shadow-2xs'
                               : 'bg-slate-50/60 border-slate-200 text-slate-400'
                           }`}
                         >
@@ -384,7 +385,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {departments.map((dept) => (
                     <div
                       key={dept.id}
-                      className="p-3 bg-white rounded-lg border border-slate-200 flex items-center justify-between"
+                      className="p-3 bg-surface rounded-lg border border-slate-200 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2">
                         <Layers className="w-4 h-4 text-indigo-600" />
@@ -407,7 +408,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-slate-200 bg-[#FAF9F6] flex items-center justify-between">
+        <div className="px-6 py-3 border-t border-slate-200 bg-paper flex items-center justify-between">
           <span className="text-xs text-slate-400 font-mono-code">
             Mika Settings • Integrations & Security
           </span>
@@ -430,6 +431,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           onContinue={() => setShowRoleConfig(false)}
         />
       )}
-    </div>
+    </ModalOverlay>
   );
 };

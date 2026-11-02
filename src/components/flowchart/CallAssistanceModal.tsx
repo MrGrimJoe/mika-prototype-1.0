@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, MessageSquare, PhoneCall, Send, Check, Clock, UserCheck, X, Shield, Headphones } from 'lucide-react';
+import { ModalOverlay } from '../ui/ModalOverlay';
 
 interface CallAssistanceModalProps {
   isOpen: boolean;
@@ -36,14 +37,14 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
   };
 
   return (
-    <div
+    <ModalOverlay onClose={onClose}
       id="call-assistance-overlay"
       className="fixed inset-0 bg-neutral-950/45 backdrop-blur-[1px] flex items-center justify-center p-4 z-50 font-mono select-none"
       onClick={onClose}
     >
       <div
         id="call-assistance-dialog"
-        className="w-full max-w-xl bg-white border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 flex flex-col max-h-[90vh] overflow-hidden"
+        className="w-full max-w-xl bg-surface border-2 border-neutral-900 rounded-sm shadow-[6px_6px_0px_#18181b] text-neutral-900 flex flex-col max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -94,7 +95,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
             onClick={() => setActiveTab('overview')}
             className={`flex-1 py-2 px-3 text-center font-semibold transition-colors border-r border-neutral-300 ${
               activeTab === 'overview'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-emerald-700'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-emerald-700'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -105,7 +106,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
             onClick={() => setActiveTab('call')}
             className={`flex-1 py-2 px-3 text-center font-semibold transition-colors border-r border-neutral-300 flex items-center justify-center gap-1.5 ${
               activeTab === 'call'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-emerald-700'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-emerald-700'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -117,7 +118,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
             onClick={() => setActiveTab('text')}
             className={`flex-1 py-2 px-3 text-center font-semibold transition-colors flex items-center justify-center gap-1.5 ${
               activeTab === 'text'
-                ? 'bg-white text-neutral-900 border-b-2 border-b-emerald-700'
+                ? 'bg-surface text-neutral-900 border-b-2 border-b-emerald-700'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
             }`}
           >
@@ -209,7 +210,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
           {activeTab === 'call' && (
             <div className="space-y-4">
               {callSubmitted ? (
-                <div className="border border-emerald-500 bg-[#f0fdf4] p-4 rounded-xs text-center space-y-2">
+                <div className="border border-emerald-500 bg-st-done-bg p-4 rounded-xs text-center space-y-2">
                   <div className="w-10 h-10 bg-emerald-700 text-white rounded-full flex items-center justify-center mx-auto">
                     <Check size={20} />
                   </div>
@@ -228,7 +229,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
               ) : (
                 <>
                   {/* Direct Phone Number Option */}
-                  <div className="border border-neutral-300 bg-[#fafaf8] p-3.5 rounded-xs space-y-2">
+                  <div className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-neutral-900 flex items-center gap-1.5">
                         <Phone size={14} className="text-emerald-700" />
@@ -241,7 +242,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                     <p className="text-[11px] text-neutral-600">
                       Dial directly to speak with an employee immediately:
                     </p>
-                    <div className="flex items-center justify-between bg-white border border-neutral-400 p-2 rounded-xs">
+                    <div className="flex items-center justify-between bg-surface border border-neutral-400 p-2 rounded-xs">
                       <span className="font-bold text-sm text-neutral-900 tracking-wider">
                         +1 (800) 555-0199
                       </span>
@@ -256,7 +257,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                   </div>
 
                   {/* Request Callback Form */}
-                  <form onSubmit={handleCallSubmit} className="border border-neutral-300 bg-[#fafaf8] p-3.5 rounded-xs space-y-3">
+                  <form onSubmit={handleCallSubmit} className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-3">
                     <div className="font-bold text-neutral-900 text-xs uppercase tracking-wide">
                       Or Request An Immediate Callback
                     </div>
@@ -274,7 +275,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                           value={callName}
                           onChange={(e) => setCallName(e.target.value)}
                           placeholder="e.g. Alex Morgan"
-                          className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
+                          className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
                         />
                       </div>
 
@@ -288,7 +289,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                           value={callPhone}
                           onChange={(e) => setCallPhone(e.target.value)}
                           placeholder="e.g. (555) 012-3456"
-                          className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
+                          className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
                         />
                       </div>
 
@@ -299,7 +300,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                         <select
                           value={callOrgType}
                           onChange={(e) => setCallOrgType(e.target.value)}
-                          className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
+                          className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none"
                         >
                           <option>Company / Business Enterprise</option>
                           <option>School / Educational Institution</option>
@@ -327,7 +328,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
           {activeTab === 'text' && (
             <div className="space-y-4">
               {textSubmitted ? (
-                <div className="border border-emerald-500 bg-[#f0fdf4] p-4 rounded-xs text-center space-y-2">
+                <div className="border border-emerald-500 bg-st-done-bg p-4 rounded-xs text-center space-y-2">
                   <div className="w-10 h-10 bg-emerald-700 text-white rounded-full flex items-center justify-center mx-auto">
                     <Check size={20} />
                   </div>
@@ -346,7 +347,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
               ) : (
                 <>
                   {/* SMS Direct Option */}
-                  <div className="border border-neutral-300 bg-[#fafaf8] p-3 rounded-xs flex items-center justify-between text-xs">
+                  <div className="border border-neutral-300 bg-paper p-3 rounded-xs flex items-center justify-between text-xs">
                     <div>
                       <span className="font-bold text-neutral-900 block">Direct SMS Helpline:</span>
                       <span className="text-[11px] text-neutral-600">Text your structure to: <strong>+1 (800) 555-0199</strong></span>
@@ -357,7 +358,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                   </div>
 
                   {/* In-App Text Form */}
-                  <form onSubmit={handleTextSubmit} className="border border-neutral-300 bg-[#fafaf8] p-3.5 rounded-xs space-y-3">
+                  <form onSubmit={handleTextSubmit} className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-3">
                     <div className="font-bold text-neutral-900 text-xs uppercase tracking-wide">
                       Text What You Want Built
                     </div>
@@ -376,7 +377,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                             value={textName}
                             onChange={(e) => setTextName(e.target.value)}
                             placeholder="e.g. Jordan Lee"
-                            className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
+                            className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
                           />
                         </div>
                         <div>
@@ -389,7 +390,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                             value={textContact}
                             onChange={(e) => setTextContact(e.target.value)}
                             placeholder="e.g. (555) 012-3456 or email"
-                            className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
+                            className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2.5 py-1 text-xs rounded-xs text-neutral-900 focus:outline-none"
                           />
                         </div>
                       </div>
@@ -404,7 +405,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                           value={textMessage}
                           onChange={(e) => setTextMessage(e.target.value)}
                           placeholder="Example: I need an organization for a high school with Principal as top root, 3 sub-departments (Science, Humanities, Administration), and a Physics Section covering Physics Teachers across Grade 11 and 12..."
-                          className="w-full bg-white border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none resize-none placeholder:text-neutral-400"
+                          className="w-full bg-surface border border-neutral-300 focus:border-neutral-900 px-2.5 py-1.5 text-xs rounded-xs text-neutral-900 focus:outline-none resize-none placeholder:text-neutral-400"
                         />
                       </div>
                     </div>
@@ -439,6 +440,6 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
           </button>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 };

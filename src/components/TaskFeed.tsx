@@ -135,15 +135,15 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
   return (
     <div className="space-y-4 font-sans">
       {/* Filter and Search Controls */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-3 border border-[#DAD5C9] rounded-xs shadow-2xs">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-surface p-3 border border-hairline rounded-xs shadow-2xs">
         {/* B6: Segmented Chip Control for Red / Blue / Yellow / Green / Grey */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button
             onClick={() => setSelectedColor('all')}
             className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border ${
               selectedColor === 'all'
-                ? 'bg-[#1C2438] text-white border-[#1C2438]'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-ink text-white border-ink'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
             All [{colorCounts.all}]
@@ -154,8 +154,8 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             onClick={() => setSelectedColor('red')}
             className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
               selectedColor === 'red'
-                ? 'bg-[#FEF2F2] text-[#DC2626] border-[#DC2626] font-bold'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-st-pending-bg text-st-pending border-[#DC2626] font-bold'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-[#EF4444]" />
@@ -167,8 +167,8 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             onClick={() => setSelectedColor('blue')}
             className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
               selectedColor === 'blue'
-                ? 'bg-[#EFF6FF] text-[#2563EB] border-[#2563EB] font-bold'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-st-help-bg text-st-help border-[#2563EB] font-bold'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
@@ -180,8 +180,8 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             onClick={() => setSelectedColor('yellow')}
             className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
               selectedColor === 'yellow'
-                ? 'bg-[#FEFCE8] text-[#CA8A04] border-[#CA8A04] font-bold'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-st-submitted-bg text-st-submitted border-[#CA8A04] font-bold'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-[#EAB308]" />
@@ -193,8 +193,8 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             onClick={() => setSelectedColor('green')}
             className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
               selectedColor === 'green'
-                ? 'bg-[#F0FDF4] text-[#16A34A] border-[#16A34A] font-bold'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-st-done-bg text-st-done border-[#16A34A] font-bold'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
@@ -206,11 +206,11 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             onClick={() => setSelectedColor('grey')}
             className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
               selectedColor === 'grey'
-                ? 'bg-[#F3F4F6] text-[#6B7280] border-[#6B7280] font-bold'
-                : 'bg-[#F7F5F0] text-[#5C574B] border-[#DAD5C9] hover:bg-[#EFEBE2]'
+                ? 'bg-paper-raised text-ink-3 border-ink-3 font-bold'
+                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-[#9CA3AF]" />
+            <span className="w-2 h-2 rounded-full bg-ink-3" />
             <span>Grey [{colorCounts.grey}]</span>
           </button>
         </div>
@@ -218,13 +218,13 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
         {/* Search & Assign Task Action */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="relative flex-1 sm:w-56">
-            <Search className="w-3.5 h-3.5 text-[#6B665A] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-ink-3 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search assignments..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs font-mono border border-[#DAD5C9] bg-[#F7F5F0] focus:bg-white focus:outline-hidden rounded-xs text-[#1C2438]"
+              className="w-full pl-8 pr-3 py-1.5 text-xs font-mono border border-hairline bg-paper focus:bg-surface focus:outline-hidden rounded-xs text-ink"
             />
           </div>
 
@@ -232,7 +232,7 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             <button
               id="btn-create-task-main"
               onClick={handleOpenModal}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#1C2438] hover:bg-[#12151C] text-white text-[11px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer rounded-xs shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-ink hover:bg-[#12151C] text-white text-[11px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer rounded-xs shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Assign Task</span>
@@ -263,10 +263,10 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             />
           ))
         ) : (
-          <div className="bg-white border border-dashed border-[#DAD5C9] p-12 text-center rounded-xs">
-            <CheckSquare className="w-8 h-8 mx-auto text-[#6B665A] mb-2 opacity-60" />
-            <h4 className="text-sm font-bold text-[#1C2438] uppercase tracking-wider mb-1 font-mono">No Matching Tasks</h4>
-            <p className="text-xs text-[#6B665A] max-w-sm mx-auto font-mono">
+          <div className="bg-surface border border-dashed border-hairline p-12 text-center rounded-xs">
+            <CheckSquare className="w-8 h-8 mx-auto text-ink-3 mb-2 opacity-60" />
+            <h4 className="text-sm font-bold text-ink uppercase tracking-wider mb-1 font-mono">No Matching Tasks</h4>
+            <p className="text-xs text-ink-3 max-w-sm mx-auto font-mono">
               {searchQuery || selectedColor !== 'all'
                 ? 'Adjust color or search filters to inspect assignments.'
                 : 'No active assignments in current view.'}

@@ -4,3 +4,4 @@ export * from './Input';
 export * from './Select';
 export * from './Badge';
 export * from './AuthorityBadge';
+export * from './ModalOverlay';
