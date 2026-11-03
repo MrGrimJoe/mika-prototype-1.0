@@ -297,12 +297,14 @@ export default function App() {
     return checkHasSuperiors(currentUser.id, assignments, roles, departments, masterRootUser?.id);
   }, [currentUser, assignments, roles, departments, masterRootUser]);
 
-  // Ensure current user cannot navigate to 'tasks' if they have no superiors
+  // The Task Feed is for anyone who can receive tasks (has superiors) or send them (can create tasks).
+  // A role with neither has nothing to do there.
+  const canUseTaskFeed = hasSuperiors || canCreateTasks;
   useEffect(() => {
-    if (!hasSuperiors && activeTab === 'tasks') {
+    if (!canUseTaskFeed && activeTab === 'tasks') {
       setActiveTab('dashboard');
     }
-  }, [hasSuperiors, activeTab]);
+  }, [canUseTaskFeed, activeTab]);
 
   // Reset selected task when switching tabs
   const handleSelectTab = (tab: SidebarTab) => {
@@ -312,15 +314,16 @@ export default function App() {
 
   // Tasks relevant to current user:
   const visibleTasks = useMemo(() => {
-    if (!currentUser || !hasSuperiors) return [];
+    if (!currentUser || !canUseTaskFeed) return [];
     return tasks.filter(t => {
-      // Direct assignment
+      // Direct assignment, or tasks this user sent
       if (t.assignedToUserId === currentUser.id) return true;
+      if (t.assignedByUserId === currentUser.id) return true;
       // If master root or lead, include subordinate tasks
       if (isCurrentUserLead) return true;
       return false;
     });
-  }, [tasks, currentUser, hasSuperiors, isCurrentUserLead]);
+  }, [tasks, currentUser, canUseTaskFeed, isCurrentUserLead]);
 
   // Check authority to review / reject / approve a given task
   const checkAuthorityOverTask = (task: Task): boolean => {
@@ -782,7 +785,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={tab => { handleSelectTab(tab); setMobileNavOpen(false); }}
         isCurrentUserLead={isCurrentUserLead}
-        hasSuperiors={hasSuperiors}
+        hasSuperiors={canUseTaskFeed}
         isCollapsed={isMobile ? false : isSidebarCollapsed}
         setIsCollapsed={collapsed => (isMobile ? setMobileNavOpen(false) : setIsSidebarCollapsed(collapsed))}
         taskCount={visibleTasks.length}
