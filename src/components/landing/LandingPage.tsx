@@ -68,7 +68,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </button>
             <button
               onClick={onNavigateToCreateOrg}
-              className="px-4 py-2 bg-accent hover:bg-accent-strong text-paper rounded-xs font-mono text-xs font-medium tracking-wide shadow-xs transition-all cursor-pointer hover:shadow-sm"
+              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white rounded-xs font-mono text-xs font-medium shadow-xs transition-all cursor-pointer hover:shadow-sm"
             >
               Get started
             </button>
@@ -121,13 +121,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onNavigateToCreateOrg}
-              className="w-full sm:w-auto px-7 py-3.5 bg-accent hover:bg-accent-strong text-paper rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all hover:shadow-sm cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-accent hover:bg-accent-strong text-white rounded-xs text-xs font-mono font-semibold shadow-xs transition-all hover:shadow-sm cursor-pointer"
             >
               Create an organisation
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paper-raised text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paper-raised text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>
@@ -155,7 +155,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 />
                 <button
                   type="submit"
-                  className="px-2.5 py-1 bg-accent text-paper text-xs font-mono rounded-xs hover:bg-accent-strong transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-accent text-white text-xs font-mono rounded-xs hover:bg-accent-strong transition-colors cursor-pointer"
                 >
                   Join
                 </button>
@@ -187,8 +187,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="how-it-works" className="py-24 px-6 border-t border-hairline bg-paper-raised">
         <div className="max-w-5xl mx-auto">
           <div className="mb-14 text-center max-w-2xl mx-auto">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
-              FOUNDATIONAL ARCHITECTURE
+            <span className="text-[11px] font-mono text-ink-3">
+              How it works
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">
               A typed relationship graph, not rigid boxes.
@@ -198,8 +198,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {/* Block 1 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
-                01 // DIMENSIONAL OVERLAY
+              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+                Overlapping teams
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 One structure, every dimension.
@@ -211,8 +211,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 2 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
-                02 // DIRECTED PERMISSIONS
+              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+                Directed permissions
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Authority that makes sense.
@@ -224,8 +224,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 3 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
-                03 // AUTOMATIC REASONING
+              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+                Automatic routing
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Nothing to configure by hand.
@@ -237,8 +237,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 4 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3 block mb-3">
-                04 // RULE OF LAW
+              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+                Rules that always hold
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
                 Deterministic, always.
@@ -257,8 +257,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="graph-showcase" className="py-24 px-6 border-t border-hairline bg-paper">
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
-              RELATIONSHIP TOPOLOGY
+            <span className="text-[11px] font-mono text-ink-3">
+              Structure
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">
               The structure is the interface.
@@ -281,13 +281,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onNavigateToCreateOrg}
-              className="w-full sm:w-auto px-6 py-3 bg-accent hover:bg-accent-strong text-paper rounded-xs text-xs font-mono tracking-wider font-semibold shadow-xs transition-all cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-accent hover:bg-accent-strong text-white rounded-xs text-xs font-mono font-semibold shadow-xs transition-all cursor-pointer"
             >
               Create an organisation
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono tracking-wider font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>

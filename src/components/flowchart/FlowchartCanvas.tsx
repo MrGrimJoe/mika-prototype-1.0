@@ -193,9 +193,9 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           }}
         >
           {/* Top Paper Header Stamp */}
-          <div className="mb-6 flex items-center gap-2 text-neutral-400 font-mono text-[11px] tracking-widest uppercase">
+          <div className="mb-6 flex items-center gap-2 text-neutral-400 font-mono text-[11px] ">
             <span className="w-8 h-[1px] bg-neutral-300" />
-            <span>ORGANIZATION FLOWCHART</span>
+            <span>Organisation flowchart</span>
             <span className="w-8 h-[1px] bg-neutral-300" />
           </div>
 

@@ -3,35 +3,35 @@
  * Authoritative source for all visual tokens across Mika.
  * 
  * Rules:
- * - High-contrast editorial paper & ink palette
+ * - Quiet neutral surfaces with a single indigo accent
  * - Fixed 5-state functional task colors kept strictly segregated
- * - Distinct typography hierarchy (Source Serif 4, Inter, JetBrains Mono)
+ * - One type voice: the system UI font (SF Pro on Apple devices, Inter elsewhere); mono only for code
  * - Calibrated transition physics
  */
 
 export const colors = {
-  paper: '#F7F5F0',
-  paperRaised: '#EFEBE2',
-  paperSunken: '#E8E4DA',
-  hairline: '#DAD5C9',
-  mutedText: '#6B665A',
-  secondaryText: '#5C574B',
-  ink: '#1C2438',
-  accent: '#2F3B7A',
+  paper: '#F5F5F7',
+  paperRaised: '#EFEFF3',
+  paperSunken: '#E8E8ED',
+  hairline: '#E1E1E6',
+  mutedText: '#5E5E67',
+  secondaryText: '#46464D',
+  ink: '#1D1D22',
+  accent: '#3F4FD0',
 
   // Dark appearance. Mirrors the CSS variables in src/index.css, which follow
   // the system setting (prefers-color-scheme); there is no in-app switch.
   dark: {
-    paper: '#12151C',
-    paperRaised: '#181C26',
-    paperSunken: '#0E1017',
-    surface: '#1A1F2B',
-    hairline: '#2B3345',
-    mutedText: '#9AA4BA',
-    secondaryText: '#A5AFC4',
-    ink: '#E8ECF5',
-    accent: '#5668D4',
-    accentText: '#8D9CF2',
+    paper: '#101014',
+    paperRaised: '#18181D',
+    paperSunken: '#0B0B0E',
+    surface: '#1C1C22',
+    hairline: '#2C2C34',
+    mutedText: '#9A9AA5',
+    secondaryText: '#C4C4CC',
+    ink: '#F5F5F7',
+    accent: '#5565E6',
+    accentText: '#8E9BFF',
   }
 } as const;
 
@@ -88,9 +88,9 @@ export const taskStateColors = {
 export type TaskStatusKey = keyof typeof taskStateColors;
 
 export const typography = {
-  fontSerif: 'Source Serif 4, Georgia, serif',
-  fontBody: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontMono: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+  fontSerif: '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", Roboto, sans-serif',
+  fontBody: '-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", Roboto, sans-serif',
+  fontMono: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
   
   // Mathematical type scale
   scale: {

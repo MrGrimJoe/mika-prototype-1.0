@@ -56,7 +56,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900">
-                  LIVE ASSISTANCE SERVICE
+                  Live assistance
                 </h2>
                 <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-1.5 py-0.5 border border-emerald-300 rounded-xs">
                   100% Free
@@ -135,7 +135,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                 {/* Call Card */}
                 <div
                   onClick={() => setActiveTab('call')}
-                  className="border border-neutral-300 bg-[#fbfbfa] hover:bg-[#f6fbf7] hover:border-emerald-600 p-3.5 rounded-xs cursor-pointer transition-all space-y-2 group shadow-[2px_2px_0px_#e5e5e5]"
+                  className="border border-neutral-300 bg-surface hover:bg-[#f6fbf7] hover:border-emerald-600 p-3.5 rounded-xs cursor-pointer transition-all space-y-2 group shadow-[2px_2px_0px_#e5e5e5]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 flex items-center gap-1.5">
@@ -158,7 +158,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                 {/* Text Card */}
                 <div
                   onClick={() => setActiveTab('text')}
-                  className="border border-neutral-300 bg-[#fbfbfa] hover:bg-[#f6fbf7] hover:border-emerald-600 p-3.5 rounded-xs cursor-pointer transition-all space-y-2 group shadow-[2px_2px_0px_#e5e5e5]"
+                  className="border border-neutral-300 bg-surface hover:bg-[#f6fbf7] hover:border-emerald-600 p-3.5 rounded-xs cursor-pointer transition-all space-y-2 group shadow-[2px_2px_0px_#e5e5e5]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-neutral-900 flex items-center gap-1.5">
@@ -180,8 +180,8 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
               </div>
 
               {/* Steps overview */}
-              <div className="border border-neutral-300 bg-[#fbfbfa] p-3.5 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-900 text-xs uppercase tracking-wide block">
+              <div className="border border-neutral-300 bg-surface p-3.5 rounded-xs space-y-2">
+                <span className="font-bold text-neutral-900 text-xs block">
                   How On-the-Spot Setup Works:
                 </span>
                 <ol className="space-y-1.5 text-[11px] text-neutral-700 list-decimal list-inside leading-relaxed">
@@ -243,7 +243,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
                       Dial directly to speak with an employee immediately:
                     </p>
                     <div className="flex items-center justify-between bg-surface border border-neutral-400 p-2 rounded-xs">
-                      <span className="font-bold text-sm text-neutral-900 tracking-wider">
+                      <span className="font-bold text-sm text-neutral-900 ">
                         +1 (800) 555-0199
                       </span>
                       <a
@@ -258,7 +258,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
 
                   {/* Request Callback Form */}
                   <form onSubmit={handleCallSubmit} className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-3">
-                    <div className="font-bold text-neutral-900 text-xs uppercase tracking-wide">
+                    <div className="font-bold text-neutral-900 text-xs ">
                       Or Request An Immediate Callback
                     </div>
                     <p className="text-[11px] text-neutral-600">
@@ -359,7 +359,7 @@ export const CallAssistanceModal: React.FC<CallAssistanceModalProps> = ({ isOpen
 
                   {/* In-App Text Form */}
                   <form onSubmit={handleTextSubmit} className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-3">
-                    <div className="font-bold text-neutral-900 text-xs uppercase tracking-wide">
+                    <div className="font-bold text-neutral-900 text-xs ">
                       Text What You Want Built
                     </div>
                     <p className="text-[11px] text-neutral-600">

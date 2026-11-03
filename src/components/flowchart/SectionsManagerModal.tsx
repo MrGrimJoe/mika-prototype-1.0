@@ -48,7 +48,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
   };
 
   const SHADES: Array<{ id: Section['shade']; label: string; bg: string }> = [
-    { id: 'ash', label: 'Ash (Grey-100)', bg: 'bg-[#eeeeea]' },
+    { id: 'ash', label: 'Ash (Grey-100)', bg: 'bg-paper-raised' },
     { id: 'silver', label: 'Silver (Zinc-200)', bg: 'bg-[#e4e4e7]' },
     { id: 'slate', label: 'Slate (Slate-200)', bg: 'bg-[#e2e8f0]' },
     { id: 'charcoal', label: 'Charcoal (Grey-300)', bg: 'bg-[#d4d4d8]' },
@@ -76,7 +76,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
         <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
           <div className="flex items-center gap-2">
             <Layers size={18} className="text-neutral-800" />
-            <h2 className="font-bold text-base tracking-tight">MANAGED SECTIONS</h2>
+            <h2 className="font-bold text-base tracking-tight">Managed sections</h2>
             <span className="text-xs text-neutral-500 bg-neutral-100 px-1.5 py-0.5 border border-neutral-300 rounded-xs">
               {sections.length} Active
             </span>
@@ -167,7 +167,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                           <span className="text-neutral-400">§</span>
                           {section.name}
                         </span>
-                        <span className="text-[11px] uppercase font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
+                        <span className="text-[11px] font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
                           {section.shade}
                         </span>
                         <span className="text-[11px] text-neutral-500">

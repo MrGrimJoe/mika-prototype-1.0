@@ -198,7 +198,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
               setErrorMessage(null);
               setCreateModalOpen(true);
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-mono font-bold uppercase tracking-wider rounded-xs cursor-pointer shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs cursor-pointer shadow-xs transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Start Department Meeting</span>
@@ -215,7 +215,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
       {/* Active Meetings Section */}
       {activeMeetings.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-st-pending">
+          <div className="flex items-center gap-2 text-xs font-semibold text-st-pending">
             <Radio className="w-4 h-4 animate-pulse" />
             <span>Live Meetings in Progress ({activeMeetings.length})</span>
           </div>
@@ -231,7 +231,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                     <span className="px-2 py-0.5 bg-st-help-bg text-st-help border border-st-help-border text-[11px] font-mono rounded-xs font-bold">
                       {meeting.deptName}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs text-st-pending font-mono font-bold">
+                    <span className="flex items-center gap-1.5 text-xs text-st-pending font-semibold">
                       <span className="w-2 h-2 rounded-full bg-[#DC2626] animate-ping" />
                       LIVE
                     </span>
@@ -250,7 +250,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                     href={meeting.meetLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 py-2 bg-[#15803D] hover:bg-[#166534] text-white text-xs font-mono font-bold uppercase tracking-wider text-center rounded-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                    className="flex-1 py-2 bg-[#15803D] hover:bg-[#166534] text-white text-xs font-semibold text-center rounded-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Join Google Meet</span>
@@ -259,7 +259,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                   {(currentUser.id === meeting.startedByUserId || currentUser.id === masterRootUserId) && (
                     <button
                       onClick={() => handleEndMeeting(meeting)}
-                      className="px-3 py-2 bg-paper hover:bg-st-pending-bg text-st-pending border border-hairline text-xs font-mono font-bold uppercase tracking-wider rounded-xs cursor-pointer transition-colors"
+                      className="px-3 py-2 bg-paper hover:bg-st-pending-bg text-st-pending border border-hairline text-xs font-semibold rounded-xs cursor-pointer transition-colors"
                     >
                       End
                     </button>
@@ -273,7 +273,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
       {/* Past Meeting History Section */}
       <div className="bg-surface border border-hairline rounded-xs p-5 shadow-2xs">
-        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-ink-3 mb-4 flex items-center gap-2">
+        <h3 className="text-xs font-semibold text-ink-3 mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-ink-2" />
           <span>Meeting History & Attendance Logs</span>
         </h3>
@@ -315,7 +315,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
         <ModalOverlay onClose={() => setCreateModalOpen(false)} className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface border border-hairline rounded-xs max-w-md w-full p-6 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-hairline mb-4">
-              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-ink flex items-center gap-2">
                 <Video className="w-4 h-4 text-accent-fg" />
                 Launch Google Meet Conference
               </h3>
@@ -329,7 +329,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
             <form onSubmit={handleStartMeeting} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+                <label className="block text-[11px] text-ink-2 font-bold mb-1">
                   Meeting Title / Topic:
                 </label>
                 <input
@@ -343,7 +343,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+                <label className="block text-[11px] text-ink-2 font-bold mb-1">
                   Department / Section (Members will be notified):
                 </label>
                 <select
@@ -378,7 +378,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                 <button
                   type="submit"
                   disabled={isStarting}
-                  className="px-4 py-1.5 bg-accent hover:bg-accent-strong text-white text-xs font-mono font-bold uppercase tracking-wider rounded-xs cursor-pointer shadow-xs disabled:opacity-50"
+                  className="px-4 py-1.5 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   {isStarting ? 'Generating Link...' : 'Launch Google Meet'}
                 </button>

@@ -224,12 +224,12 @@ export const OverlappingOrgShowcase: React.FC = () => {
                     {node.label}
                   </span>
                   {node.type === 'section' && (
-                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
+                    <span className="text-[11px] font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       section
                     </span>
                   )}
                   {node.type === 'subject' && (
-                    <span className="text-[8px] font-mono uppercase px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
+                    <span className="text-[11px] font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       subject
                     </span>
                   )}

@@ -136,7 +136,15 @@ export default function App() {
   const [authView, setAuthView] = useState<'landing' | 'signin' | 'create-org'>('landing');
   const [createOrgPrefillGoogle, setCreateOrgPrefillGoogle] = useState<any | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = (e: MediaQueryListEvent) => setIsSidebarCollapsed(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
   const [activeJoinModalLink, setActiveJoinModalLink] = useState<JoinLink | null>(null);
   const [viewingProfileUser, setViewingProfileUser] = useState<User | null>(null);
@@ -761,15 +769,15 @@ export default function App() {
       {/* Main Content Stage */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative z-10 bg-paper">
         {/* Top Header Bar with active breadcrumb & Top-Right Avatar Entry Point */}
-        <header className="h-14 bg-surface border-b border-hairline px-6 flex items-center justify-between shrink-0 z-20">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-ink-3">
+        <header className="h-14 bg-surface border-b border-hairline px-4 sm:px-6 flex items-center justify-between shrink-0 z-20">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="hidden sm:inline text-[13px] text-ink-3 truncate">
               {organization?.name || 'Oakridge Academy'}
             </span>
-            <span className="text-hairline font-mono">/</span>
-            <span className="text-xs font-mono font-bold text-ink capitalize">
-              {activeTab}
-            </span>
+            <span className="hidden sm:inline text-edge" aria-hidden="true">/</span>
+            <h1 className="text-[15px] font-semibold text-ink truncate">
+              {({ dashboard: 'Dashboard', tasks: 'Task Feed', team: 'Staff Directory', files: 'File Vault', chat: 'Messages', invites: 'Invitations', meetings: 'Meetings', admin: 'Administration', settings: 'Settings' } as Record<string, string>)[activeTab] || activeTab}
+            </h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -779,7 +787,7 @@ export default function App() {
               onClick={() => setActiveTab('settings')}
               className={`p-2 rounded-xs border transition-colors cursor-pointer ${
                 activeTab === 'settings'
-                  ? 'bg-ink text-white border-ink'
+                  ? 'bg-accent text-white border-ink'
                   : 'text-ink-2 hover:text-ink hover:bg-paper border-hairline'
               }`}
               title="Settings & Integrations"
@@ -795,7 +803,7 @@ export default function App() {
                 className="flex items-center gap-2 p-1.5 rounded-xs hover:bg-paper border border-hairline transition-colors cursor-pointer"
                 title="Account Menu"
               >
-                <div className="w-7 h-7 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
+                <div className="w-7 h-7 rounded-xs bg-accent text-white flex items-center justify-center font-semibold text-xs shadow-2xs">
                   {currentUser.preferredName?.[0] || currentUser.fullName?.[0] || 'U'}
                 </div>
                 <span className="text-xs font-semibold text-ink hidden sm:inline max-w-[120px] truncate">

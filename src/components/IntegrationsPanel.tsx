@@ -172,7 +172,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
       {/* 1. Third-Party Integrations Cluster */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Developer & Design Platforms</span>
+          <span className="text-xs font-semibold text-slate-500">Developer & Design Platforms</span>
           <div className="h-[1px] flex-1 bg-slate-200" />
         </div>
 
@@ -335,7 +335,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
       {/* 2. Google Workspace Provider Cluster */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Google Workspace Applications</span>
+          <span className="text-xs font-semibold text-slate-500">Google Workspace Applications</span>
           <div className="h-[1px] flex-1 bg-slate-200" />
         </div>
 
@@ -362,7 +362,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium text-sm text-slate-900">{svc.name}</h4>
                       {svc.enterpriseOnly && (
-                        <span className="text-[11px] uppercase font-semibold tracking-wider text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
+                        <span className="text-[11px] font-semibold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
                           Enterprise
                         </span>
                       )}

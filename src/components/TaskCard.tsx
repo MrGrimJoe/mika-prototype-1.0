@@ -55,7 +55,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {/* Status Badge per B7 & B9 */}
           <Badge
             variant={task.status as any}
-            className="text-[11px] font-mono font-bold uppercase tracking-wider px-2 py-0.5"
+            className="text-[11px] font-semibold px-2 py-0.5"
           >
             <span 
               className="w-1.5 h-1.5 rounded-full mr-1.5 inline-block" 

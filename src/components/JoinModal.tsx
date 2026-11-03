@@ -176,7 +176,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
                       <div>
                         {conn ? (
-                          <span className="px-2 py-0.5 text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded flex items-center gap-1">
+                          <span className="px-2 py-0.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded flex items-center gap-1">
                             <Check className="w-2.5 h-2.5" />
                             Connected
                           </span>
@@ -184,7 +184,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                           <button
                             type="button"
                             onClick={() => setConnectingTool(tool)}
-                            className="px-2.5 py-1 bg-accent hover:bg-[#232c5c] text-white text-[11px] font-medium rounded cursor-pointer"
+                            className="px-2.5 py-1 bg-accent hover:bg-accent-strong text-white text-[11px] font-medium rounded cursor-pointer"
                           >
                             Connect
                           </button>
@@ -218,7 +218,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               className={`flex-1 py-2 text-white rounded-lg font-semibold text-xs shadow-xs transition-colors ${
                 !allRequirementsSatisfied
                   ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
-                  : 'bg-accent hover:bg-[#232c5c] cursor-pointer'
+                  : 'bg-accent hover:bg-accent-strong cursor-pointer'
               }`}
             >
               Accept & Enter Role

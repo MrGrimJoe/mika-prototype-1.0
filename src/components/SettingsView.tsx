@@ -197,12 +197,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3">
-              ORGANISATION SETTINGS
+            <span className="text-[11px] font-mono text-ink-3">
+              Organisation settings
             </span>
             {isMasterRoot && (
-              <span className="text-[11px] font-mono bg-ink text-white px-1.5 py-0.5 rounded-xs">
-                MASTER ROOT
+              <span className="text-[11px] font-mono bg-accent text-white px-1.5 py-0.5 rounded-xs">
+                Master root
               </span>
             )}
           </div>
@@ -239,7 +239,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('integrations')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'integrations'
-              ? 'bg-ink text-white shadow-xs font-bold'
+              ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
@@ -258,7 +258,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('general')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'general'
-              ? 'bg-ink text-white shadow-xs font-bold'
+              ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
@@ -270,7 +270,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('storage')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'storage'
-              ? 'bg-ink text-white shadow-xs font-bold'
+              ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
@@ -282,7 +282,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           onClick={() => setActiveTab('roles')}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
             activeTab === 'roles'
-              ? 'bg-ink text-white shadow-xs font-bold'
+              ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
           }`}
         >
@@ -357,7 +357,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </p>
               </div>
               {isAnyRoot ? (
-                <span className="text-[11px] font-mono uppercase bg-accent text-white px-2 py-1 rounded-xs">
+                <span className="text-[11px] font-mono bg-accent text-white px-2 py-1 rounded-xs">
                   {isMasterRoot ? 'Master Root Permitted' : 'Root Authority Permitted'}
                 </span>
               ) : (
@@ -397,7 +397,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <a
                 href="/mika-companion.user.js"
                 download
-                className="px-3 py-1.5 bg-ink text-white rounded-xs text-[11px] font-mono font-bold hover:bg-accent-strong transition-colors inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-accent text-white rounded-xs text-[11px] font-semibold hover:bg-accent-strong transition-colors inline-flex items-center gap-1.5"
               >
                 <span>Download Userscript</span>
                 <ExternalLink className="w-3 h-3" />

@@ -186,7 +186,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
         ))}
       </div>
 
-      <p className="text-[11px] font-mono-code text-stone-500 px-6 uppercase tracking-wider">
+      <p className="text-[11px] font-mono-code text-stone-500 px-6 ">
         {currentStep + 1} / 7 · {stepLabels[currentStep]}
       </p>
 
@@ -207,7 +207,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             <div className="space-y-3 max-w-xs mx-auto">
               <button
                 onClick={handleNext}
-                className="w-full h-11 bg-accent hover:bg-[#232c5c] text-white font-medium rounded-lg text-sm shadow-sm transition-all cursor-pointer"
+                className="w-full h-11 bg-accent hover:bg-accent-strong text-white font-medium rounded-lg text-sm shadow-sm transition-all cursor-pointer"
               >
                 Create an organisation
               </button>
@@ -436,7 +436,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
             {/* Total Display */}
             <div className="border-t border-stone-200 pt-4 flex items-baseline justify-between bg-paper p-4 rounded-xl border">
               <div>
-                <span className="text-xs uppercase font-semibold tracking-wider text-stone-500 block">Total Monthly Cost</span>
+                <span className="text-xs font-semibold text-stone-500 block">Total Monthly Cost</span>
                 <span className="text-[11px] text-stone-500 font-mono-code">
                   (${peopleCost.toFixed(2)} + ${storageCost.toFixed(2)})
                 </span>
@@ -580,7 +580,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
               <div className="bg-surface border-l-4 border-l-[#DC2626] border border-stone-200 rounded-lg p-3 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-stone-900">Term 2 Exam Math Questions</h4>
-                  <span className="text-[11px] text-red-600 font-semibold font-mono-code">DUE TOMORROW</span>
+                  <span className="text-[11px] text-red-600 font-semibold font-mono-code">Due tomorrow</span>
                 </div>
                 <p className="text-[11px] text-stone-500 mt-1">Delegated by Section Head · Middle School</p>
               </div>
@@ -609,7 +609,7 @@ export const OnboardingWalkthrough: React.FC<OnboardingWalkthroughProps> = ({
 
         <button
           onClick={handleNext}
-          className="px-6 py-2 bg-accent hover:bg-[#232c5c] text-white text-xs font-semibold rounded-lg shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer"
+          className="px-6 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-lg shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer"
         >
           {currentStep === 6 ? (
             <>

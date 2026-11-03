@@ -216,7 +216,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 <div className="mt-3 pt-2 border-t border-[#FCA5A5] flex justify-end">
                   <button
                     onClick={() => onNavigateToCreateOrg(googleDataForCreate)}
-                    className="text-[11px] font-mono font-bold text-accent-fg underline cursor-pointer"
+                    className="text-[11px] font-semibold text-accent-fg underline cursor-pointer"
                   >
                     Create organisation with this account &rarr;
                   </button>
@@ -229,7 +229,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
           <div className="grid grid-cols-2 gap-1 bg-paper-sunken p-1 rounded-xs border border-hairline mb-6">
             <button
               onClick={() => { setAuthMethod('google'); setErrorMessage(null); }}
-              className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
+              className={`py-2 text-xs font-mono rounded-xs transition-all cursor-pointer ${
                 authMethod === 'google'
                   ? 'bg-paper text-ink font-bold shadow-xs border border-hairline'
                   : 'text-ink-3 hover:text-ink'
@@ -239,7 +239,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
             </button>
             <button
               onClick={() => { setAuthMethod('email'); setErrorMessage(null); }}
-              className={`py-2 text-xs font-mono uppercase tracking-wider rounded-xs transition-all cursor-pointer ${
+              className={`py-2 text-xs font-mono rounded-xs transition-all cursor-pointer ${
                 authMethod === 'email'
                   ? 'bg-paper text-ink font-bold shadow-xs border border-hairline'
                   : 'text-ink-3 hover:text-ink'
@@ -255,7 +255,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               <button
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-surface hover:bg-neutral-50 text-[#3c4043] border border-[#dadce0] rounded-xs font-sans text-sm font-medium shadow-xs hover:shadow transition-all disabled:opacity-50 cursor-pointer"
+                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-surface hover:bg-neutral-50 text-ink-2 border border-hairline rounded-xs font-sans text-sm font-medium shadow-xs hover:shadow transition-all disabled:opacity-50 cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -296,7 +296,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                   </p>
                   <button
                     onClick={() => setEmailSent(false)}
-                    className="mt-3 text-xs font-mono uppercase underline text-accent-fg font-semibold cursor-pointer"
+                    className="mt-3 text-xs font-mono underline text-accent-fg font-semibold cursor-pointer"
                   >
                     Try another email
                   </button>
@@ -323,7 +323,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                   <button
                     type="submit"
                     disabled={emailLoading}
-                    className="w-full py-2.5 bg-accent hover:bg-accent-strong text-paper rounded-xs font-mono text-xs uppercase tracking-wider font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="w-full py-2.5 bg-accent hover:bg-accent-strong text-white rounded-xs font-mono text-xs font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <span>{emailLoading ? 'Verifying...' : 'Proceed with Email'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -336,8 +336,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
           {/* Quick Demo Switcher */}
           <div className="mt-8 pt-5 border-t border-hairline">
             <div className="flex items-center justify-between mb-3 text-[11px] font-mono text-ink-3">
-              <span>SAMPLE IDENTITIES</span>
-              <span>ONE-CLICK ACCESS</span>
+              <span>Sample identities</span>
+              <span>One-click access</span>
             </div>
 
             <div className="space-y-1.5">

@@ -32,7 +32,7 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
               <RotateCcw size={14} />
             </div>
             <h3 className="font-bold text-sm text-neutral-900">
-              RESET FLOWCHART CANVAS
+              Reset flowchart canvas
             </h3>
           </div>
           <button

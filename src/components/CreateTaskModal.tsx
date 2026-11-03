@@ -194,7 +194,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         <div className="bg-surface rounded-xs shadow-2xl max-w-md w-full p-6 border border-hairline">
           <div className="flex items-center gap-2 text-st-pending mb-3">
             <ShieldAlert className="w-5 h-5" />
-            <h3 className="text-sm font-bold uppercase tracking-wider font-mono">
+            <h3 className="text-sm font-bold font-mono">
               Authority Required
             </h3>
           </div>
@@ -204,7 +204,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           <div className="flex justify-end">
             <button
               onClick={onClose}
-              className="px-4 py-1.5 bg-ink hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer"
+              className="px-4 py-1.5 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -221,7 +221,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         <div className="flex items-center justify-between pb-3.5 border-b border-hairline mb-4">
           <div className="flex items-center gap-2">
             <CheckSquare className="w-4 h-4 text-ink" />
-            <h3 className="text-sm font-bold text-ink uppercase tracking-wider font-mono">
+            <h3 className="text-sm font-bold text-ink font-mono">
               Assign Authoritative Task
             </h3>
           </div>
@@ -235,7 +235,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
           <div>
-            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+            <label className="block text-[11px] text-ink-2 font-bold mb-1">
               Task Title:
             </label>
             <input
@@ -250,7 +250,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="relative">
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold">
+              <label className="block text-[11px] text-ink-2 font-bold">
                 Description & Specifications:
               </label>
               <span className="text-[11px] text-slate-400 font-mono">
@@ -278,7 +278,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             {/* Referenced Mentions Chips */}
             {mentions.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                <span className="text-[11px] uppercase font-bold text-slate-400 font-mono">Linked:</span>
+                <span className="text-[11px] font-bold text-slate-400 font-mono">Linked:</span>
                 {mentions.map((m) => (
                   <span
                     key={m.displayName}
@@ -300,7 +300,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+              <label className="block text-[11px] text-ink-2 font-bold mb-1">
                 Authorized Department:
               </label>
               <select
@@ -315,7 +315,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+              <label className="block text-[11px] text-ink-2 font-bold mb-1">
                 Target Role:
               </label>
               <select
@@ -332,7 +332,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+              <label className="block text-[11px] text-ink-2 font-bold mb-1">
                 Assign to Member:
               </label>
               <select
@@ -347,7 +347,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-1">
+              <label className="block text-[11px] text-ink-2 font-bold mb-1">
                 Due Date (Google Calendar Sync):
               </label>
               <input
@@ -361,7 +361,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           {/* B4: Confirmation Mode Selection */}
           <div className="pt-2">
-            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-2">
+            <label className="block text-[11px] text-ink-2 font-bold mb-2">
               Confirmation Mode (Creator Choice):
             </label>
             <div className="grid grid-cols-2 gap-3">
@@ -411,7 +411,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           {/* B3: Reference File Context Attachment */}
           <div className="pt-2">
-            <label className="block text-[11px] uppercase tracking-wider text-ink-2 font-bold mb-2">
+            <label className="block text-[11px] text-ink-2 font-bold mb-2">
               Reference Context File (Optional):
             </label>
             {referenceFile ? (
@@ -461,7 +461,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-ink hover:bg-[#12151C] text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer shadow-xs"
+              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs transition-colors cursor-pointer shadow-xs"
             >
               Assign Deliverable
             </button>

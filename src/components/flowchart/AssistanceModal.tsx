@@ -458,7 +458,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="font-bold text-lg text-neutral-900 tracking-tight">
-                      ASSISTANCE SERVICE
+                      Assistance
                     </h2>
                     <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2 py-0.5 border border-emerald-300 rounded-xs">
                       100% Free
@@ -480,7 +480,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
 
             {/* Brief Explanation */}
             <div className="bg-[#f2f7f4] border border-emerald-300/80 p-4 rounded-xs space-y-2 text-neutral-800">
-              <span className="font-bold text-xs uppercase tracking-wider text-emerald-950 flex items-center gap-1.5">
+              <span className="font-bold text-xs text-emerald-950 flex items-center gap-1.5">
                 <Sparkles size={14} className="text-emerald-700" />
                 What This Option Does:
               </span>
@@ -492,7 +492,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
             {/* Name Input Form */}
             <form onSubmit={handleStartChat} className="space-y-4 pt-1">
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wide flex items-center gap-1.5">
+                <label className="block text-xs font-bold text-neutral-800 flex items-center gap-1.5">
                   <User size={13} className="text-neutral-600" />
                   Add Your Name:
                 </label>
@@ -533,7 +533,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
           /* Live Chat UI with Employee Helper */
           <div className="flex flex-col h-[80vh]">
             {/* Chat Top Bar */}
-            <div className="bg-ink text-white px-4 py-3 border-b-2 border-neutral-900 flex items-center justify-between">
+            <div className="bg-accent text-white px-4 py-3 border-b-2 border-neutral-900 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
@@ -594,7 +594,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
             {showCallOption && (
               <div className="bg-st-done-bg border-b border-emerald-300 p-3 text-xs space-y-2 text-neutral-900 animate-in slide-in-from-top-2 duration-150">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[11px] text-emerald-950 uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="font-bold text-[11px] text-emerald-950 flex items-center gap-1.5">
                     <Phone size={13} className="text-emerald-700" />
                     Direct Phone Line & Instant Callback:
                   </span>
@@ -681,7 +681,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                       {/* Interactive Canvas Action Trigger */}
                       {msg.suggestedAction && onApplyStructure && (
                         <div className="mt-2 pt-2 border-t border-neutral-200 bg-neutral-50 -mx-3 -mb-3 p-3 rounded-b-sm space-y-1.5">
-                          <span className="text-[11px] font-mono font-bold text-neutral-600 uppercase tracking-wide block">
+                          <span className="text-[11px] font-semibold text-neutral-600 block">
                             Prepared Structure:
                           </span>
                           <p className="text-[11px] font-sans text-neutral-600">
@@ -718,7 +718,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
 
             {/* Quick Prompt Suggestions */}
             <div className="border-t border-neutral-200 bg-surface px-3 py-2 flex items-center gap-1.5 overflow-x-auto text-[11px]">
-              <span className="text-[11px] text-neutral-400 font-bold uppercase shrink-0">
+              <span className="text-[11px] text-neutral-400 font-bold shrink-0">
                 Quick Prompts:
               </span>
               <button

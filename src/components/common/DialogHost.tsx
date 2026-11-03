@@ -59,7 +59,7 @@ export const DialogHost: React.FC = () => {
                 className={`px-4 py-2 text-sm font-medium rounded-xs cursor-pointer ${
                   current.destructive
                     ? 'bg-[#B91C1C] hover:bg-[#991B1B] text-white'
-                    : 'bg-ink hover:bg-accent text-paper'
+                    : 'bg-accent hover:bg-accent text-white'
                 }`}
               >
                 {current.confirmLabel}

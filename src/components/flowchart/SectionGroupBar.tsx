@@ -45,7 +45,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
   };
 
   const SHADES: Array<{ id: Section['shade']; label: string; bg: string }> = [
-    { id: 'ash', label: 'Ash (Grey-100)', bg: 'bg-[#eeeeea]' },
+    { id: 'ash', label: 'Ash (Grey-100)', bg: 'bg-paper-raised' },
     { id: 'silver', label: 'Silver (Zinc-200)', bg: 'bg-[#e4e4e7]' },
     { id: 'slate', label: 'Slate (Slate-200)', bg: 'bg-[#e2e8f0]' },
     { id: 'charcoal', label: 'Charcoal (Grey-300)', bg: 'bg-[#d4d4d8]' },
@@ -114,7 +114,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                   id="existing-sections-menu"
                   className="absolute bottom-full mb-2 left-0 w-56 bg-surface border border-neutral-900 rounded-xs shadow-[3px_3px_0px_#18181b] p-1 z-50 flex flex-col gap-1 max-h-48 overflow-y-auto"
                 >
-                  <div className="text-[11px] uppercase font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
+                  <div className="text-[11px] font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
                     Choose Section
                   </div>
                   {sections.map((sec) => (
@@ -206,7 +206,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Shades Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[11px] text-neutral-500 uppercase">Shade:</span>
+              <span className="text-[11px] text-neutral-500 ">Shade:</span>
               <div className="flex items-center gap-1 bg-surface p-1 border border-neutral-300 rounded-xs">
                 {SHADES.map((s) => (
                   <button aria-label={s.label}
@@ -226,7 +226,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Border Style Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[11px] text-neutral-500 uppercase">Border:</span>
+              <span className="text-[11px] text-neutral-500 ">Border:</span>
               <select
                 value={selectedBorderStyle}
                 onChange={(e) => setSelectedBorderStyle(e.target.value as Section['borderStyle'])}
@@ -252,7 +252,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
       {/* Delete Confirmation Options */}
       {showDeleteConfirm && (
-        <div className="border-t border-neutral-300 pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 bg-[#f4f4f0] p-2 rounded-xs">
+        <div className="border-t border-neutral-300 pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 bg-paper p-2 rounded-xs">
           <div className="text-xs text-neutral-800 font-medium">
             Remove {count} selected department(s)? Sub-branches behavior:
           </div>

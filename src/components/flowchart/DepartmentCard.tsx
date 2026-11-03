@@ -34,7 +34,7 @@ interface DepartmentCardProps {
 }
 
 const SHADE_CARD_STYLES: Record<Section['shade'], { bg: string; border: string; badge: string; shadow: string }> = {
-  ash: { bg: 'bg-paper', border: 'border-neutral-400', badge: 'bg-[#eeeeea] text-neutral-800 border-neutral-400', shadow: 'shadow-[3px_3px_0px_#52525b]' },
+  ash: { bg: 'bg-paper', border: 'border-neutral-400', badge: 'bg-paper-raised text-neutral-800 border-neutral-400', shadow: 'shadow-[3px_3px_0px_#52525b]' },
   silver: { bg: 'bg-[#f4f4f5]', border: 'border-zinc-500', badge: 'bg-[#e4e4e7] text-zinc-800 border-zinc-400', shadow: 'shadow-[3px_3px_0px_#3f3f46]' },
   slate: { bg: 'bg-[#f1f5f9]', border: 'border-slate-500', badge: 'bg-[#e2e8f0] text-slate-800 border-slate-400', shadow: 'shadow-[3px_3px_0px_#334155]' },
   charcoal: { bg: 'bg-[#e4e4e7]', border: 'border-neutral-700', badge: 'bg-[#d4d4d8] text-neutral-900 border-neutral-500', shadow: 'shadow-[3px_3px_0px_#262626]' },
@@ -197,8 +197,8 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       <div
         className={`border-b-[1.5px] border-neutral-900 px-3 py-2.5 flex flex-col gap-1 transition-colors ${
           isRoot
-            ? 'bg-ink text-white'
-            : 'bg-[#f6f5f0] text-neutral-900'
+            ? 'bg-accent text-white'
+            : 'bg-paper text-neutral-900'
         }`}
       >
         <div className="flex items-center justify-between">
@@ -210,7 +210,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 title="Main department cannot be grouped into sections or deleted."
               >
                 <Lock size={10} className="text-amber-300" />
-                <span className="font-bold tracking-wide">PRIMARY ROOT</span>
+                <span className="font-bold ">Primary root</span>
               </div>
             ) : (
               <button aria-label={isMultiSelected ? 'Deselect department' : 'Select department for grouping'}
@@ -348,7 +348,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
         {/* Section: ROOT */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] font-bold text-indigo-950 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="font-mono text-[11px] font-bold text-indigo-950 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full inline-block" />
               <span>Root (Leadership)</span>
               {node.roots.length > 0 && (
@@ -400,7 +400,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               onChange={(e) => setRootInput(e.target.value)}
               onKeyDown={handleRootKeyDown}
               placeholder="Type leadership root & hit Enter..."
-              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-indigo-400 focus:border-indigo-600 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-indigo-600/30 transition-all placeholder:text-neutral-400 placeholder:italic"
+              className="w-full bg-surface border border-neutral-300 hover:border-indigo-400 focus:border-indigo-600 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-indigo-600/30 transition-all placeholder:text-neutral-400 placeholder:italic"
             />
           </div>
         </div>
@@ -411,7 +411,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
         {/* Section: ROLES */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] font-bold text-neutral-700 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="font-mono text-[11px] font-bold text-neutral-700 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-slate-500 rounded-full inline-block" />
               <span>Roles (Positions)</span>
               {node.roles.length > 0 && (
@@ -462,7 +462,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               onChange={(e) => setRoleInput(e.target.value)}
               onKeyDown={handleRoleKeyDown}
               placeholder="Type role position & hit Enter..."
-              className="w-full bg-[#fcfcfb] border border-neutral-300 hover:border-slate-400 focus:border-slate-800 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-slate-800/20 transition-all placeholder:text-neutral-400 placeholder:italic"
+              className="w-full bg-surface border border-neutral-300 hover:border-slate-400 focus:border-slate-800 focus:bg-surface text-neutral-900 px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-none focus:ring-1 focus:ring-slate-800/20 transition-all placeholder:text-neutral-400 placeholder:italic"
             />
           </div>
         </div>
@@ -478,7 +478,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
           <div className="space-y-1.5">
             <div className="font-bold text-neutral-900 flex items-center gap-1">
               <Trash2 size={13} className="text-neutral-800" />
-              <span>REMOVE DEPARTMENT</span>
+              <span>Remove department</span>
             </div>
             <p className="text-[11px] text-neutral-600 leading-snug">
               "{node.department || 'This department'}" has {node.children.length} sub-branch(es). How would you like to handle them?

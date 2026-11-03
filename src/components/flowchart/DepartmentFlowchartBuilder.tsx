@@ -417,7 +417,7 @@ export function DepartmentFlowchartBuilder({
               </button>
             )}
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="text-emerald-400 font-mono font-bold text-[11px] uppercase tracking-wider bg-emerald-950/80 px-2.5 py-1 rounded-xs border border-emerald-700/60 shrink-0">
+              <span className="text-emerald-400 font-semibold text-[11px] bg-emerald-950/80 px-2.5 py-1 rounded-xs border border-emerald-700/60 shrink-0">
                 Step 4: Org Graph
               </span>
               <span className="text-white font-semibold text-sm hidden md:inline truncate max-w-sm">
@@ -440,9 +440,9 @@ export function DepartmentFlowchartBuilder({
               <button
                 type="button"
                 onClick={() => onContinue(rootNode, sections)}
-                className="flex items-center gap-2.5 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold rounded-xs shadow-[0_2px_14px_rgba(16,185,129,0.45)] text-xs font-mono uppercase tracking-wider transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] border border-emerald-400"
+                className="flex items-center gap-2.5 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold rounded-xs shadow-[0_2px_14px_rgba(16,185,129,0.45)] text-xs font-mono transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] border border-emerald-400"
               >
-                <span className="tracking-wide">Save & Next: Team Size</span>
+                <span className="">Save & Next: Team Size</span>
                 <ArrowRight size={15} className="stroke-[2.5]" />
               </button>
             )}
@@ -450,7 +450,7 @@ export function DepartmentFlowchartBuilder({
               <button
                 type="button"
                 onClick={() => onApplyToOrg(rootNode, sections)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold rounded-xs shadow-md transition-all cursor-pointer text-xs uppercase tracking-wider"
+                className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold rounded-xs shadow-md transition-all cursor-pointer text-xs "
               >
                 <Check size={14} />
                 <span>Apply Flowchart</span>

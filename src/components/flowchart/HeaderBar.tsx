@@ -37,11 +37,11 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   return (
     <header
       id="app-header-bar"
-      className="w-full bg-[#f6f5f0] border-b-2 border-neutral-900 px-5 py-2.5 flex flex-wrap items-center justify-between gap-4 select-none z-20 shadow-xs"
+      className="w-full bg-paper border-b-2 border-neutral-900 px-5 py-2.5 flex flex-wrap items-center justify-between gap-4 select-none z-20 shadow-xs"
     >
       {/* Title & Branding */}
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 bg-ink text-white flex items-center justify-center rounded-xs font-mono font-bold text-xs shadow-[2px_2px_0px_#2F3B7A]">
+        <div className="w-7 h-7 bg-accent text-white flex items-center justify-center rounded-xs font-semibold text-xs shadow-[2px_2px_0px_#2F3B7A]">
           MK
         </div>
         <div>
@@ -66,30 +66,30 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       >
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Depts:</span>
+          <span className="text-[11px] text-neutral-500 font-semibold">Depts:</span>
           <span className="font-bold text-neutral-900">{stats.totalDepartments}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" />
-          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Sections:</span>
+          <span className="text-[11px] text-neutral-500 font-semibold">Sections:</span>
           <span className="font-bold text-neutral-900">{stats.totalSections}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />
-          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Roots:</span>
+          <span className="text-[11px] text-neutral-500 font-semibold">Roots:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoots}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Roles:</span>
+          <span className="text-[11px] text-neutral-500 font-semibold">Roles:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoles}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
-          <span className="text-[11px] uppercase text-neutral-500 font-semibold">Tiers:</span>
+          <span className="text-[11px] text-neutral-500 font-semibold">Tiers:</span>
           <span className="font-bold text-neutral-900">{stats.maxDepth}</span>
         </div>
       </div>
@@ -132,7 +132,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('grid')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'grid'
-                ? 'bg-ink text-white font-bold'
+                ? 'bg-accent text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Graph Grid"
@@ -145,7 +145,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('dots')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'dots'
-                ? 'bg-ink text-white font-bold'
+                ? 'bg-accent text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Dot Matrix"
@@ -158,7 +158,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('ledger')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'ledger'
-                ? 'bg-ink text-white font-bold'
+                ? 'bg-accent text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Lined Ledger"
@@ -171,7 +171,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             onClick={() => onPaperStyleChange('clean')}
             className={`px-2 py-0.5 rounded-xs transition-colors ${
               paperStyle === 'clean'
-                ? 'bg-ink text-white font-bold'
+                ? 'bg-accent text-white font-bold'
                 : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
             }`}
             title="Clean Paper"

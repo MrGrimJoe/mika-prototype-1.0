@@ -201,7 +201,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Context Switcher Block */}
         <div className="p-3.5 border-b border-hairline bg-surface space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3 font-bold">
+            <span className="text-[11px] font-mono text-ink-3 font-bold">
               Messaging Context
             </span>
             <span className="text-[11px] font-mono bg-paper text-ink-2 px-1.5 py-0.5 rounded-xs border border-hairline">
@@ -264,7 +264,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
               return (
                 <div key={ruleLabel} className="space-y-1">
-                  <div className="px-1 text-[11px] font-mono uppercase tracking-wider text-ink-3 font-bold">
+                  <div className="px-1 text-[11px] font-mono text-ink-3 font-bold">
                     {ruleLabel} ({items.length})
                   </div>
 
@@ -292,7 +292,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 e.stopPropagation();
                                 if (onViewProfile) onViewProfile(item.user);
                               }}
-                              className="w-7 h-7 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-[11px] shrink-0 cursor-pointer"
+                              className="w-7 h-7 rounded-xs bg-accent text-white flex items-center justify-center font-semibold text-[11px] shrink-0 cursor-pointer"
                               title={`View ${item.user.fullName}'s profile`}
                             >
                               {item.user.preferredName?.[0] || item.user.fullName[0]}
@@ -303,7 +303,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 <span className="font-bold text-xs text-ink truncate text-left">
                                   {item.user.fullName}
                                 </span>
-                                <span className={`text-[8px] font-mono px-1 rounded-xs uppercase tracking-wider shrink-0 font-semibold ${
+                                <span className={`text-[11px] font-mono px-1 rounded-xs shrink-0 font-semibold ${
                                   item.ruleType === 'rule_a' 
                                     ? 'bg-paper text-ink-2'
                                     : item.ruleType === 'rule_b'
@@ -342,7 +342,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 <button aria-label={`View ${activeContact.user.fullName}'s profile`}
                   type="button"
                   onClick={() => onViewProfile && onViewProfile(activeContact.user)}
-                  className="w-9 h-9 rounded-xs bg-ink text-white flex items-center justify-center font-mono font-bold text-sm shrink-0 cursor-pointer"
+                  className="w-9 h-9 rounded-xs bg-accent text-white flex items-center justify-center font-semibold text-sm shrink-0 cursor-pointer"
                   title={`View ${activeContact.user.fullName}'s profile`}
                 >
                   {activeContact.user.preferredName?.[0] || activeContact.user.fullName[0]}
@@ -421,7 +421,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                       <div
                         className={`max-w-md px-4 py-2.5 rounded-xs text-xs leading-relaxed shadow-2xs ${
                           isSelf
-                            ? 'bg-ink text-white'
+                            ? 'bg-accent text-white'
                             : 'bg-surface border border-hairline text-ink'
                         }`}
                       >
@@ -445,7 +445,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               <button
                 type="submit"
                 disabled={!messageInput.trim()}
-                className="px-4 py-2 bg-ink hover:bg-[#12151C] disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-4 py-2 bg-accent hover:bg-accent-strong disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-semibold rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Send</span>

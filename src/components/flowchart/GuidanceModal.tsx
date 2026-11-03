@@ -31,7 +31,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
             </div>
             <div>
               <h2 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900">
-                ORGANIZATIONAL SPECIFICATION & FLOWCHART GUIDE
+                Organisation and flowchart guide
               </h2>
               <p className="text-[11px] text-neutral-600">
                 Recursive hierarchy, sections, roots, and authority boundaries
@@ -112,7 +112,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
           {activeSection === 'model' && (
             <div className="space-y-3">
               <div className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                <span className="font-bold text-neutral-950 text-xs flex items-center gap-1.5">
                   <GitFork size={14} className="text-neutral-700" />
                   The Recursive Triple: Department &rarr; Root &rarr; Roles
                 </span>
@@ -123,7 +123,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
                     Department Primitive
                   </span>
                   <p className="text-[11px] text-neutral-600">
@@ -132,7 +132,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
                     Roots (Leadership)
                   </span>
                   <p className="text-[11px] text-neutral-600">
@@ -141,7 +141,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
                     Roles (Functional Positions)
                   </span>
                   <p className="text-[11px] text-neutral-600">
@@ -150,7 +150,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
                     Direct vs. Indirect Authority
                   </span>
                   <p className="text-[11px] text-neutral-600">
@@ -164,7 +164,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
           {activeSection === 'sections' && (
             <div className="space-y-3">
               <div className="border border-neutral-300 bg-paper p-3.5 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                <span className="font-bold text-neutral-950 text-xs flex items-center gap-1.5">
                   <Layers size={14} className="text-neutral-700" />
                   Why Sections Exist: Solving Overlapping Dimensions
                 </span>
@@ -174,7 +174,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               </div>
 
               <div className="border-l-2 border-neutral-900 pl-3 py-1 space-y-1 bg-neutral-50/70 p-2 rounded-r-xs">
-                <span className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider block">
+                <span className="font-bold text-neutral-900 text-[11px] block">
                   The Fundamental Section Rule
                 </span>
                 <p className="text-[11px] text-neutral-700">
@@ -198,8 +198,8 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
           {activeSection === 'mainRoot' && (
             <div className="space-y-3">
-              <div className="border border-neutral-900 bg-[#f4f4f0] p-3.5 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+              <div className="border border-neutral-900 bg-paper p-3.5 rounded-xs space-y-2">
+                <span className="font-bold text-neutral-950 text-xs flex items-center gap-1.5">
                   <ShieldCheck size={14} className="text-neutral-900" />
                   The Main Department: Permanent Institutional Anchor
                 </span>
@@ -239,7 +239,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
           {activeSection === 'workflow' && (
             <div className="space-y-3">
               <div className="border border-neutral-300 bg-paper p-3 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide">
+                <span className="font-bold text-neutral-950 text-xs ">
                   Visual Flowchart Operations:
                 </span>
                 <p className="text-[11px] text-neutral-600">
@@ -294,7 +294,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
           {activeSection === 'rules' && (
             <div className="space-y-3">
               <div className="border border-neutral-300 bg-paper p-3 rounded-xs space-y-2">
-                <span className="font-bold text-neutral-950 text-xs uppercase tracking-wide">
+                <span className="font-bold text-neutral-950 text-xs ">
                   Core Invariants & Boundaries
                 </span>
                 <p className="text-[11px] text-neutral-600">

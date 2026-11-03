@@ -145,7 +145,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         {/* Header bar */}
         <div className="px-6 py-4 border-b border-hairline flex items-center justify-between bg-paper">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-ink-3 font-bold">
+            <span className="text-[11px] font-mono text-ink-3 font-bold">
               Personnel Profile
             </span>
             {isSelf && (
@@ -173,7 +173,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Identity Section */}
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-xl bg-ink text-white flex items-center justify-center font-mono font-bold text-lg shrink-0 shadow-xs">
+            <div className="w-14 h-14 rounded-xl bg-accent text-white flex items-center justify-center font-semibold text-lg shrink-0 shadow-xs">
               {user.preferredName?.[0] || user.fullName[0]}
             </div>
             <div className="min-w-0 flex-1">
@@ -225,7 +225,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Organizational Assignments */}
           <div className="pt-2">
-            <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <Building2 className="w-3.5 h-3.5" />
               <span>Assigned Positions ({rolesWithDepts.length})</span>
             </h3>
@@ -277,7 +277,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Integration Access Section (Section 4.1) */}
           <div className="pt-2 border-t border-hairline">
-            <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Available Connected Tools ({accessSummary.length})</span>
             </h3>
@@ -305,7 +305,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {/* Required Integrations Section (Section 4.2) */}
           {requiredList.length > 0 && (
             <div className="pt-2 border-t border-hairline">
-              <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+              <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
                 <span>Role Required Connectors</span>
               </h3>
@@ -358,11 +358,11 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {/* Member Meta */}
           <div className="pt-2 border-t border-hairline grid grid-cols-2 gap-3 text-xs font-mono text-ink-3">
             <div>
-              <span className="text-[11px] uppercase text-ink-3 block">Personnel ID</span>
+              <span className="text-[11px] text-ink-3 block">Personnel ID</span>
               <span className="text-ink">{user.id}</span>
             </div>
             <div>
-              <span className="text-[11px] uppercase text-ink-3 block">Account Status</span>
+              <span className="text-[11px] text-ink-3 block">Account Status</span>
               <span className="text-[#059669] font-medium flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                 Active Enrolled
@@ -386,7 +386,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                 onStartMessage(user.id);
                 onClose();
               }}
-              className="px-4 py-2 bg-ink hover:bg-black text-white text-xs font-mono uppercase tracking-wider font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-2 bg-accent hover:bg-black text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Send Message</span>

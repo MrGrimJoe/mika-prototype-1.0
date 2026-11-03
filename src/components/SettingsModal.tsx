@@ -284,7 +284,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {!isAnyRoot && (
                 <div className="space-y-4">
                   <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
-                    <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                    <div className="text-xs font-bold text-slate-500 mb-3">
                       Your Available Tools
                     </div>
                     <div className="space-y-2">

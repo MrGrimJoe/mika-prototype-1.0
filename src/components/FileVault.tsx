@@ -386,7 +386,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-semibold ">
                 <tr>
                   <th className="px-6 py-3">File / Asset</th>
                   <th className="px-4 py-3">Source</th>

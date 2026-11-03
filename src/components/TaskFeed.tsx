@@ -137,82 +137,30 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
       {/* Filter and Search Controls */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-surface p-3 border border-hairline rounded-xs shadow-2xs">
         {/* B6: Segmented Chip Control for Red / Blue / Yellow / Green / Grey */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <button
-            onClick={() => setSelectedColor('all')}
-            className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border ${
-              selectedColor === 'all'
-                ? 'bg-ink text-white border-ink'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            All [{colorCounts.all}]
-          </button>
-
-          {/* Red: Pending & Denied */}
-          <button
-            onClick={() => setSelectedColor('red')}
-            className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
-              selectedColor === 'red'
-                ? 'bg-st-pending-bg text-st-pending border-[#DC2626] font-bold'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#EF4444]" />
-            <span>Red [{colorCounts.red}]</span>
-          </button>
-
-          {/* Blue: Help Needed */}
-          <button
-            onClick={() => setSelectedColor('blue')}
-            className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
-              selectedColor === 'blue'
-                ? 'bg-st-help-bg text-st-help border-[#2563EB] font-bold'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
-            <span>Blue [{colorCounts.blue}]</span>
-          </button>
-
-          {/* Yellow: Submitted */}
-          <button
-            onClick={() => setSelectedColor('yellow')}
-            className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
-              selectedColor === 'yellow'
-                ? 'bg-st-submitted-bg text-st-submitted border-[#CA8A04] font-bold'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#EAB308]" />
-            <span>Yellow [{colorCounts.yellow}]</span>
-          </button>
-
-          {/* Green: Approved */}
-          <button
-            onClick={() => setSelectedColor('green')}
-            className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
-              selectedColor === 'green'
-                ? 'bg-st-done-bg text-st-done border-[#16A34A] font-bold'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            <span>Green [{colorCounts.green}]</span>
-          </button>
-
-          {/* Grey: Expired */}
-          <button
-            onClick={() => setSelectedColor('grey')}
-            className={`px-2.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
-              selectedColor === 'grey'
-                ? 'bg-paper-raised text-ink-3 border-ink-3 font-bold'
-                : 'bg-paper text-ink-2 border-hairline hover:bg-paper-raised'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-ink-3" />
-            <span>Grey [{colorCounts.grey}]</span>
-          </button>
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none" role="group" aria-label="Filter tasks by status">
+          {([
+            { key: 'all', label: 'All', dot: null, on: 'bg-accent text-white border-accent' },
+            { key: 'red', label: 'Pending & denied', dot: 'bg-[#EF4444]', on: 'bg-st-pending-bg text-st-pending border-st-pending-border font-semibold' },
+            { key: 'blue', label: 'Help needed', dot: 'bg-[#3B82F6]', on: 'bg-st-help-bg text-st-help border-st-help-border font-semibold' },
+            { key: 'yellow', label: 'Submitted', dot: 'bg-[#EAB308]', on: 'bg-st-submitted-bg text-st-submitted border-st-submitted-border font-semibold' },
+            { key: 'green', label: 'Approved', dot: 'bg-[#22C55E]', on: 'bg-st-done-bg text-st-done border-st-done-border font-semibold' },
+            { key: 'grey', label: 'Expired', dot: 'bg-ink-3', on: 'bg-st-expired-bg text-st-expired border-st-expired-border font-semibold' }
+          ] as const).map(chip => (
+            <button
+              key={chip.key}
+              onClick={() => setSelectedColor(chip.key as ColorFilterKey)}
+              aria-pressed={selectedColor === chip.key}
+              className={`px-3 py-1.5 min-h-8 text-[13px] rounded-full transition-colors cursor-pointer shrink-0 border flex items-center gap-1.5 ${
+                selectedColor === chip.key
+                  ? chip.on
+                  : 'bg-surface text-ink-2 border-hairline hover:bg-paper-sunken'
+              }`}
+            >
+              {chip.dot && <span className={`w-2 h-2 rounded-full ${chip.dot}`} aria-hidden="true" />}
+              <span>{chip.label}</span>
+              <span className="tabular-nums opacity-70">{colorCounts[chip.key as keyof typeof colorCounts]}</span>
+            </button>
+          ))}
         </div>
 
         {/* Search & Assign Task Action */}
@@ -232,7 +180,7 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             <button
               id="btn-create-task-main"
               onClick={handleOpenModal}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-ink hover:bg-[#12151C] text-white text-[11px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer rounded-xs shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent hover:bg-accent-strong text-white text-[11px] font-semibold transition-all cursor-pointer rounded-xs shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Assign Task</span>
@@ -265,7 +213,7 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
         ) : (
           <div className="bg-surface border border-dashed border-hairline p-12 text-center rounded-xs">
             <CheckSquare className="w-8 h-8 mx-auto text-ink-3 mb-2 opacity-60" />
-            <h4 className="text-sm font-bold text-ink uppercase tracking-wider mb-1 font-mono">No Matching Tasks</h4>
+            <h4 className="text-sm font-bold text-ink mb-1 font-mono">No Matching Tasks</h4>
             <p className="text-xs text-ink-3 max-w-sm mx-auto font-mono">
               {searchQuery || selectedColor !== 'all'
                 ? 'Adjust color or search filters to inspect assignments.'

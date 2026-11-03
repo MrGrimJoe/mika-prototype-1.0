@@ -132,7 +132,7 @@ export const StaffList: React.FC<StaffListProps> = ({
                     </div>
                   )}
                   {isLead && (
-                    <span className="absolute -bottom-1 -right-1 p-0.5 rounded-xs bg-ink text-white border border-white" title="Root Authority">
+                    <span className="absolute -bottom-1 -right-1 p-0.5 rounded-xs bg-accent text-white border border-white" title="Root Authority">
                       <Crown className="w-2.5 h-2.5" />
                     </span>
                   )}
@@ -152,11 +152,11 @@ export const StaffList: React.FC<StaffListProps> = ({
 
                   <div className="mt-1.5">
                     {isLead ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-bold uppercase tracking-wider bg-ink text-white font-mono">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-bold bg-accent text-white font-mono">
                         <Shield className="w-2.5 h-2.5" /> ROOT_LEAD
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-mono uppercase tracking-wider bg-paper text-ink-2 border border-hairline">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] font-mono bg-paper text-ink-2 border border-hairline">
                         STAFF_MEMBER
                       </span>
                     )}
@@ -166,7 +166,7 @@ export const StaffList: React.FC<StaffListProps> = ({
 
               {/* Roles Held */}
               <div className="space-y-1.5 mb-3">
-                <p className="text-[11px] font-bold text-ink-3 uppercase tracking-wider font-mono">
+                <p className="text-[11px] font-bold text-ink-3 font-mono">
                   Assigned Roles [{roles.length}]
                 </p>
                 <div className="flex flex-wrap gap-1">
@@ -187,7 +187,7 @@ export const StaffList: React.FC<StaffListProps> = ({
             <div className="pt-3 border-t border-hairline flex items-center justify-between">
               <div className="flex items-center gap-1.5" title="Live task state breakdown">
                 {counts.total === 0 ? (
-                  <span className="text-xs font-mono text-ink-3">IDLE // NO_TASKS</span>
+                  <span className="text-xs font-mono text-ink-3">No open tasks</span>
                 ) : (
                   <div className="flex items-center gap-1 font-mono text-[11px]">
                     {counts.pending > 0 && (
@@ -230,7 +230,7 @@ export const StaffList: React.FC<StaffListProps> = ({
                 )}
               </div>
 
-              <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-ink hover:underline flex items-center gap-1">
+              <span className="text-[11px] font-semibold text-ink hover:underline flex items-center gap-1">
                 Inspect <ExternalLink className="w-3 h-3" />
               </span>
             </div>
@@ -242,7 +242,7 @@ export const StaffList: React.FC<StaffListProps> = ({
       <div className="bg-surface border border-hairline p-4 rounded-xs shadow-2xs flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
         <div className="flex items-center gap-2">
           <Layers className="w-4 h-4 text-ink" />
-          <span className="text-[11px] font-bold uppercase tracking-wider text-ink">
+          <span className="text-[11px] font-bold text-ink">
             System Partition Summary:
           </span>
         </div>
@@ -305,7 +305,7 @@ export const StaffList: React.FC<StaffListProps> = ({
 
             {/* Assignments & Scopes */}
             <div className="mb-5">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-ink-3 mb-2 font-mono">
+              <div className="text-[11px] font-bold text-ink-3 mb-2 font-mono">
                 Active Assignments:
               </div>
               <div className="space-y-2">
@@ -328,7 +328,7 @@ export const StaffList: React.FC<StaffListProps> = ({
             <div className="flex justify-end pt-3 border-t border-hairline">
               <button
                 onClick={() => setSelectedUser(null)}
-                className="px-4 py-1.5 bg-ink text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs cursor-pointer"
+                className="px-4 py-1.5 bg-accent text-white text-xs font-semibold rounded-xs cursor-pointer"
               >
                 Close
               </button>

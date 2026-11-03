@@ -90,9 +90,9 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-hairline">
         <div>
-          <div className="text-[11px] font-mono uppercase tracking-widest text-ink-3 mb-1.5 flex items-center gap-2">
+          <div className="text-[11px] font-mono text-ink-3 mb-1.5 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
-            <span>Staff Onboarding // Role Link Access</span>
+            <span>Staff onboarding</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
             Invitations
@@ -102,7 +102,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
           </p>
         </div>
 
-        <div className="px-3 py-1.5 bg-surface border border-hairline rounded-xs text-xs font-mono text-[#374151] flex items-center gap-2 shadow-2xs self-start sm:self-auto">
+        <div className="px-3 py-1.5 bg-surface border border-hairline rounded-xs text-[13px] text-ink-2 flex items-center gap-2 shadow-2xs self-start sm:self-auto">
           <Link2 className="w-3.5 h-3.5 text-ink-3" />
           <span>{joinLinks.length} Active Links</span>
         </div>
@@ -111,7 +111,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
       {/* Generate Invitation Link Card */}
       <div className="bg-surface border border-hairline rounded-xs p-6 shadow-2xs space-y-5">
         <div className="flex items-center gap-2.5 pb-3 border-b border-paper-raised">
-          <div className="w-8 h-8 rounded-xs bg-ink text-white flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xs bg-accent text-white flex items-center justify-center">
             <UserPlus className="w-4 h-4" />
           </div>
           <div>
@@ -127,7 +127,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
         <form onSubmit={handleGenerate} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-ink-2 mb-1.5">
+              <label className="block text-xs font-mono text-ink-2 mb-1.5">
                 1. Department
               </label>
               <select
@@ -147,7 +147,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-ink-2 mb-1.5">
+              <label className="block text-xs font-mono text-ink-2 mb-1.5">
                 2. Target Role
               </label>
               <select
@@ -165,7 +165,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-ink-2 mb-1.5">
+              <label className="block text-xs font-mono text-ink-2 mb-1.5">
                 3. Link Validity
               </label>
               <div className="flex gap-2">
@@ -182,7 +182,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                 <button
                   type="submit"
                   disabled={!selectedRoleId || isGenerating}
-                  className="px-4 py-2 bg-ink hover:bg-ink disabled:opacity-40 text-white rounded-xs text-xs font-mono uppercase tracking-wider font-bold transition-all cursor-pointer shrink-0 shadow-xs flex items-center gap-1.5"
+                  className="px-4 py-2 bg-accent hover:bg-accent-strong disabled:opacity-40 text-white rounded-xs text-xs font-semibold transition-all cursor-pointer shrink-0 shadow-xs flex items-center gap-1.5"
                 >
                   <Link2 className="w-3.5 h-3.5" />
                   <span>Generate</span>
@@ -194,7 +194,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
           {/* Section 3.2: Require tool connections before joining */}
           <div className="pt-3 border-t border-paper-raised space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono uppercase tracking-wider text-ink-2 flex items-center gap-1.5">
+              <span className="text-xs font-mono text-ink-2 flex items-center gap-1.5">
                 <ShieldAlert className="w-3.5 h-3.5 text-ink-2" />
                 <span>Require tool connections before joining (Optional)</span>
               </span>
@@ -251,11 +251,11 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link2 className="w-4 h-4 text-[#374151]" />
-            <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-ink">
+            <Link2 className="w-4 h-4 text-ink-2" />
+            <h2 className="text-sm font-bold font-mono text-ink">
               Active Invitation Links
             </h2>
-            <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-paper-raised text-ink-2 rounded-xs">
+            <span className="px-2 py-0.5 text-[11px] font-semibold bg-paper-raised text-ink-2 rounded-xs">
               {joinLinks.length}
             </span>
           </div>
@@ -297,7 +297,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                     {/* Required Integrations Badges */}
                     {link.requiredIntegrations && link.requiredIntegrations.length > 0 && (
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[11px] font-mono uppercase text-ink-3">Requires:</span>
+                        <span className="text-[11px] font-mono text-ink-3">Requires:</span>
                         {link.requiredIntegrations.map(k => {
                           const tool = INTEGRATION_TOOLS.find(t => t.key === k);
                           return (
@@ -326,10 +326,10 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => handleCopyLink(link)}
-                      className={`px-3 py-1.5 rounded-xs text-xs font-mono uppercase tracking-wider font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-3 py-1.5 rounded-xs text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                         isCopied
                           ? 'bg-[#10B981] text-white'
-                          : 'bg-ink hover:bg-ink text-white shadow-2xs'
+                          : 'bg-accent hover:bg-accent-strong text-white shadow-2xs'
                       }`}
                     >
                       {isCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
@@ -372,7 +372,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
             </div>
             <button
               onClick={() => setQrModalLink(null)}
-              className="w-full py-2 bg-ink hover:bg-ink text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs cursor-pointer"
+              className="w-full py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs cursor-pointer"
             >
               Close
             </button>
