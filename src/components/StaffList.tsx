@@ -114,7 +114,7 @@ export const StaffList: React.FC<StaffListProps> = ({
           <div
             key={user.id}
             onClick={() => setSelectedUser(user)}
-            className="bg-surface border border-hairline p-4 hover:border-ink transition-all cursor-pointer rounded-xs shadow-2xs hover:shadow-xs flex flex-col justify-between"
+            className="bg-surface border border-hairline p-4 hover:border-accent transition-all cursor-pointer rounded-xs shadow-2xs hover:shadow-xs flex flex-col justify-between"
           >
             <div>
               {/* User Header */}

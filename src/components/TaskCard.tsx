@@ -48,7 +48,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   return (
     <div
       onClick={() => onSelectTask && onSelectTask(task)}
-      className="bg-surface border border-hairline hover:border-ink p-4 sm:p-5 rounded-xs shadow-2xs hover:shadow-xs transition-all cursor-pointer group font-sans"
+      className="bg-surface border border-hairline hover:border-accent p-4 sm:p-5 rounded-xs shadow-2xs hover:shadow-xs transition-all cursor-pointer group font-sans"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5">
         <div className="flex flex-wrap items-center gap-2">

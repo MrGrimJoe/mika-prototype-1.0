@@ -214,7 +214,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
                     ? 'bg-paper border-accent shadow-[0_2px_8px_rgba(47,59,122,0.18)] ring-1 ring-accent' 
                     : isConnected 
                       ? 'bg-paper border-accent shadow-xs'
-                      : 'bg-paper border-hairline hover:border-ink shadow-xs'
+                      : 'bg-paper border-hairline hover:border-accent shadow-xs'
                 } ${node.type === 'role' ? 'min-w-[110px]' : 'min-w-[130px]'}`}
               >
                 <div className="flex items-center justify-between gap-2">

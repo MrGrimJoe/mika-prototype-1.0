@@ -302,8 +302,8 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
       {/* Employees Table / Cards */}
       <div className="bg-surface border border-hairline rounded-xs shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-paper border-b border-hairline text-[11px] font-mono text-ink-3">
+          <table className="block md:table w-full text-left text-xs">
+            <thead className="hidden md:table-header-group bg-paper border-b border-hairline text-[11px] text-ink-3">
               <tr>
                 <th className="px-5 py-3 font-medium">Employee</th>
                 <th className="px-5 py-3 font-medium">Email</th>
@@ -312,10 +312,10 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                 <th className="px-5 py-3 font-medium">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-hairline">
+            <tbody className="block md:table-row-group divide-y divide-hairline">
               {employees.map(({ user, roles }) => (
-                <tr key={user.id} className="hover:bg-paper transition-colors">
-                  <td className="px-5 py-4">
+                <tr key={user.id} className="block md:table-row p-4 md:p-0 hover:bg-paper transition-colors">
+                  <td className="block md:table-cell px-0 md:px-5 py-1.5 md:py-4">
                     <button aria-label={`View ${user.fullName}'s profile`}
                       onClick={() => onViewProfile && onViewProfile(user)}
                       className="flex items-center gap-3 text-left group cursor-pointer"
@@ -331,11 +331,11 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     </button>
                   </td>
 
-                  <td className="px-5 py-4 font-mono text-ink-2">
+                  <td data-label="Email" className="block md:table-cell px-0 md:px-5 py-1.5 md:py-4 text-ink-2 before:content-[attr(data-label)] before:block before:text-[11px] before:font-medium before:text-ink-3 before:mb-0.5 md:before:hidden">
                     {user.email}
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td data-label="Role & department" className="block md:table-cell px-0 md:px-5 py-1.5 md:py-4 before:content-[attr(data-label)] before:block before:text-[11px] before:font-medium before:text-ink-3 before:mb-0.5 md:before:hidden">
                     <div className="space-y-1">
                       {roles.map((r, i) => (
                         <div key={i} className="flex items-center gap-1.5">
@@ -351,7 +351,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     </div>
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td data-label="Authority" className="block md:table-cell px-0 md:px-5 py-1.5 md:py-4 before:content-[attr(data-label)] before:block before:text-[11px] before:font-medium before:text-ink-3 before:mb-0.5 md:before:hidden">
                     <div className="flex flex-wrap gap-1">
                       {roles.map((r, i) => {
                         const isRootRole = r.role ? isRoleRoot(r.role, r.dept) : false;
@@ -377,7 +377,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
                     </div>
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td data-label="Status" className="block md:table-cell px-0 md:px-5 py-1.5 md:py-4 before:content-[attr(data-label)] before:block before:text-[11px] before:font-medium before:text-ink-3 before:mb-0.5 md:before:hidden">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#059669] font-medium">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                       Active

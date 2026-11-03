@@ -234,10 +234,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       )}
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex border-b border-hairline bg-paper-raised p-1 rounded-xs gap-1">
+      <div className="flex border-b border-hairline bg-paper-raised p-1 rounded-xs gap-1 overflow-x-auto scrollbar-none" role="tablist">
         <button
           onClick={() => setActiveTab('integrations')}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-xs whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
             activeTab === 'integrations'
               ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
@@ -256,7 +256,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         <button
           onClick={() => setActiveTab('general')}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-xs whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
             activeTab === 'general'
               ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
@@ -268,7 +268,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         <button
           onClick={() => setActiveTab('storage')}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-xs whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
             activeTab === 'storage'
               ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
@@ -280,7 +280,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         <button
           onClick={() => setActiveTab('roles')}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-xs transition-colors cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 text-[13px] font-medium rounded-xs whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
             activeTab === 'roles'
               ? 'bg-accent text-white shadow-xs font-bold'
               : 'text-ink-2 hover:text-ink hover:bg-paper-sunken'
@@ -295,8 +295,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {activeTab === 'integrations' && (
         <div className="space-y-6">
           {/* My Access Summary Card */}
-          <div className="bg-paper-raised border border-hairline p-5 rounded-xs space-y-3">
-            <div className="flex items-center justify-between">
+          <div className="bg-surface border border-hairline p-5 rounded-xs space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-serif font-bold text-ink">
                   Your Personal Tool Access
@@ -305,7 +305,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   Inherited from your active roles: {userAssignments.map(a => `@${roles.find(r => r.id === a.roleId)?.title || 'Role'}`).join(', ') || 'None'}
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-accent-fg bg-surface px-2 py-1 rounded-xs border border-hairline">
+              <span className="self-start sm:self-auto text-[11px] text-accent-fg bg-surface px-2 py-1 rounded-xs border border-hairline break-all">
                 {currentUser.email}
               </span>
             </div>
@@ -346,7 +346,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           {/* Org Integrations Checklist */}
-          <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-4">
+          <div className="bg-surface border border-hairline p-6 rounded-xs space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
                 <h3 className="text-base font-serif font-bold text-ink">
@@ -381,7 +381,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
 
           {/* Browser Userscript Integration Guide */}
-          <div className="bg-paper-raised border border-hairline p-5 rounded-xs space-y-3 font-mono text-xs">
+          <div className="bg-surface border border-hairline p-5 rounded-xs space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between">
               <h4 className="font-bold text-ink flex items-center gap-2">
                 <span>⚡ Browser Userscript (Ctrl+Alt+M)</span>
@@ -412,7 +412,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: GENERAL */}
       {activeTab === 'general' && (
-        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-6">
+        <div className="bg-surface border border-hairline p-6 rounded-xs space-y-6">
           <div>
             <h3 className="text-base font-serif font-bold text-ink">
               Organisation Identity
@@ -452,7 +452,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: STORAGE */}
       {activeTab === 'storage' && (
-        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-6">
+        <div className="bg-surface border border-hairline p-6 rounded-xs space-y-6">
           <div>
             <h3 className="text-base font-serif font-bold text-ink">
               File Vault & Storage Backend
@@ -516,7 +516,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* TAB CONTENT: ROLES */}
       {activeTab === 'roles' && (
-        <div className="bg-paper-raised border border-hairline p-6 rounded-xs space-y-4">
+        <div className="bg-surface border border-hairline p-6 rounded-xs space-y-4">
           <div>
             <h3 className="text-base font-serif font-bold text-ink">
               Authority Tree & Role Governance

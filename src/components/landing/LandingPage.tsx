@@ -47,16 +47,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </button>
 
           {/* Minimal Links */}
-          <div className="flex items-center gap-7 text-xs font-mono text-ink-2">
+          <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-ink-2 whitespace-nowrap">
             <a 
               href="#how-it-works" 
-              className="hover:text-ink transition-colors"
+              className="hidden sm:inline hover:text-ink transition-colors"
             >
               How it works
             </a>
             <a 
               href="#graph-showcase" 
-              className="hover:text-ink transition-colors"
+              className="hidden sm:inline hover:text-ink transition-colors"
             >
               Structure
             </a>
@@ -127,7 +127,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paper-raised text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paper-raised text-ink border border-hairline hover:border-accent rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>
@@ -287,7 +287,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </button>
             <button
               onClick={onNavigateToSignIn}
-              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-ink rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-accent rounded-xs text-xs font-mono font-semibold transition-all cursor-pointer"
             >
               Log in
             </button>

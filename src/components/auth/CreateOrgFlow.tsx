@@ -443,7 +443,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           <span className="font-serif font-bold text-xl text-ink">Mika</span>
         </header>
 
-        <main className="max-w-md mx-auto w-full my-auto text-center p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs">
+        <main className="max-w-md mx-auto w-full my-auto text-center p-8 bg-surface border border-hairline rounded-xs shadow-xs">
           <div className="w-12 h-12 mx-auto mb-5 rounded-full bg-paper-sunken border border-hairline flex items-center justify-center text-accent-fg">
             <Check className="w-6 h-6 stroke-[2.5]" />
           </div>
@@ -539,7 +539,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           
           {/* STEP 1: ENTRY CHOICE */}
           {currentStep === 1 && (
-            <div className="max-w-md mx-auto p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs text-center">
+            <div className="max-w-md mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs text-center">
               <h1 className="text-2xl font-serif font-bold text-ink tracking-tight">
                 Establish an Organisation
               </h1>
@@ -558,7 +558,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
                 <button
                   onClick={onNavigateToSignIn}
-                  className="w-full py-3.5 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-ink rounded-xs font-mono text-xs font-semibold transition-all cursor-pointer"
+                  className="w-full py-3.5 bg-transparent hover:bg-paper-sunken text-ink border border-hairline hover:border-accent rounded-xs font-mono text-xs font-semibold transition-all cursor-pointer"
                 >
                   Log in
                 </button>
@@ -568,7 +568,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
           {/* STEP 2: ACCOUNT (GOOGLE SIGN-IN + PROFILE FORM ON SAME STEP) */}
           {currentStep === 2 && (
-            <div className="max-w-lg mx-auto p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs">
+            <div className="max-w-lg mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs">
               <div className="text-center mb-6">
                 <h1 className="text-2xl font-serif font-bold text-ink tracking-tight">
                   Account & Organization
@@ -649,7 +649,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                         value={fullName}
                         onChange={e => setFullName(e.target.value)}
                         placeholder="e.g. Dr. Sarah Vance"
-                        className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none"
+                        className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-accent focus:outline-none"
                       />
                     </div>
 
@@ -663,7 +663,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                           value={preferredName}
                           onChange={e => setPreferredName(e.target.value)}
                           placeholder="e.g. Sarah"
-                          className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none"
+                          className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-accent focus:outline-none"
                         />
                       </div>
 
@@ -674,7 +674,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                         <select
                           value={gender}
                           onChange={e => setGender(e.target.value as any)}
-                          className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none cursor-pointer"
+                          className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-accent focus:outline-none cursor-pointer"
                         >
                           <option value="prefer_not_to_say">Prefer not to say</option>
                           <option value="female">Female</option>
@@ -693,7 +693,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                         value={orgName}
                         onChange={e => setOrgName(e.target.value)}
                         placeholder="e.g. St. Jude Academy or Acme Corp"
-                        className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none"
+                        className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-accent focus:outline-none"
                       />
                     </div>
 
@@ -727,7 +727,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                           onDragOver={e => e.preventDefault()}
                           onDrop={handleDropLogo}
                           onClick={() => fileInputRef.current?.click()}
-                          className="p-4 border border-dashed border-hairline hover:border-ink rounded-xs bg-paper text-center cursor-pointer transition-colors"
+                          className="p-4 border border-dashed border-hairline hover:border-accent rounded-xs bg-paper text-center cursor-pointer transition-colors"
                         >
                           <Upload className="w-4 h-4 mx-auto text-ink-3 mb-1" />
                           <div className="text-[11px] font-mono text-ink-2">
@@ -956,7 +956,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
               </div>
 
               {/* Step Navigation Bottom Bar */}
-              <div className="p-3.5 bg-paper-raised border border-hairline rounded-xs flex items-center justify-between shadow-xs">
+              <div className="p-3.5 bg-surface border border-hairline rounded-xs flex items-center justify-between shadow-xs">
                 <button
                   type="button"
                   onClick={handleBack}
@@ -982,7 +982,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
           {/* STEP 5: TEAM SIZE (DEDICATED STEP) */}
           {currentStep === 5 && (
-            <div className="max-w-lg mx-auto p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs text-center">
+            <div className="max-w-lg mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs text-center">
               <span className="text-[11px] font-mono text-ink-3">
                 Step 5 of 7 · Capacity
               </span>
@@ -1052,7 +1052,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
           {/* STEP 6: STORAGE (DEDICATED STEP) */}
           {currentStep === 6 && (
-            <div className="max-w-xl mx-auto p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs">
+            <div className="max-w-xl mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs">
               <div className="text-center mb-8">
                 <span className="text-[11px] font-mono text-ink-3">
                   Step 6 of 7 · Storage
@@ -1219,7 +1219,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
           {/* STEP 7: FINAL BILLING SUMMARY */}
           {currentStep === 7 && (
-            <div className="max-w-xl mx-auto p-8 bg-paper-raised border border-hairline rounded-xs shadow-xs">
+            <div className="max-w-xl mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs">
               <div className="text-center mb-6">
                 <span className="text-[11px] font-mono text-ink-3">
                   Step 7 of 7 · Confirmation

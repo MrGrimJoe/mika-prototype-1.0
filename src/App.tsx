@@ -67,7 +67,7 @@ import {
   upsertUserCompliance
 } from './lib/firestoreService';
 import { IntegrationConnection, UserIntegrationCompliance } from './types';
-import { Settings as SettingsIcon, User as UserIcon, LogOut, ChevronDown } from 'lucide-react';
+import { Settings as SettingsIcon, User as UserIcon, LogOut, ChevronDown, Menu } from 'lucide-react';
 import { syncToGoogleCalendar } from './lib/workspace';
 
 import confetti from 'canvas-confetti';
@@ -136,15 +136,33 @@ export default function App() {
   const [authView, setAuthView] = useState<'landing' | 'signin' | 'create-org'>('landing');
   const [createOrgPrefillGoogle, setCreateOrgPrefillGoogle] = useState<any | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  // Phones get a top bar + slide-over navigation drawer instead of a permanent sidebar.
+  const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
   );
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
-    const onChange = (e: MediaQueryListEvent) => setIsSidebarCollapsed(e.matches);
+    const onChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+      if (!e.matches) setMobileNavOpen(false);
+    };
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileNavOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [mobileNavOpen]);
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
   const [activeJoinModalLink, setActiveJoinModalLink] = useState<JoinLink | null>(null);
   const [viewingProfileUser, setViewingProfileUser] = useState<User | null>(null);
@@ -746,17 +764,27 @@ export default function App() {
   // 3. User IS authenticated -> Render Main Application
   return (
     <div className="h-screen w-screen bg-paper text-ink flex antialiased relative overflow-hidden font-sans">
-      {/* Sidebar */}
+      {/* Sidebar: persistent on desktop, slide-over drawer on phones */}
+      {isMobile && mobileNavOpen && (
+        <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setMobileNavOpen(false)} aria-hidden="true" />
+      )}
+      <div
+        id="mobile-navigation"
+        className={isMobile
+          ? `fixed inset-y-0 left-0 z-50 flex transition-transform duration-200 ease-out ${mobileNavOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full'}`
+          : 'contents'}
+        inert={isMobile && !mobileNavOpen}
+      >
       <AppSidebar
         currentUser={currentUser}
         currentUserRoles={currentUserRoles}
         masterRootUserId={masterRootUser?.id}
         activeTab={activeTab}
-        setActiveTab={handleSelectTab}
+        setActiveTab={tab => { handleSelectTab(tab); setMobileNavOpen(false); }}
         isCurrentUserLead={isCurrentUserLead}
         hasSuperiors={hasSuperiors}
-        isCollapsed={isSidebarCollapsed}
-        setIsCollapsed={setIsSidebarCollapsed}
+        isCollapsed={isMobile ? false : isSidebarCollapsed}
+        setIsCollapsed={collapsed => (isMobile ? setMobileNavOpen(false) : setIsSidebarCollapsed(collapsed))}
         taskCount={visibleTasks.length}
         allUsers={users}
         onSwitchUser={id => handleFastSwitchUser(id)}
@@ -765,12 +793,25 @@ export default function App() {
         onViewProfile={u => setViewingProfileUser(u)}
         orgName="Oakridge Academy"
       />
+      </div>
 
       {/* Main Content Stage */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative z-10 bg-paper">
         {/* Top Header Bar with active breadcrumb & Top-Right Avatar Entry Point */}
         <header className="h-14 bg-surface border-b border-hairline px-4 sm:px-6 flex items-center justify-between shrink-0 z-20">
           <div className="flex items-center gap-3 min-w-0">
+            {isMobile && (
+              <button
+                ref={menuButtonRef}
+                onClick={() => setMobileNavOpen(true)}
+                aria-label="Open navigation"
+                aria-expanded={mobileNavOpen}
+                aria-controls="mobile-navigation"
+                className="-ml-2 w-11 h-11 flex items-center justify-center rounded-xs text-ink-2 hover:bg-paper-sunken cursor-pointer shrink-0"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            )}
             <span className="hidden sm:inline text-[13px] text-ink-3 truncate">
               {organization?.name || 'Oakridge Academy'}
             </span>
@@ -785,9 +826,9 @@ export default function App() {
             <button aria-label="Settings & Integrations"
               id="topbar-settings-button"
               onClick={() => setActiveTab('settings')}
-              className={`p-2 rounded-xs border transition-colors cursor-pointer ${
+              className={`hidden sm:inline-flex p-2 rounded-xs border transition-colors cursor-pointer ${
                 activeTab === 'settings'
-                  ? 'bg-accent text-white border-ink'
+                  ? 'bg-accent text-white border-accent'
                   : 'text-ink-2 hover:text-ink hover:bg-paper border-hairline'
               }`}
               title="Settings & Integrations"

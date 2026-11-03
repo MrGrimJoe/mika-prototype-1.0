@@ -123,7 +123,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   return (
     <ModalOverlay onClose={onClose}
       id="settings-modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
     >
       <div
         id="settings-modal-container"
@@ -414,7 +414,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold transition-colors"
+            className="px-4 py-2 bg-accent hover:bg-accent-strong text-white rounded-xl text-xs font-semibold transition-colors"
           >
             Done
           </button>

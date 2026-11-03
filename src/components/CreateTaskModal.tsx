@@ -244,7 +244,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               placeholder="e.g. Submit Q1 Assessment Plan or Curriculum Draft"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
+              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent text-ink"
             />
           </div>
 
@@ -263,7 +263,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               placeholder="Specify required deliverables... Type @repo or @file to reference connected assets"
               value={description}
               onChange={handleDescriptionChange}
-              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
+              className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent text-ink"
             />
 
             {/* Mention Dropdown Popover */}
@@ -306,7 +306,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <select
                 value={selectedDeptId}
                 onChange={e => setSelectedDeptId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent cursor-pointer"
               >
                 {authorizedDepts.map(d => (
                   <option key={d.id} value={d.id}>{d.name}</option>
@@ -321,7 +321,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <select
                 value={selectedRoleId}
                 onChange={e => setSelectedRoleId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent cursor-pointer"
               >
                 {availableRoles.map(r => (
                   <option key={r.id} value={r.id}>{r.title}</option>
@@ -338,7 +338,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <select
                 value={selectedUserId}
                 onChange={e => setSelectedUserId(e.target.value)}
-                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink cursor-pointer"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent cursor-pointer"
               >
                 {availableMembers.map(u => (
                   <option key={u.id} value={u.id}>{u.fullName}</option>
@@ -354,7 +354,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 type="date"
                 value={dueDate}
                 onChange={e => setDueDate(e.target.value)}
-                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
               />
             </div>
           </div>

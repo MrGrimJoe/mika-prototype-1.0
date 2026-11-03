@@ -273,7 +273,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                 <div 
                   key={dept.id} 
                   className={`bg-surface rounded-xs p-4 border transition-all shadow-xs ${
-                    isSection ? 'border-2 border-ink' : 
+                    isSection ? 'border-2 border-accent' : 
                     isSubject ? 'border border-ink-3' : 
                     isTemp ? 'border border-amber-300 bg-amber-50/10' : 'border border-hairline'
                   }`}
@@ -281,7 +281,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2.5">
                       <div className={`p-2 rounded-xs border ${
-                        isSection ? 'bg-accent text-white border-ink' :
+                        isSection ? 'bg-accent text-white border-accent' :
                         isSubject ? 'bg-paper text-ink border-hairline' :
                         isTemp ? 'bg-amber-100 text-amber-900 border-amber-300' : 'bg-paper-raised text-ink border-hairline'
                       }`}>
@@ -339,7 +339,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                             key={role.id}
                             className={`p-1.5 rounded-xs text-[11px] border flex items-center gap-1.5 font-mono ${
                               role.isRoot 
-                                ? 'bg-accent text-white border-ink font-bold' 
+                                ? 'bg-accent text-white border-accent font-bold' 
                                 : 'bg-paper border-hairline text-ink'
                             }`}
                           >
@@ -387,7 +387,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                 value={selectedRoleIdForLink}
                 onChange={e => setSelectedRoleIdForLink(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-xs border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                className="w-full px-3 py-2 text-xs border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
               >
                 <option value="">-- Choose Role --</option>
                 {allRoles.map(r => {
@@ -408,7 +408,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               <select
                 value={linkValidityDays}
                 onChange={e => setLinkValidityDays(Number(e.target.value))}
-                className="w-full px-3 py-2 text-xs border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                className="w-full px-3 py-2 text-xs border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
               >
                 <option value={3}>3 Days</option>
                 <option value={7}>7 Days</option>
@@ -648,7 +648,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   placeholder="e.g. Class 9 or High School Section"
                   value={newDeptName}
                   onChange={e => setNewDeptName(e.target.value)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent"
                 />
               </div>
 
@@ -657,7 +657,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                 <select
                   value={newDeptType}
                   onChange={e => setNewDeptType(e.target.value as DeptType)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
                 >
                   <option value="department">Standard Department (subordinate root)</option>
                   <option value="section">Section (reaches roles inside grouped depts directly)</option>
@@ -671,7 +671,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                 <select
                   value={newDeptParentId}
                   onChange={e => setNewDeptParentId(e.target.value)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
                 >
                   <option value="">None (Top-Level under Org)</option>
                   {allDepts.map(d => (
@@ -745,7 +745,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   placeholder="e.g. math-teacher, lab-assistant, lead-developer"
                   value={newRoleTitle}
                   onChange={e => setNewRoleTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent"
                 />
               </div>
 
@@ -755,7 +755,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   value={newRoleDeptId}
                   onChange={e => setNewRoleDeptId(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent"
                 >
                   <option value="">-- Select Department --</option>
                   {allDepts.map(d => (
@@ -815,7 +815,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   placeholder="e.g. Science Fair 2026 or Joint Term Assessment"
                   value={eventTitle}
                   onChange={e => setEventTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent"
                 />
               </div>
 
@@ -826,7 +826,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   placeholder="Brief description of the collaboration scope..."
                   value={eventDesc}
                   onChange={e => setEventDesc(e.target.value)}
-                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-ink"
+                  className="w-full px-3 py-2 border border-hairline rounded-xs bg-paper focus:bg-surface focus:outline-hidden focus:border-accent"
                 />
               </div>
 

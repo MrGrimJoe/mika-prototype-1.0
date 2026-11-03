@@ -1,17 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Department, User, Role, Assignment, Message } from '../types';
-import { 
-  MessageSquare, 
-  Send, 
-  Search, 
-  ChevronDown, 
-  ShieldCheck, 
-  Layers, 
-  User as UserIcon,
-  ArrowRight,
-  Radio,
-  ExternalLink
-} from 'lucide-react';
+import { MessageSquare, Send, Search, ChevronDown, ShieldCheck, Layers, User as UserIcon, ArrowRight, Radio, ExternalLink, ArrowLeft } from 'lucide-react';
 import { 
   getUserContexts, 
   getReachableContactsForContext, 
@@ -74,6 +63,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
   // 4. Selected contact for 1-to-1 conversation
   const [selectedUserId, setSelectedUserId] = useState<string>('');
+  // Phones show either the contact list or the conversation, never both side by side
+  const [mobileThreadOpen, setMobileThreadOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [messageInput, setMessageInput] = useState('');
 
@@ -193,11 +184,11 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   };
 
   return (
-    <div className="bg-surface border border-hairline rounded-xs shadow-2xs overflow-hidden h-[calc(100vh-140px)] min-h-[520px] flex font-sans">
+    <div className="bg-surface border border-hairline rounded-xs shadow-2xs overflow-hidden h-[calc(100dvh-140px)] min-h-[420px] md:min-h-[520px] flex font-sans">
       {/* ─────────────────────────────────────────────────────────────
           LEFT PANEL: CONTEXT SWITCHER & STRICT REACHABLE CONTACTS
       ───────────────────────────────────────────────────────────── */}
-      <div className="w-80 border-r border-hairline bg-paper flex flex-col shrink-0">
+      <div className={`${mobileThreadOpen ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-r border-hairline bg-paper flex-col shrink-0`}>
         {/* Context Switcher Block */}
         <div className="p-3.5 border-b border-hairline bg-surface space-y-2">
           <div className="flex items-center justify-between">
@@ -217,7 +208,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   id="context-select"
                   value={selectedContextIndex}
                   onChange={e => setSelectedContextIndex(Number(e.target.value))}
-                  className="w-full text-xs font-mono bg-paper border border-hairline text-ink py-2 px-2.5 pr-8 rounded-xs focus:outline-hidden focus:border-ink cursor-pointer appearance-none"
+                  className="w-full text-xs font-mono bg-paper border border-hairline text-ink py-2 px-2.5 pr-8 rounded-xs focus:outline-hidden focus:border-accent cursor-pointer appearance-none"
                 >
                   {userContexts.map((ctx, idx) => (
                     <option key={ctx.assignmentId} value={idx}>
@@ -247,7 +238,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               placeholder="Search eligible peers..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-2.5 py-1.5 text-xs font-mono bg-surface border border-hairline rounded-xs focus:outline-hidden focus:border-ink text-ink"
+              className="w-full pl-8 pr-2.5 py-1.5 text-xs font-mono bg-surface border border-hairline rounded-xs focus:outline-hidden focus:border-accent text-ink"
             />
           </div>
         </div>
@@ -280,10 +271,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                           key={item.user.id}
                           className={`w-full group rounded-xs transition-colors flex items-center justify-between p-2 cursor-pointer border ${
                             isSelected
-                              ? 'bg-surface border-ink shadow-2xs'
+                              ? 'bg-surface border-accent shadow-2xs'
                               : 'bg-surface border-hairline hover:border-edge'
                           }`}
-                          onClick={() => setSelectedUserId(item.user.id)}
+                          onClick={() => { setSelectedUserId(item.user.id); setMobileThreadOpen(true); }}
                         >
                           <div className="flex items-center gap-2.5 min-w-0 flex-1">
                             <button aria-label={`View ${item.user.fullName}'s profile`}
@@ -333,12 +324,20 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           RIGHT PANEL: CONVERSATION STAGE
       ───────────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col bg-surface">
+      <div className={`${mobileThreadOpen ? 'flex' : 'hidden md:flex'} flex-1 flex-col bg-surface min-w-0`}>
         {activeContact ? (
           <>
             {/* Conversation Header */}
-            <div className="px-6 py-3.5 border-b border-hairline bg-surface flex items-center justify-between">
+            <div className="px-3 md:px-6 py-3.5 border-b border-hairline bg-surface flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setMobileThreadOpen(false)}
+                  aria-label="Back to conversations"
+                  className="md:hidden -ml-1 w-10 h-10 flex items-center justify-center rounded-xs text-ink-2 hover:bg-paper-sunken cursor-pointer shrink-0"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
                 <button aria-label={`View ${activeContact.user.fullName}'s profile`}
                   type="button"
                   onClick={() => onViewProfile && onViewProfile(activeContact.user)}
@@ -349,15 +348,15 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 </button>
 
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-ink truncate text-left">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="font-semibold text-[15px] text-ink text-left">
                       {activeContact.user.fullName}
                     </span>
-                    <span className="text-[11px] font-mono bg-paper text-ink-2 px-1.5 py-0.2 rounded-xs border border-hairline">
+                    <span className="text-[11px] bg-paper text-ink-2 px-1.5 py-0.5 rounded-full border border-hairline whitespace-nowrap">
                       {activeContact.ruleLabel}
                     </span>
                     {/* Part A5: Backed by Google Chat indicator */}
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-st-help-bg text-st-help border border-st-help-border px-1.5 py-0.2 rounded-xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] bg-st-help-bg text-st-help border border-st-help-border px-1.5 py-0.5 rounded-full whitespace-nowrap">
                       <Radio className="w-2.5 h-2.5" />
                       Backed by Google Chat
                     </span>
@@ -440,7 +439,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 placeholder={`Message ${activeContact.user.fullName}...`}
                 value={messageInput}
                 onChange={e => setMessageInput(e.target.value)}
-                className="flex-1 px-3 py-2 text-xs font-mono bg-paper border border-hairline rounded-xs focus:bg-surface focus:outline-hidden focus:border-ink text-ink"
+                className="flex-1 px-3 py-2 text-xs font-mono bg-paper border border-hairline rounded-xs focus:bg-surface focus:outline-hidden focus:border-accent text-ink"
               />
               <button
                 type="submit"

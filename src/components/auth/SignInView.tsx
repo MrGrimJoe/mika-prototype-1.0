@@ -194,7 +194,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
 
       {/* Main Authentication Card */}
       <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-paper-raised border border-hairline rounded-xs shadow-xs p-8">
+        <div className="w-full max-w-md bg-surface border border-hairline rounded-xs shadow-xs p-8">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-serif font-bold text-ink tracking-tight">
               Log in to Mika
@@ -315,7 +315,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                         value={emailInput}
                         onChange={e => setEmailInput(e.target.value)}
                         placeholder="name@organisation.edu"
-                        className="w-full pl-9 pr-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-ink focus:outline-none"
+                        className="w-full pl-9 pr-3 py-2 bg-paper border border-hairline rounded-xs text-xs font-sans text-ink focus:border-accent focus:outline-none"
                       />
                     </div>
                   </div>

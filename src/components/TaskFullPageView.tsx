@@ -305,7 +305,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-ink-2 hover:text-ink transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 text-[13px] font-semibold text-ink-2 hover:text-ink transition-colors cursor-pointer whitespace-nowrap min-h-10"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Tasks</span>
@@ -317,7 +317,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
             <button aria-label="Set this task as the target for Ctrl+Alt+M shortcut across any browser tab"
               id="btn-set-active-task"
               onClick={handleSetActiveTask}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xs text-xs font-semibold transition-all border shadow-xs cursor-pointer ${
+              className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xs text-xs font-semibold transition-all border shadow-xs cursor-pointer whitespace-nowrap ${
                 isActiveForShortcut 
                   ? 'bg-amber-50 text-amber-900 border-amber-300' 
                   : 'bg-surface text-slate-700 border-hairline hover:bg-paper'
@@ -565,7 +565,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   id="btn-submit-confirmation-text"
                   onClick={handleSaveConfirmationText}
                   disabled={!confirmationInputText.trim()}
-                  className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xs disabled:opacity-40 transition cursor-pointer"
+                  className="px-3.5 py-1.5 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs disabled:opacity-40 transition cursor-pointer"
                 >
                   Save & Submit Text Response
                 </button>

@@ -296,7 +296,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 [&>button]:flex-1 sm:[&>button]:flex-none [&>button]:justify-center [&>button]:whitespace-nowrap">
           <input 
             type="file" 
             ref={fileInputRef} 
@@ -331,7 +331,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
             onClick={() => setSelectedView('myself')}
             className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition whitespace-nowrap ${
               selectedView === 'myself'
-                ? 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-accent text-white shadow-sm'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
@@ -548,7 +548,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
 
       {/* Add Entry Modal */}
       {showAddModal && (
-        <ModalOverlay onClose={() => setShowAddModal(false)} className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+        <ModalOverlay onClose={() => setShowAddModal(false)} className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
             <h2 className="text-lg font-semibold text-slate-900">Add Entry to File Vault</h2>
             <p className="text-xs text-slate-500 mt-1">

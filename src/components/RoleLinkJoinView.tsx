@@ -361,7 +361,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
     return (
       <div className="min-h-screen bg-paper flex items-center justify-center p-4">
         <div className="text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-ink border-t-transparent animate-spin rounded-full mx-auto" />
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
           <p className="text-xs font-mono text-ink-3">Resolving Invite Token...</p>
         </div>
       </div>
@@ -569,7 +569,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     fullName: 'Elena Rostova',
                     google_sub: 'google_sub_physics_003'
                   })}
-                  className="w-full text-left p-2.5 border border-hairline hover:border-ink transition-colors text-xs flex items-center justify-between"
+                  className="w-full text-left p-2.5 border border-hairline hover:border-accent transition-colors text-xs flex items-center justify-between"
                 >
                   <div>
                     <div className="font-semibold text-ink">Elena Rostova (Existing Account)</div>
@@ -585,7 +585,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                     fullName: 'Dr. Arthur Pendelton',
                     google_sub: `sub_${Date.now()}`
                   })}
-                  className="w-full text-left p-2.5 border border-hairline hover:border-ink transition-colors text-xs flex items-center justify-between"
+                  className="w-full text-left p-2.5 border border-hairline hover:border-accent transition-colors text-xs flex items-center justify-between"
                 >
                   <div>
                     <div className="font-semibold text-ink">New Incoming Teacher (First-Time)</div>
@@ -612,7 +612,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   required
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-accent outline-none"
                   placeholder="e.g. Dr. Arthur Pendelton"
                 />
               </div>
@@ -626,7 +626,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                   required
                   value={preferredName}
                   onChange={e => setPreferredName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-accent outline-none"
                   placeholder="e.g. Arthur"
                 />
               </div>
@@ -638,7 +638,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 <select
                   value={gender}
                   onChange={e => setGender(e.target.value as any)}
-                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-ink outline-none bg-surface"
+                  className="w-full px-3 py-2 text-xs border border-hairline focus:border-accent outline-none bg-surface"
                 >
                   <option value="female">Female</option>
                   <option value="male">Male</option>

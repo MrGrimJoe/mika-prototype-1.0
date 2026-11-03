@@ -136,7 +136,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                   setSelectedDeptId(e.target.value);
                   setSelectedRoleId('');
                 }}
-                className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs text-ink focus:ring-1 focus:ring-ink focus:border-ink outline-hidden cursor-pointer"
+                className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs text-ink focus:ring-1 focus:ring-ink focus:border-accent outline-hidden cursor-pointer"
               >
                 {allDepts.map(d => (
                   <option key={d.id} value={d.id}>
@@ -153,7 +153,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
               <select
                 value={selectedRoleId}
                 onChange={e => setSelectedRoleId(e.target.value)}
-                className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs text-ink focus:ring-1 focus:ring-ink focus:border-ink outline-hidden cursor-pointer"
+                className="w-full px-3 py-2 bg-paper border border-hairline rounded-xs text-xs text-ink focus:ring-1 focus:ring-ink focus:border-accent outline-hidden cursor-pointer"
               >
                 <option value="">Select a role...</option>
                 {deptRoles.map(r => (
@@ -213,7 +213,7 @@ export const InvitationsView: React.FC<InvitationsViewProps> = ({
                     key={tool.key}
                     className={`flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
                       isChecked
-                        ? 'border-ink bg-paper text-ink font-medium'
+                        ? 'border-accent bg-paper text-ink font-medium'
                         : 'border-hairline hover:border-hairline text-ink-2'
                     }`}
                   >

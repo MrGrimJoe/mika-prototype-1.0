@@ -54,8 +54,8 @@
     --color-slate-100: oklch(20.8% 0.042 265.755);
     --color-slate-200: oklch(27.9% 0.041 260.031);
     --color-slate-300: oklch(37.2% 0.044 257.287);
-    --color-slate-400: oklch(44.6% 0.043 257.281);
-    --color-slate-500: oklch(55.4% 0.046 257.417);
+    --color-slate-400: var(--ink-3);
+    --color-slate-500: var(--ink-3);
     --color-slate-600: oklch(70.4% 0.04 256.788);
     --color-slate-700: oklch(86.9% 0.022 252.894);
     --color-slate-800: oklch(92.9% 0.013 255.508);
@@ -65,8 +65,8 @@
     --color-gray-100: oklch(21% 0.034 264.665);
     --color-gray-200: oklch(27.8% 0.033 256.848);
     --color-gray-300: oklch(37.3% 0.034 259.733);
-    --color-gray-400: oklch(44.6% 0.03 256.802);
-    --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-gray-400: var(--ink-3);
+    --color-gray-500: var(--ink-3);
     --color-gray-600: oklch(70.7% 0.022 261.325);
     --color-gray-700: oklch(87.2% 0.01 258.338);
     --color-gray-800: oklch(92.8% 0.006 264.531);
@@ -76,8 +76,8 @@
     --color-zinc-100: oklch(21% 0.006 285.885);
     --color-zinc-200: oklch(27.4% 0.006 286.033);
     --color-zinc-300: oklch(37% 0.013 285.805);
-    --color-zinc-400: oklch(44.2% 0.017 285.786);
-    --color-zinc-500: oklch(55.2% 0.016 285.938);
+    --color-zinc-400: var(--ink-3);
+    --color-zinc-500: var(--ink-3);
     --color-zinc-600: oklch(70.5% 0.015 286.067);
     --color-zinc-700: oklch(87.1% 0.006 286.286);
     --color-zinc-800: oklch(92% 0.004 286.32);
@@ -159,6 +159,44 @@
   --shadow-xl: 0 18px 48px rgb(16 16 32 / 0.18), 0 0 0 0.5px rgb(16 16 32 / 0.06);
 }
 
+/* Legacy slate/gray/zinc utilities resolve to the neutral scale so greys never drift cool next to the palette.
+   The 400/500 shades are what the app uses for secondary text, so they follow --ink-3 (>= 4.5:1 in both appearances). */
+@theme {
+  --color-slate-50: var(--color-neutral-50);
+  --color-slate-100: var(--color-neutral-100);
+  --color-slate-200: var(--color-neutral-200);
+  --color-slate-300: var(--color-neutral-300);
+  --color-slate-400: var(--ink-3);
+  --color-slate-500: var(--ink-3);
+  --color-slate-600: var(--color-neutral-600);
+  --color-slate-700: var(--color-neutral-700);
+  --color-slate-800: var(--color-neutral-800);
+  --color-slate-900: var(--color-neutral-900);
+  --color-slate-950: var(--color-neutral-950);
+  --color-gray-50: var(--color-neutral-50);
+  --color-gray-100: var(--color-neutral-100);
+  --color-gray-200: var(--color-neutral-200);
+  --color-gray-300: var(--color-neutral-300);
+  --color-gray-400: var(--ink-3);
+  --color-gray-500: var(--ink-3);
+  --color-gray-600: var(--color-neutral-600);
+  --color-gray-700: var(--color-neutral-700);
+  --color-gray-800: var(--color-neutral-800);
+  --color-gray-900: var(--color-neutral-900);
+  --color-gray-950: var(--color-neutral-950);
+  --color-zinc-50: var(--color-neutral-50);
+  --color-zinc-100: var(--color-neutral-100);
+  --color-zinc-200: var(--color-neutral-200);
+  --color-zinc-300: var(--color-neutral-300);
+  --color-zinc-400: var(--ink-3);
+  --color-zinc-500: var(--ink-3);
+  --color-zinc-600: var(--color-neutral-600);
+  --color-zinc-700: var(--color-neutral-700);
+  --color-zinc-800: var(--color-neutral-800);
+  --color-zinc-900: var(--color-neutral-900);
+  --color-zinc-950: var(--color-neutral-950);
+}
+
 /* One accent: legacy indigo utilities follow the Mika accent in both appearances */
 @theme inline {
   --color-indigo-50: color-mix(in srgb, var(--accent-fg) 8%, var(--surface));
@@ -232,4 +270,11 @@ select:not([multiple]):not([size]) {
 
 ::selection {
   background: color-mix(in srgb, var(--accent-fg) 28%, transparent);
+}
+
+/* Form fields draw their own ring; keep the global outline flush so focus doesn't read as a double border */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: -1px;
 }

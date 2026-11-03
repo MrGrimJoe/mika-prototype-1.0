@@ -539,7 +539,7 @@ export const AssistanceModal: React.FC<AssistanceModalProps> = ({
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                     MS
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-ink rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-accent rounded-full animate-pulse" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">

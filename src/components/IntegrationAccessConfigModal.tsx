@@ -88,7 +88,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
       className={
         isInline
           ? 'space-y-6'
-          : 'fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4'
+          : 'fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4'
       }
     >
       <div

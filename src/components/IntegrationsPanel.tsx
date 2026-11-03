@@ -181,7 +181,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
           <div className="p-5 rounded-xl border border-slate-200 bg-surface shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-accent text-white flex items-center justify-center">
                   <Github className="w-5 h-5" />
                 </div>
                 {integrations.github?.connected ? (
@@ -220,7 +220,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
                     type: 'third_party',
                     description: 'Authorize Mika to read public/private repos, file trees, and receive failure webhooks.'
                   })}
-                  className="w-full py-2 px-3 text-xs font-medium bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition text-center shadow-xs"
+                  className="w-full py-2 px-3 text-xs font-medium bg-accent text-white rounded-lg hover:bg-accent-strong transition text-center shadow-xs"
                 >
                   Connect GitHub
                 </button>
@@ -417,7 +417,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({
 
       {/* Connect Modal */}
       {activeModalApp && (
-        <ModalOverlay onClose={() => setActiveModalApp(null)} className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+        <ModalOverlay onClose={() => setActiveModalApp(null)} className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
