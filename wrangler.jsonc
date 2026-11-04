@@ -1,0 +1,42 @@
+{
+  // Mika on Cloudflare: one Worker serves the React app (static assets) and the /api/* routes.
+  // Deploy it, and it is reachable at https://mika.<your-subdomain>.workers.dev
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mika",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Only /api/* hits the Worker first; everything else is served straight from the asset store.
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mika",
+      // Replace with the id printed by `npx wrangler d1 create mika` (see README). Local dev ignores it.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "mika-files"
+    }
+  ],
+
+  // Non-secret config. Secrets (GOOGLE_CLIENT_SECRET, GEMINI_API_KEY) are set with `wrangler secret put`.
+  "vars": {
+    // Public OAuth client id from Google Cloud Console. Leave empty until you have one.
+    "GOOGLE_CLIENT_ID": "",
+    // "1" enables the clearly-labelled development sign-in. NEVER set this in production.
+    "DEV_AUTH": "0"
+  }
+}
