@@ -226,6 +226,9 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
   const department = allDepts.find(d => d.id === task.deptId);
   const taskComments = comments.filter(c => c.taskId === task.id);
 
+  // Only the person the task is assigned to does the work; everyone else just reviews or watches.
+  const isAssignee = !task.assignedToUserId || task.assignedToUserId === currentUser.id;
+
   const statusConfig = taskStateColors[task.status] || taskStateColors.pending;
 
   // B2: Help Button behavior (turns task Blue, notifies creator, posts help notice)
@@ -314,6 +317,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {/* B2: Help Button Fixed at Top Right & Global Shortcut Controls */}
           <div className="flex items-center gap-3">
             {/* Global Shortcut Active Toggle */}
+            {isAssignee && (
             <button aria-label="Set this task as the target for Ctrl+Alt+M shortcut across any browser tab"
               id="btn-set-active-task"
               onClick={handleSetActiveTask}
@@ -327,6 +331,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               <Keyboard className="w-3.5 h-3.5 text-amber-600" />
               <span>{isCopiedShortcut ? 'Active (Ctrl+Alt+M)' : isActiveForShortcut ? 'Shortcut Active' : 'Set Active (Ctrl+Alt+M)'}</span>
             </button>
+            )}
 
             {/* Tampermonkey userscript modal trigger */}
             <button aria-label="Userscript Shortcut Instructions"
@@ -342,7 +347,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <HelpCircle className="w-4 h-4" />
                 Help Requested (Assigner Notified)
               </span>
-            ) : task.status !== 'done' && (
+            ) : task.status !== 'done' && isAssignee && (
               <button aria-label="Request help and notify assigner"
                 id="btn-task-help-topright"
                 onClick={handleHelpClick}
@@ -551,7 +556,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 </div>
                 <p className="whitespace-pre-wrap leading-relaxed">{task.confirmationText}</p>
               </div>
-            ) : task.status !== 'done' ? (
+            ) : task.status !== 'done' && isAssignee ? (
               <div className="space-y-2">
                 <textarea
                   rows={3}
@@ -574,7 +579,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           </div>
 
           {/* Connected Design Tools Quick-Export Bar */}
-          {task.status !== 'done' && (
+          {task.status !== 'done' && isAssignee && (
             <div className="mb-5 p-3.5 bg-slate-50 border border-slate-200 rounded-xs">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-semibold text-slate-700">
@@ -642,7 +647,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                     </a>
                   )}
                 </div>
-              ) : task.status !== 'done' ? (
+              ) : task.status !== 'done' && isAssignee ? (
                 <div
                   onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                   onDragLeave={() => setIsDragging(false)}
@@ -678,7 +683,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {/* Mode 2: Yes/No Confirmation */}
           {task.confirmationMode === 'yes_no' && (
             <div className="space-y-4">
-              {task.status === 'pending' || task.status === 'help' || task.status === 'rejected' ? (
+              {isAssignee && (task.status === 'pending' || task.status === 'help' || task.status === 'rejected') ? (
                 <div className="p-4 bg-paper border border-hairline rounded-xs flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold font-mono text-ink">Ready to submit?</p>

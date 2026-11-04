@@ -112,7 +112,7 @@ export const RolesDashboard: React.FC<RolesDashboardProps> = ({
   const handleCopyAnyLink = () => {
     const firstLink = joinLinks[0];
     if (firstLink) {
-      const url = `${window.location.origin}/#join-${firstLink.token}`;
+      const url = `${window.location.origin}/?join=${firstLink.token}`;
       navigator.clipboard.writeText(url);
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2000);

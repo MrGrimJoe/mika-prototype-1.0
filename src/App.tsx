@@ -306,6 +306,13 @@ export default function App() {
     }
   }, [canUseTaskFeed, activeTab]);
 
+  // Invitations, Settings and Administration are for people with authority over others.
+  useEffect(() => {
+    if (!isCurrentUserLead && (activeTab === 'invites' || activeTab === 'settings' || activeTab === 'admin')) {
+      setActiveTab('dashboard');
+    }
+  }, [isCurrentUserLead, activeTab]);
+
   // Reset selected task when switching tabs
   const handleSelectTab = (tab: SidebarTab) => {
     setSelectedTaskId(null);
@@ -794,7 +801,7 @@ export default function App() {
         onSignOut={handleSignOut}
         onCreateTaskClick={() => setShowCreateTaskModal(true)}
         onViewProfile={u => setViewingProfileUser(u)}
-        orgName="Oakridge Academy"
+        orgName={organization?.name || "Oakridge Academy"}
       />
       </div>
 
@@ -934,8 +941,10 @@ export default function App() {
                   allRoles={roles}
                   allDepts={departments}
                   assignments={assignments}
-                  notifications={notifications}
-                  orgName="Oakridge Academy"
+                  tasks={visibleTasks}
+                  notifications={notifications.filter(n => !currentUser || n.userId === currentUser.id)}
+                  onOpenTask={(id: string) => { setActiveTab('tasks'); setSelectedTaskId(id); }}
+                  orgName={organization?.name || "Oakridge Academy"}
                   onClearNotification={(id) => {
                     setNotifications(prev => prev.filter(n => n.id !== id));
                   }}

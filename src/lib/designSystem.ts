@@ -70,10 +70,10 @@ export const taskStateColors = {
     label: 'Approved'
   },
   rejected: {
-    text: 'var(--status-pending-text, #B91C1C)',      // Same Red as Pending, disambiguated by label
-    bg: 'var(--status-pending-bg, #FEF2F2)',
-    border: 'var(--status-pending-border, #FECACA)',
-    dot: 'var(--status-pending-dot, #EF4444)',
+    text: 'var(--status-rejected-text, #9A3412)',     // Orange (7:1 on bg), per spec
+    bg: 'var(--status-rejected-bg, #FFF7ED)',
+    border: 'var(--status-rejected-border, #FED7AA)',
+    dot: 'var(--status-rejected-dot, #F97316)',
     label: 'Denied'
   },
   expired: {

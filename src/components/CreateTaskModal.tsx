@@ -56,7 +56,14 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedDeptId, setSelectedDeptId] = useState<string>(authorizedDepts[0]?.id || '');
+  // Start on the first department that actually has a role you can assign to.
+  const [selectedDeptId, setSelectedDeptId] = useState<string>(() => {
+    const ownRoleIds = new Set(assignments.filter(a => a.userId === currentUser.id && a.isActive).map(a => a.roleId));
+    const withTargets = authorizedDepts.find(d =>
+      allRoles.some(r => r.deptId === d.id && !ownRoleIds.has(r.id) && hasDirectAuthority(currentUser.id, r.id, allDepts, allRoles, assignments, masterRootUserId).allowed)
+    );
+    return (withTargets || authorizedDepts[0])?.id || '';
+  });
   const [selectedRoleId, setSelectedRoleId] = useState<string>('');
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [dueDate, setDueDate] = useState('');
@@ -74,30 +81,19 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
   const availableRoles = useMemo(() => {
     if (!selectedDeptId) return [];
-    return allRoles.filter(r => r.deptId === selectedDeptId && hasDirectAuthority(currentUser.id, r.id, allDepts, allRoles, assignments, masterRootUserId).allowed);
+    // You can't assign work to a role you hold yourself.
+    const ownRoleIds = new Set(assignments.filter(a => a.userId === currentUser.id && a.isActive).map(a => a.roleId));
+    return allRoles.filter(r => r.deptId === selectedDeptId && !ownRoleIds.has(r.id) && hasDirectAuthority(currentUser.id, r.id, allDepts, allRoles, assignments, masterRootUserId).allowed);
   }, [selectedDeptId, allRoles, currentUser.id, allDepts, assignments, masterRootUserId]);
 
   const availableMembers = useMemo(() => {
-    if (!selectedDeptId) return allUsers;
-    const deptMemberIds = new Set(
-      assignments
-        .filter(a => a.deptId === selectedDeptId && a.isActive)
-        .map(a => a.userId)
+    // Only people who actually hold the chosen role (never the whole org).
+    if (!selectedRoleId) return [];
+    const roleMemberIds = new Set(
+      assignments.filter(a => a.roleId === selectedRoleId && a.isActive).map(a => a.userId)
     );
-
-    if (selectedRoleId) {
-      const roleMemberIds = new Set(
-        assignments
-          .filter(a => a.roleId === selectedRoleId && a.isActive)
-          .map(a => a.userId)
-      );
-      const filtered = allUsers.filter(u => roleMemberIds.has(u.id));
-      if (filtered.length > 0) return filtered;
-    }
-
-    const membersInDept = allUsers.filter(u => deptMemberIds.has(u.id));
-    return membersInDept.length > 0 ? membersInDept : allUsers;
-  }, [selectedDeptId, selectedRoleId, assignments, allUsers]);
+    return allUsers.filter(u => roleMemberIds.has(u.id) && u.id !== currentUser.id);
+  }, [selectedRoleId, assignments, allUsers, currentUser.id]);
 
   React.useEffect(() => {
     if (availableRoles.length > 0 && (!selectedRoleId || !availableRoles.some(r => r.id === selectedRoleId))) {
@@ -170,14 +166,14 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !selectedDeptId) return;
+    if (!title.trim() || !selectedDeptId || !selectedRoleId) return;
 
     onCreateTask({
       title: title.trim(),
       description: description.trim(),
       deptId: selectedDeptId,
       targetRoleId: selectedRoleId || (availableRoles[0]?.id || ''),
-      assignedToUserId: selectedUserId || (availableMembers[0]?.id || ''),
+      assignedToUserId: availableMembers.some(u => u.id === selectedUserId) ? selectedUserId : (availableMembers[0]?.id || ''),
       confirmationMode,
       referenceFile,
       dueDate: dueDate || undefined,
@@ -323,6 +319,9 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 onChange={e => setSelectedRoleId(e.target.value)}
                 className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent cursor-pointer"
               >
+                {availableRoles.length === 0 && (
+                  <option value="">No role in this department you can assign to</option>
+                )}
                 {availableRoles.map(r => (
                   <option key={r.id} value={r.id}>{r.title}</option>
                 ))}
@@ -340,6 +339,9 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                 onChange={e => setSelectedUserId(e.target.value)}
                 className="w-full px-2.5 py-2 border border-hairline rounded-xs bg-paper text-ink focus:outline-hidden focus:border-accent cursor-pointer"
               >
+                {availableMembers.length === 0 && (
+                  <option value="">Nobody holds this role yet (stays open for whoever joins)</option>
+                )}
                 {availableMembers.map(u => (
                   <option key={u.id} value={u.id}>{u.fullName}</option>
                 ))}
@@ -461,7 +463,9 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs transition-colors cursor-pointer shadow-xs"
+              disabled={!title.trim() || !selectedRoleId}
+              title={!selectedRoleId ? 'Pick a department that has a role you can assign to' : undefined}
+              className="px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs transition-colors cursor-pointer shadow-xs"
             >
               Assign Deliverable
             </button>

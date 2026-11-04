@@ -40,6 +40,10 @@ interface AppSidebarProps {
   orgName?: string;
 }
 
+// Test Mode identity switching is only offered in dev builds (or when explicitly enabled).
+const viteEnv = (import.meta as any).env || {};
+const showTestMode = !viteEnv.PROD || !!viteEnv.VITE_ALLOW_DEMO_SWITCH;
+
 export const AppSidebar: React.FC<AppSidebarProps> = ({
   currentUser,
   currentUserRoles,
@@ -47,6 +51,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   activeTab,
   setActiveTab,
   hasSuperiors = false,
+  isCurrentUserLead = false,
   isCollapsed,
   setIsCollapsed,
   taskCount,
@@ -99,18 +104,21 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       shortLabel: 'Files',
       icon: HardDrive
     },
-    {
-      id: 'invites' as const,
-      label: 'Invitations',
-      shortLabel: 'Invites',
-      icon: UserPlus
-    },
-    {
-      id: 'settings' as const,
-      label: 'Settings',
-      shortLabel: 'Settings',
-      icon: SettingsIcon
-    }
+    // Only people with authority over others can invite staff or change org settings.
+    ...(isCurrentUserLead ? [
+      {
+        id: 'invites' as const,
+        label: 'Invitations',
+        shortLabel: 'Invites',
+        icon: UserPlus
+      },
+      {
+        id: 'settings' as const,
+        label: 'Settings',
+        shortLabel: 'Settings',
+        icon: SettingsIcon
+      }
+    ] : [])
   ];
 
   return (
@@ -281,13 +289,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 <SettingsIcon className="w-3.5 h-3.5" />
               </button>
             )}
-            <button aria-label="Switch active user identity (Test Mode)"
+            {showTestMode && (<button aria-label="Switch active user identity (Test Mode)"
               onClick={() => setShowPersonaMenu(!showPersonaMenu)}
               className="p-1.5 text-ink-3 hover:text-ink hover:bg-paper rounded-xs transition-colors cursor-pointer"
               title="Switch active user identity (Test Mode)"
             >
               <ChevronDown className="w-3.5 h-3.5" />
-            </button>
+            </button>)}
           </div>
         )}
 
