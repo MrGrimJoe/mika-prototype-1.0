@@ -222,7 +222,7 @@ export const INITIAL_ROLES: Role[] = [
     id: 'role_principal',
     orgId: 'org_school',
     deptId: 'dept_school',
-    title: 'principal',
+    title: 'Principal',
     slug: 'principal',
     isRoot: true,
     roleType: 'master_root',
@@ -236,7 +236,7 @@ export const INITIAL_ROLES: Role[] = [
     id: 'role_preschool_headmaster',
     orgId: 'org_school',
     deptId: 'dept_preschool',
-    title: 'preschool-headmaster',
+    title: 'Preschool Headmaster',
     slug: 'preschool-headmaster',
     isRoot: true,
     isSectionRoot: true,
@@ -248,25 +248,25 @@ export const INITIAL_ROLES: Role[] = [
     id: 'role_caretaker',
     orgId: 'org_school',
     deptId: 'dept_kindergarde',
-    title: 'caretaker',
+    title: 'Caretaker',
     slug: 'caretaker',
     isRoot: false,
     roleType: 'member'
   },
   // Class 1
-  { id: 'role_c1_math', orgId: 'org_school', deptId: 'dept_class1', title: 'math-teacher', slug: 'c1-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c1_english', orgId: 'org_school', deptId: 'dept_class1', title: 'english-teacher', slug: 'c1-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c1_science', orgId: 'org_school', deptId: 'dept_class1', title: 'science-teacher', slug: 'c1-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c1_math', orgId: 'org_school', deptId: 'dept_class1', title: 'Math Teacher', slug: 'c1-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c1_english', orgId: 'org_school', deptId: 'dept_class1', title: 'English Teacher', slug: 'c1-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c1_science', orgId: 'org_school', deptId: 'dept_class1', title: 'Science Teacher', slug: 'c1-science-teacher', isRoot: false, roleType: 'member' },
 
   // Class 2
-  { id: 'role_c2_math', orgId: 'org_school', deptId: 'dept_class2', title: 'math-teacher', slug: 'c2-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c2_english', orgId: 'org_school', deptId: 'dept_class2', title: 'english-teacher', slug: 'c2-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c2_science', orgId: 'org_school', deptId: 'dept_class2', title: 'science-teacher', slug: 'c2-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c2_math', orgId: 'org_school', deptId: 'dept_class2', title: 'Math Teacher', slug: 'c2-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c2_english', orgId: 'org_school', deptId: 'dept_class2', title: 'English Teacher', slug: 'c2-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c2_science', orgId: 'org_school', deptId: 'dept_class2', title: 'Science Teacher', slug: 'c2-science-teacher', isRoot: false, roleType: 'member' },
 
   // Class 3
-  { id: 'role_c3_math', orgId: 'org_school', deptId: 'dept_class3', title: 'math-teacher', slug: 'c3-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c3_english', orgId: 'org_school', deptId: 'dept_class3', title: 'english-teacher', slug: 'c3-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c3_science', orgId: 'org_school', deptId: 'dept_class3', title: 'science-teacher', slug: 'c3-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c3_math', orgId: 'org_school', deptId: 'dept_class3', title: 'Math Teacher', slug: 'c3-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c3_english', orgId: 'org_school', deptId: 'dept_class3', title: 'English Teacher', slug: 'c3-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c3_science', orgId: 'org_school', deptId: 'dept_class3', title: 'Science Teacher', slug: 'c3-science-teacher', isRoot: false, roleType: 'member' },
 
   // ──────────────────────────────────────────────
   // Section 2: Middleschool
@@ -275,7 +275,7 @@ export const INITIAL_ROLES: Role[] = [
     id: 'role_middleschool_headmaster',
     orgId: 'org_school',
     deptId: 'dept_middleschool',
-    title: 'middleschool-headmaster',
+    title: 'Middleschool Headmaster',
     slug: 'middleschool-headmaster',
     isRoot: true,
     isSectionRoot: true,
@@ -283,32 +283,32 @@ export const INITIAL_ROLES: Role[] = [
     description: 'Middleschool section root: holds direct authority over teachers in Classes 4-7.'
   },
   // Class 4
-  { id: 'role_c4_math', orgId: 'org_school', deptId: 'dept_class4', title: 'math-teacher', slug: 'c4-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c4_english', orgId: 'org_school', deptId: 'dept_class4', title: 'english-teacher', slug: 'c4-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c4_science', orgId: 'org_school', deptId: 'dept_class4', title: 'science-teacher', slug: 'c4-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c4_geography', orgId: 'org_school', deptId: 'dept_class4', title: 'geography-teacher', slug: 'c4-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c4_history', orgId: 'org_school', deptId: 'dept_class4', title: 'history-teacher', slug: 'c4-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c4_math', orgId: 'org_school', deptId: 'dept_class4', title: 'Math Teacher', slug: 'c4-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c4_english', orgId: 'org_school', deptId: 'dept_class4', title: 'English Teacher', slug: 'c4-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c4_science', orgId: 'org_school', deptId: 'dept_class4', title: 'Science Teacher', slug: 'c4-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c4_geography', orgId: 'org_school', deptId: 'dept_class4', title: 'Geography Teacher', slug: 'c4-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c4_history', orgId: 'org_school', deptId: 'dept_class4', title: 'History Teacher', slug: 'c4-history-teacher', isRoot: false, roleType: 'member' },
 
   // Class 5
-  { id: 'role_c5_math', orgId: 'org_school', deptId: 'dept_class5', title: 'math-teacher', slug: 'c5-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c5_english', orgId: 'org_school', deptId: 'dept_class5', title: 'english-teacher', slug: 'c5-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c5_science', orgId: 'org_school', deptId: 'dept_class5', title: 'science-teacher', slug: 'c5-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c5_geography', orgId: 'org_school', deptId: 'dept_class5', title: 'geography-teacher', slug: 'c5-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c5_history', orgId: 'org_school', deptId: 'dept_class5', title: 'history-teacher', slug: 'c5-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c5_math', orgId: 'org_school', deptId: 'dept_class5', title: 'Math Teacher', slug: 'c5-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c5_english', orgId: 'org_school', deptId: 'dept_class5', title: 'English Teacher', slug: 'c5-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c5_science', orgId: 'org_school', deptId: 'dept_class5', title: 'Science Teacher', slug: 'c5-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c5_geography', orgId: 'org_school', deptId: 'dept_class5', title: 'Geography Teacher', slug: 'c5-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c5_history', orgId: 'org_school', deptId: 'dept_class5', title: 'History Teacher', slug: 'c5-history-teacher', isRoot: false, roleType: 'member' },
 
   // Class 6
-  { id: 'role_c6_math', orgId: 'org_school', deptId: 'dept_class6', title: 'math-teacher', slug: 'c6-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c6_english', orgId: 'org_school', deptId: 'dept_class6', title: 'english-teacher', slug: 'c6-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c6_science', orgId: 'org_school', deptId: 'dept_class6', title: 'science-teacher', slug: 'c6-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c6_geography', orgId: 'org_school', deptId: 'dept_class6', title: 'geography-teacher', slug: 'c6-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c6_history', orgId: 'org_school', deptId: 'dept_class6', title: 'history-teacher', slug: 'c6-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c6_math', orgId: 'org_school', deptId: 'dept_class6', title: 'Math Teacher', slug: 'c6-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c6_english', orgId: 'org_school', deptId: 'dept_class6', title: 'English Teacher', slug: 'c6-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c6_science', orgId: 'org_school', deptId: 'dept_class6', title: 'Science Teacher', slug: 'c6-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c6_geography', orgId: 'org_school', deptId: 'dept_class6', title: 'Geography Teacher', slug: 'c6-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c6_history', orgId: 'org_school', deptId: 'dept_class6', title: 'History Teacher', slug: 'c6-history-teacher', isRoot: false, roleType: 'member' },
 
   // Class 7
-  { id: 'role_c7_math', orgId: 'org_school', deptId: 'dept_class7', title: 'math-teacher', slug: 'c7-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c7_english', orgId: 'org_school', deptId: 'dept_class7', title: 'english-teacher', slug: 'c7-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c7_science', orgId: 'org_school', deptId: 'dept_class7', title: 'science-teacher', slug: 'c7-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c7_geography', orgId: 'org_school', deptId: 'dept_class7', title: 'geography-teacher', slug: 'c7-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c7_history', orgId: 'org_school', deptId: 'dept_class7', title: 'history-teacher', slug: 'c7-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c7_math', orgId: 'org_school', deptId: 'dept_class7', title: 'Math Teacher', slug: 'c7-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c7_english', orgId: 'org_school', deptId: 'dept_class7', title: 'English Teacher', slug: 'c7-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c7_science', orgId: 'org_school', deptId: 'dept_class7', title: 'Science Teacher', slug: 'c7-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c7_geography', orgId: 'org_school', deptId: 'dept_class7', title: 'Geography Teacher', slug: 'c7-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c7_history', orgId: 'org_school', deptId: 'dept_class7', title: 'History Teacher', slug: 'c7-history-teacher', isRoot: false, roleType: 'member' },
 
   // ──────────────────────────────────────────────
   // Section 3: Highschool
@@ -317,7 +317,7 @@ export const INITIAL_ROLES: Role[] = [
     id: 'role_highschool_headmaster',
     orgId: 'org_school',
     deptId: 'dept_highschool',
-    title: 'highschool-headmaster',
+    title: 'Highschool Headmaster',
     slug: 'highschool-headmaster',
     isRoot: true,
     isSectionRoot: true,
@@ -325,32 +325,32 @@ export const INITIAL_ROLES: Role[] = [
     description: 'Highschool section root: holds direct authority over teachers in Classes 8-10 and Physics.'
   },
   // Class 8
-  { id: 'role_c8_math', orgId: 'org_school', deptId: 'dept_class8', title: 'math-teacher', slug: 'c8-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c8_english', orgId: 'org_school', deptId: 'dept_class8', title: 'english-teacher', slug: 'c8-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c8_science', orgId: 'org_school', deptId: 'dept_class8', title: 'science-teacher', slug: 'c8-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c8_geography', orgId: 'org_school', deptId: 'dept_class8', title: 'geography-teacher', slug: 'c8-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c8_history', orgId: 'org_school', deptId: 'dept_class8', title: 'history-teacher', slug: 'c8-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c8_math', orgId: 'org_school', deptId: 'dept_class8', title: 'Math Teacher', slug: 'c8-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c8_english', orgId: 'org_school', deptId: 'dept_class8', title: 'English Teacher', slug: 'c8-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c8_science', orgId: 'org_school', deptId: 'dept_class8', title: 'Science Teacher', slug: 'c8-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c8_geography', orgId: 'org_school', deptId: 'dept_class8', title: 'Geography Teacher', slug: 'c8-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c8_history', orgId: 'org_school', deptId: 'dept_class8', title: 'History Teacher', slug: 'c8-history-teacher', isRoot: false, roleType: 'member' },
 
   // Class 9
-  { id: 'role_c9_math', orgId: 'org_school', deptId: 'dept_class9', title: 'math-teacher', slug: 'c9-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c9_english', orgId: 'org_school', deptId: 'dept_class9', title: 'english-teacher', slug: 'c9-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c9_science', orgId: 'org_school', deptId: 'dept_class9', title: 'science-teacher', slug: 'c9-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c9_geography', orgId: 'org_school', deptId: 'dept_class9', title: 'geography-teacher', slug: 'c9-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c9_history', orgId: 'org_school', deptId: 'dept_class9', title: 'history-teacher', slug: 'c9-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c9_math', orgId: 'org_school', deptId: 'dept_class9', title: 'Math Teacher', slug: 'c9-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c9_english', orgId: 'org_school', deptId: 'dept_class9', title: 'English Teacher', slug: 'c9-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c9_science', orgId: 'org_school', deptId: 'dept_class9', title: 'Science Teacher', slug: 'c9-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c9_geography', orgId: 'org_school', deptId: 'dept_class9', title: 'Geography Teacher', slug: 'c9-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c9_history', orgId: 'org_school', deptId: 'dept_class9', title: 'History Teacher', slug: 'c9-history-teacher', isRoot: false, roleType: 'member' },
 
   // Class 10
-  { id: 'role_c10_math', orgId: 'org_school', deptId: 'dept_class10', title: 'math-teacher', slug: 'c10-math-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c10_english', orgId: 'org_school', deptId: 'dept_class10', title: 'english-teacher', slug: 'c10-english-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c10_science', orgId: 'org_school', deptId: 'dept_class10', title: 'science-teacher', slug: 'c10-science-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c10_geography', orgId: 'org_school', deptId: 'dept_class10', title: 'geography-teacher', slug: 'c10-geography-teacher', isRoot: false, roleType: 'member' },
-  { id: 'role_c10_history', orgId: 'org_school', deptId: 'dept_class10', title: 'history-teacher', slug: 'c10-history-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c10_math', orgId: 'org_school', deptId: 'dept_class10', title: 'Math Teacher', slug: 'c10-math-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c10_english', orgId: 'org_school', deptId: 'dept_class10', title: 'English Teacher', slug: 'c10-english-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c10_science', orgId: 'org_school', deptId: 'dept_class10', title: 'Science Teacher', slug: 'c10-science-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c10_geography', orgId: 'org_school', deptId: 'dept_class10', title: 'Geography Teacher', slug: 'c10-geography-teacher', isRoot: false, roleType: 'member' },
+  { id: 'role_c10_history', orgId: 'org_school', deptId: 'dept_class10', title: 'History Teacher', slug: 'c10-history-teacher', isRoot: false, roleType: 'member' },
 
   // Physics
   {
     id: 'role_physics_teacher',
     orgId: 'org_school',
     deptId: 'dept_physics',
-    title: 'physics-teacher',
+    title: 'Physics Teacher',
     slug: 'physics-teacher',
     isRoot: false,
     roleType: 'member',

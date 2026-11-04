@@ -193,10 +193,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         <div className="p-3.5 border-b border-hairline bg-surface space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-ink-3 font-bold">
-              Messaging Context
-            </span>
-            <span className="text-[11px] font-mono bg-paper text-ink-2 px-1.5 py-0.5 rounded-xs border border-hairline">
-              Rules A, B, C
+              Messaging as
             </span>
           </div>
 

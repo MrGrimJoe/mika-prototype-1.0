@@ -44,8 +44,9 @@ export function registerDialogHost(l: Listener): () => void {
 
 export function confirmAction(options: ConfirmOptions): Promise<boolean> {
   if (!listener) {
-    // No host mounted (tests, early boot): fall back to the browser prompt.
-    return Promise.resolve(window.confirm(`${options.title}\n\n${options.message}`));
+    // No host mounted (early boot): never act on a prompt nobody could see.
+    console.warn('confirmAction called before <DialogHost /> mounted; treating as cancelled.');
+    return Promise.resolve(false);
   }
   const host = listener;
   return new Promise<boolean>(resolve => {

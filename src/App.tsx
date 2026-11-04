@@ -512,7 +512,7 @@ export default function App() {
     if (!currentUser) return;
     const newTask: Task = {
       id: `t_${Date.now()}`,
-      orgId: 'org_oakridge',
+      orgId: organization?.id || 'org_oakridge',
       deptId: taskData.deptId,
       title: taskData.title,
       description: taskData.description,
@@ -740,6 +740,15 @@ export default function App() {
     localStorage.setItem('mika_user_id', userId);
   };
 
+  // Tasks sent to a role nobody held yet go to the first person who joins that role.
+  const claimOpenTasksForRole = (userId: string, roleId: string) => {
+    setTasks(prev => prev.map(t =>
+      !t.assignedToUserId && t.assignedToRoleId === roleId && t.status === 'pending'
+        ? { ...t, assignedToUserId: userId, updatedAt: new Date().toISOString() }
+        : t
+    ));
+  };
+
   const handleSimulateJoin = (roleId: string, deptId: string, userData: { name: string; email: string }) => {
     const newUser: User = {
       id: `u_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -762,6 +771,7 @@ export default function App() {
 
     setUsers(prev => [...prev, newUser]);
     setAssignments(prev => [...prev, newAssignment]);
+    claimOpenTasksForRole(newUser.id, roleId);
     confetti({ particleCount: 40, spread: 60 });
   };
 
@@ -796,7 +806,7 @@ export default function App() {
         isCollapsed={isMobile ? false : isSidebarCollapsed}
         setIsCollapsed={collapsed => (isMobile ? setMobileNavOpen(false) : setIsSidebarCollapsed(collapsed))}
         taskCount={visibleTasks.length}
-        allUsers={users}
+        allUsers={users.filter(u => u.id === masterRootUser?.id || assignments.some(a => a.userId === u.id && a.isActive))}
         onSwitchUser={id => handleFastSwitchUser(id)}
         onSignOut={handleSignOut}
         onCreateTaskClick={() => setShowCreateTaskModal(true)}
@@ -1153,6 +1163,7 @@ export default function App() {
 
             setUsers(prev => [...prev, newUser]);
             setAssignments(prev => [...prev, newAssignment]);
+            claimOpenTasksForRole(newUser.id, activeJoinModalLink.roleId);
             setCurrentUserId(newUser.id);
             setActiveJoinModalLink(null);
 

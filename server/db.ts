@@ -522,7 +522,7 @@ class Database {
         created_by_user_id: 'u_principal',
         expires_at: new Date(Date.now() + 14 * 86400000).toISOString(),
         created_at: '2026-08-20T08:00:00Z',
-        role_title: 'caretaker',
+        role_title: 'Caretaker',
         dept_name: 'Kindergarde'
       },
       {
@@ -534,7 +534,7 @@ class Database {
         created_by_user_id: 'u_principal',
         expires_at: new Date(Date.now() + 14 * 86400000).toISOString(),
         created_at: '2026-08-20T08:00:00Z',
-        role_title: 'math-teacher',
+        role_title: 'Math Teacher',
         dept_name: 'Class 1'
       }
     ];
