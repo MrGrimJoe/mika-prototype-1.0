@@ -36,7 +36,7 @@ import {
   upsertIntegrationConnection,
   removeIntegrationConnection,
   upsertUserCompliance,
-} from '../lib/firestoreService';
+} from '../lib/cloudStore';
 
 interface SettingsViewProps {
   currentUser: User;
@@ -67,9 +67,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [selectedToolForConfig, setSelectedToolForConfig] = useState<string | null>(null);
   const [statusFeedback, setStatusFeedback] = useState<string | null>(null);
 
-  const isMasterRoot = currentOrg?.masterRootUserId === currentUser.id || currentUser.isRoot || currentUser.roleTitle?.toLowerCase().includes('principal');
+  const isMasterRoot = currentOrg?.masterRootUserId === currentUser.id;
   const isAnyRoot = isUserAnyRoot(currentUser.id, currentOrg, roles, assignments);
-  const isEnterprise = currentOrg?.storageType === 'byod' || currentOrg?.storageType === 'drive';
+  const isEnterprise = currentOrg?.storageType === 'drive';
 
   const orgWideConnections = connections.filter((c) => c.scope === 'org');
 
@@ -464,7 +464,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className={`p-4 rounded-xs border font-mono text-xs space-y-2 ${
-              currentOrg?.storageType === 'byod'
+              currentOrg?.storageType === 'drive'
                 ? 'bg-surface border-accent shadow-xs'
                 : 'bg-paper border-hairline'
             }`}>
@@ -472,7 +472,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <p className="text-[11px] text-ink-2">
                 Files live inside your organization's verified Google Drive domain.
               </p>
-              {currentOrg?.storageType === 'byod' && (
+              {currentOrg?.storageType === 'drive' && (
                 <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
@@ -528,8 +528,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="divide-y divide-hairline border border-hairline rounded-xs bg-surface">
             {departments.map(dept => {
-              const deptRoles = roles.filter(r => r.departmentId === dept.id);
-              const leadRole = deptRoles.find(r => r.isDepartmentRoot);
+              const deptRoles = roles.filter(r => r.deptId === dept.id);
+              const leadRole = deptRoles.find(r => r.id === dept.rootRoleId);
               return (
                 <div key={dept.id} className="p-4 flex items-center justify-between font-mono text-xs">
                   <div>
@@ -539,7 +539,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     </div>
                   </div>
                   <span className="text-[11px] bg-paper px-2 py-1 rounded-xs border border-hairline text-ink">
-                    {dept.isSection ? 'Section' : 'Department'}
+                    {dept.type === 'section' ? 'Section' : 'Department'}
                   </span>
                 </div>
               );
@@ -564,17 +564,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {/* Access Config Modal */}
       {selectedToolForConfig && (
         <IntegrationAccessConfigModal
-          toolKey={selectedToolForConfig}
           roles={roles}
           departments={departments}
-          currentConnections={connections}
+          connections={connections.filter(c => c.integrationKey === selectedToolForConfig)}
           onSave={async (updated) => {
             for (const conn of updated) {
               await upsertIntegrationConnection(conn);
             }
             setSelectedToolForConfig(null);
           }}
-          onClose={() => setSelectedToolForConfig(null)}
+          onContinue={() => setSelectedToolForConfig(null)}
         />
       )}
     </div>

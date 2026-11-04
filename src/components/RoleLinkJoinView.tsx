@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { signInWithGooglePopup } from '../lib/firebase';
+import { GoogleSignIn } from './auth/GoogleSignIn';
+import type { AuthResult } from '../lib/auth';
+import { api, getToken } from '../lib/api';
 import { 
   Link2, 
   ShieldCheck, 
@@ -18,11 +20,11 @@ import {
 import confetti from 'canvas-confetti';
 import { INTEGRATION_TOOLS, IntegrationToolDefinition } from '../lib/integrationService';
 import { OAuthConnectModal } from './OAuthConnectModal';
-import { upsertUserCompliance } from '../lib/firestoreService';
+import { upsertUserCompliance, startOrgSync } from '../lib/cloudStore';
 
 interface RoleLinkJoinViewProps {
   token: string;
-  onJoinSuccess: (userData: any, session: any) => void;
+  onJoinSuccess: (result: { user: any; orgId: string; session: any }) => void;
   onCancel: () => void;
 }
 
@@ -53,7 +55,6 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
   // Step 1: Link Verified -> Prompt Google Sign-In
   // Step 2: Minimal Fields (if new) OR Merge Dialog (if existing)
   const [googleAuthData, setGoogleAuthData] = useState<{
-    google_sub: string;
     email: string;
     fullName: string;
     photoUrl?: string;
@@ -62,10 +63,8 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
   // Minimal signup fields
   const [preferredName, setPreferredName] = useState('');
   const [fullName, setFullName] = useState('');
-  const [gender, setGender] = useState<'female' | 'male' | 'non-binary' | 'prefer-not-to-say'>('female');
+  const [gender, setGender] = useState<'female' | 'male' | 'non-binary' | 'prefer-not-to-say'>('prefer-not-to-say');
 
-  // Existing account merge prompt state
-  const [existingAccountData, setExistingAccountData] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   // Integration gating state (Section 3.3)
@@ -106,69 +105,28 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
     resolveLink();
   }, [token]);
 
-  // Handle Google Sign-In Click
-  const handleGoogleSignIn = async (simulatedData?: { email: string; fullName: string; google_sub: string }) => {
-    setError(null);
+  // Already signed in on this browser? Skip straight to the signup details.
+  useEffect(() => {
+    if (!getToken()) return;
+    api<{ user: any }>('/api/me').then(({ user }) => adoptIdentity(user)).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    let authPayload: { email: string; fullName: string; google_sub: string; photoUrl?: string };
-
-    if (simulatedData) {
-      authPayload = simulatedData;
-    } else {
-      setSubmitting(true);
-      const res = await signInWithGooglePopup();
-      setSubmitting(false);
-
-      if (!res.success || !res.user) {
-        // Fallback or user dismissed popup
-        if (res.error && !res.error.includes('closed-by-user')) {
-          setError('Google Sign-In was cancelled or blocked. You may also choose a test identity below.');
-        }
-        return;
-      }
-
-      authPayload = {
-        email: res.user.email,
-        fullName: res.user.displayName || res.user.email.split('@')[0],
-        google_sub: res.user.uid,
-        photoUrl: res.user.photoURL
-      };
-    }
-
-    setGoogleAuthData(authPayload);
-    setFullName(authPayload.fullName);
-    setPreferredName(authPayload.fullName.split(' ')[0] || authPayload.email.split('@')[0]);
-
-    // Check with server if this Google account already exists
-    try {
-      setSubmitting(true);
-      const checkRes = await fetch(`/api/join/${token}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: authPayload.email,
-          google_sub: authPayload.google_sub
-        })
-      });
-
-      const checkJson = await checkRes.json();
-      setSubmitting(false);
-
-      if (checkJson.existingAccountFound && checkJson.promptMerge) {
-        // Account exists -> show merge confirmation dialog
-        setExistingAccountData(checkJson);
-      } else if (checkJson.isNew) {
-        // New account needed -> proceed to minimal fields review
-        // (already populated)
-      }
-    } catch (e: any) {
-      setSubmitting(false);
-      console.error('Server check error:', e);
-    }
+  const adoptIdentity = (u: { email: string; fullName: string; preferredName?: string; avatarUrl?: string; gender?: any }) => {
+    setGoogleAuthData({ email: u.email, fullName: u.fullName, photoUrl: u.avatarUrl });
+    setFullName(u.fullName);
+    setPreferredName(u.preferredName || u.fullName.split(' ')[0] || u.email.split('@')[0]);
+    if (u.gender) setGender(u.gender);
   };
 
-  // Submit First-Time Minimal Signup
-  const handleCompleteNewSignup = async (e: React.FormEvent) => {
+  // Called once Google (verified by the Worker) says who this is.
+  const handleSignedIn = (result: AuthResult) => {
+    setError(null);
+    adoptIdentity(result.user);
+  };
+
+  // Accept the invite: binds this Google account to the role immediately, no admin review step.
+  const handleCompleteSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!googleAuthData) return;
 
@@ -176,106 +134,41 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
       setSubmitting(true);
       setError(null);
 
-      const res = await fetch(`/api/join/${token}/signup`, {
+      const data = await api<any>(`/api/join/${token}/signup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: googleAuthData.email,
-          google_sub: googleAuthData.google_sub,
-          full_name: fullName.trim() || googleAuthData.fullName,
-          preferred_name: preferredName.trim() || fullName.split(' ')[0] || 'Member',
+        body: {
+          fullName: fullName.trim() || googleAuthData.fullName,
+          preferredName: preferredName.trim() || fullName.split(' ')[0] || 'Member',
           gender,
-          avatar_url: googleAuthData.photoUrl
-        })
+        },
       });
-
-      const data = await res.json();
-      setSubmitting(false);
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to complete signup');
-      }
 
       confetti({ particleCount: 50, spread: 70 });
 
-      // Persist user compliance records to Firestore
-      if (data.user?.id && linkInfo?.orgId) {
+      // Record which required accounts this person connected (needs the org open to write).
+      if (data.user?.id && linkInfo?.orgId && requiredKeys.some(k => connectedIntegrations[k])) {
+        await startOrgSync(linkInfo.orgId);
         for (const key of requiredKeys) {
           const conn = connectedIntegrations[key];
           if (conn) {
-            upsertUserCompliance({
+            await upsertUserCompliance({
               userId: data.user.id,
               orgId: linkInfo.orgId,
               integrationKey: key,
               connectedAccountLabel: conn.accountLabel,
               connectedAt: conn.connectedAt,
-              satisfiedAt: new Date().toISOString()
+              satisfiedAt: new Date().toISOString(),
             }).catch(console.warn);
           }
         }
       }
 
-      onJoinSuccess(data.user, data.session);
+      onJoinSuccess({ user: data.user, orgId: data.orgId, session: data.session });
     } catch (err: any) {
       setError(err.message || 'Signup failed');
+    } finally {
       setSubmitting(false);
     }
-  };
-
-  // Handle Merging with Existing Account
-  const handleConfirmMerge = async () => {
-    if (!googleAuthData) return;
-
-    try {
-      setSubmitting(true);
-      setError(null);
-
-      const res = await fetch(`/api/join/${token}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: googleAuthData.email,
-          google_sub: googleAuthData.google_sub,
-          mergeWithExisting: true
-        })
-      });
-
-      const data = await res.json();
-      setSubmitting(false);
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to merge role');
-      }
-
-      confetti({ particleCount: 60, spread: 80 });
-
-      // Persist user compliance records to Firestore
-      if (data.user?.id && linkInfo?.orgId) {
-        for (const key of requiredKeys) {
-          const conn = connectedIntegrations[key];
-          if (conn) {
-            upsertUserCompliance({
-              userId: data.user.id,
-              orgId: linkInfo.orgId,
-              integrationKey: key,
-              connectedAccountLabel: conn.accountLabel,
-              connectedAt: conn.connectedAt,
-              satisfiedAt: new Date().toISOString()
-            }).catch(console.warn);
-          }
-        }
-      }
-
-      onJoinSuccess(data.user, data.session);
-    } catch (err: any) {
-      setError(err.message || 'Failed to merge role');
-      setSubmitting(false);
-    }
-  };
-
-  const handleCancelMerge = () => {
-    setExistingAccountData(null);
-    setGoogleAuthData(null);
   };
 
   const renderRequiredConnectionsCard = () => {
@@ -480,50 +373,7 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
         {/* Dynamic Section: Google Sign-in OR Minimal Form OR Merge Confirmation */}
         <div className="p-6 bg-surface space-y-4">
           
-          {/* SCENARIO A: Existing Account Found -> Merge Confirmation */}
-          {existingAccountData && existingAccountData.promptMerge ? (
-            <div className="space-y-4 animate-in fade-in duration-200">
-              <div className="p-4 bg-amber-50 border border-amber-200 space-y-2">
-                <div className="flex items-center gap-2 text-amber-800 font-bold text-xs">
-                  <HelpCircle className="w-4 h-4" />
-                  Existing Account Detected
-                </div>
-                <p className="text-xs text-amber-900 leading-relaxed">
-                  You already have an active Mika account as <strong>{existingAccountData.user?.full_name}</strong> ({existingAccountData.user?.email}).
-                </p>
-                <p className="text-xs text-amber-800 font-semibold">
-                  Add this role (<span className="font-mono">@{linkInfo?.roleName}</span>) to your existing profile?
-                </p>
-              </div>
-
-              {/* Required Integrations Gating Card */}
-              {renderRequiredConnectionsCard()}
-
-              <div className="flex flex-col gap-2">
-                <button
-                  type="button"
-                  onClick={handleConfirmMerge}
-                  disabled={submitting || !allRequirementsSatisfied}
-                  className={`w-full py-2.5 text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-2 ${
-                    !allRequirementsSatisfied
-                      ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
-                      : 'bg-accent text-white hover:bg-accent-strong cursor-pointer'
-                  }`}
-                >
-                  {submitting ? 'Merging Role...' : 'Yes, Add Role to My Account'}
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancelMerge}
-                  disabled={submitting}
-                  className="w-full py-2 bg-surface text-ink-2 border border-hairline text-xs font-mono hover:bg-paper"
-                >
-                  No, Cancel Join
-                </button>
-              </div>
-            </div>
-          ) : !googleAuthData ? (
+          {!googleAuthData ? (
             /* SCENARIO B: Initial State -> Prompt Google Sign-In */
             <div className="space-y-4">
               <div className="text-center space-y-1">
@@ -535,69 +385,11 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
                 </p>
               </div>
 
-              {/* Primary Google Auth Button */}
-              <button
-                type="button"
-                onClick={() => handleGoogleSignIn()}
-                disabled={submitting}
-                className="w-full py-3 bg-accent text-white hover:bg-accent-strong transition-all flex items-center justify-center gap-3 text-xs font-semibold shadow-xs cursor-pointer"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                </svg>
-                <span>{submitting ? 'Connecting Google...' : 'Continue with Google Account'}</span>
-              </button>
-
-              <div className="relative my-3">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-hairline" />
-                </div>
-                <div className="relative flex justify-center text-[11px] font-mono">
-                  <span className="bg-surface px-2 text-ink-3">Or select test account</span>
-                </div>
-              </div>
-
-              {/* Quick test account buttons for development / review */}
-              <div className="space-y-1.5">
-                <button
-                  type="button"
-                  onClick={() => handleGoogleSignIn({
-                    email: 'elena.rostova@mika-org.edu',
-                    fullName: 'Elena Rostova',
-                    google_sub: 'google_sub_physics_003'
-                  })}
-                  className="w-full text-left p-2.5 border border-hairline hover:border-accent transition-colors text-xs flex items-center justify-between"
-                >
-                  <div>
-                    <div className="font-semibold text-ink">Elena Rostova (Existing Account)</div>
-                    <div className="text-[11px] text-ink-3">elena.rostova@mika-org.edu • Tests Account Merge</div>
-                  </div>
-                  <span className="text-[11px] font-mono text-amber-600">Merge test →</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleGoogleSignIn({
-                    email: `new.teacher.${Math.floor(Math.random() * 1000)}@mika-org.edu`,
-                    fullName: 'Dr. Arthur Pendelton',
-                    google_sub: `sub_${Date.now()}`
-                  })}
-                  className="w-full text-left p-2.5 border border-hairline hover:border-accent transition-colors text-xs flex items-center justify-between"
-                >
-                  <div>
-                    <div className="font-semibold text-ink">New Incoming Teacher (First-Time)</div>
-                    <div className="text-[11px] text-ink-3">Simulate first-time Google sign up</div>
-                  </div>
-                  <span className="text-[11px] font-mono text-emerald-600">New signup →</span>
-                </button>
-              </div>
+              <GoogleSignIn onSuccess={handleSignedIn} onError={setError} label="Continue with Google" />
             </div>
           ) : (
             /* SCENARIO C: First-time Google user -> Minimal Signup Fields */
-            <form onSubmit={handleCompleteNewSignup} className="space-y-3.5">
+            <form onSubmit={handleCompleteSignup} className="space-y-3.5">
               <div className="p-3 bg-paper border border-hairline text-xs">
                 <div className="text-[11px] font-mono text-ink-3 mb-1">Authenticated Google Email</div>
                 <div className="font-semibold text-ink">{googleAuthData.email}</div>

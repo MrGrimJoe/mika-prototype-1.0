@@ -14,13 +14,44 @@ const asKind = (k: string): DocKind => {
   return k as DocKind;
 };
 
+/**
+ * What one person may see. Private things stay private on the server, not just hidden in the UI:
+ * your notifications, direct messages you are part of, files archived "to myself", and integration
+ * secrets never leave the Worker.
+ */
+function readable(userId: string, kind: DocKind, doc: any): any | null {
+  switch (kind) {
+    case 'notification':
+      return doc.userId === userId ? doc : null;
+    case 'message':
+      if (doc.channelType === 'dm') {
+        const sender = doc.senderUserId || doc.senderId;
+        const to = doc.recipientId || doc.channelId;
+        return sender === userId || to === userId ? doc : null;
+      }
+      return doc;
+    case 'file':
+      return doc.archiveDestination === 'myself' && doc.uploadedByUserId !== userId ? null : doc;
+    case 'connection': {
+      const { accessToken, refreshToken, token, secret, ...safe } = doc;
+      return safe;
+    }
+    default:
+      return doc;
+  }
+}
+
 /** Everything the app needs on load, in the shape the React app already uses. */
-export async function orgState(env: Env, orgId: string) {
+export async function orgState(env: Env, orgId: string, userId: string) {
+  // Taken BEFORE reading so a write that lands mid-read is replayed by /changes rather than missed.
+  const serverTime = stamp();
   const [org, ...rest] = await Promise.all([
     loadOrgContext(env, orgId),
     ...DOC_KINDS.map(k => listDocs(env, orgId, k)),
   ]);
-  const byKind = Object.fromEntries(DOC_KINDS.map((k, i) => [k, rest[i]])) as Record<DocKind, any[]>;
+  const byKind = Object.fromEntries(
+    DOC_KINDS.map((k, i) => [k, rest[i].map(d => readable(userId, k, d)).filter(Boolean)])
+  ) as Record<DocKind, any[]>;
   return {
     organization: org.org,
     departments: byKind.department,
@@ -37,16 +68,20 @@ export async function orgState(env: Env, orgId: string) {
     compliances: byKind.compliance,
     events: byKind.event,
     joinLinks: await listInviteLinks(env, orgId),
-    serverTime: stamp(),
+    serverTime,
   };
 }
 
 /** Documents changed after `since` (deleted ones are flagged) so clients can poll cheaply. */
-export async function orgChanges(env: Env, orgId: string, since: number) {
+export async function orgChanges(env: Env, orgId: string, since: number, userId: string) {
   const { results } = await env.DB.prepare(
     'SELECT kind, id, json, deleted, updated_at FROM docs WHERE org_id = ?1 AND updated_at > ?2 ORDER BY updated_at ASC LIMIT 2000'
   ).bind(orgId, since).all<{ kind: DocKind; id: string; json: string; deleted: number; updated_at: number }>();
-  const changes = results.map(r => ({ kind: r.kind, id: r.id, deleted: !!r.deleted, doc: r.deleted ? null : JSON.parse(r.json) }));
+  const changes = results.flatMap(r => {
+    if (r.deleted) return [{ kind: r.kind, id: r.id, deleted: true, doc: null }];
+    const doc = readable(userId, r.kind, JSON.parse(r.json));
+    return doc ? [{ kind: r.kind, id: r.id, deleted: false, doc }] : [];
+  });
   const last = results.length ? results[results.length - 1].updated_at : since;
   return { changes, cursor: last, joinLinks: await listInviteLinks(env, orgId) };
 }
@@ -172,9 +207,21 @@ async function authorize(env: Env, ctx: OrgContext, user: User, kind: DocKind, e
       if (doc.userId !== user.id) throw new HttpError(403, 'You can only update your own integration status');
       return doc;
 
+    case 'file':
+      if (existing && existing.uploadedByUserId !== user.id && !lead) throw new HttpError(403, 'You can only change files you uploaded');
+      if (!existing && doc.uploadedByUserId !== user.id) throw new HttpError(403, 'Files must be added as yourself');
+      return doc;
+
+    case 'notification':
+      if (existing && existing.userId !== user.id) throw new HttpError(403, 'You can only update your own notifications');
+      return doc;
+
     case 'connection':
+      if (doc.scope === 'org' && !lead) throw new HttpError(403, 'Only leads can connect organisation-wide tools');
+      return doc;
+
     case 'event':
-      if (!lead && kind === 'event') throw new HttpError(403, 'Only leads can create events');
+      if (!lead) throw new HttpError(403, 'Only leads can create events');
       return doc;
 
     default:
@@ -253,3 +300,46 @@ function authorizeTask(ctx: OrgContext, user: User, existing: Task | null, doc: 
 }
 
 export { putDoc };
+
+/**
+ * Ctrl+Alt+M userscript: the assignee captures a page as evidence. This SUBMITS the task for review;
+ * only the person who assigned it (or an authority over the role) can mark it done.
+ */
+export async function submitViaShortcut(
+  env: Env,
+  user: User,
+  body: { taskId?: string; sourceUrl?: string; host?: string; capturedAt?: string }
+) {
+  if (!body.taskId) throw new HttpError(400, 'taskId is required');
+  // The task id is unique per org, so find which org holds it among the ones this person belongs to.
+  const row = await env.DB.prepare(`SELECT org_id FROM docs WHERE kind = 'task' AND id = ?1 AND deleted = 0`)
+    .bind(body.taskId).first<{ org_id: string }>();
+  if (!row) throw new HttpError(404, 'That task does not exist');
+  const ctx = await loadOrgContext(env, row.org_id);
+  if (!isMember(ctx, user.id)) throw new HttpError(404, 'That task does not exist');
+
+  const task = await getDoc<Task>(env, row.org_id, 'task', body.taskId);
+  if (!task) throw new HttpError(404, 'That task does not exist');
+  if (task.assignedToUserId !== user.id) throw new HttpError(403, 'Only the person this task is assigned to can submit it');
+  if (!['pending', 'rejected', 'help'].includes(task.status)) throw new HttpError(409, `This task is already ${task.status}`);
+
+  const now = new Date().toISOString();
+  const updated: Task = {
+    ...task,
+    status: 'submitted',
+    submissionEvidence: {
+      source: 'keyboard-shortcut',
+      url: String(body.sourceUrl ?? '').slice(0, 2000),
+      host: String(body.host ?? '').slice(0, 255),
+      capturedAt: body.capturedAt || now,
+    },
+    updatedAt: now,
+  };
+  await putDoc(env, row.org_id, 'task', task.id, updated);
+  await putDoc(env, row.org_id, 'notification', `notif_${Date.now()}_sc`, {
+    id: `notif_${Date.now()}_sc`, orgId: row.org_id, userId: task.assignedByUserId,
+    title: 'Task submitted for review', message: `"${task.title}" was submitted by ${user.fullName} with captured evidence.`,
+    type: 'task_submitted', read: false, createdAt: now, relatedTaskId: task.id, metadata: { taskId: task.id },
+  });
+  return updated;
+}

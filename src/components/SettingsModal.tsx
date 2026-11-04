@@ -32,7 +32,7 @@ import {
 import { IntegrationChecklist } from './IntegrationChecklist';
 import { IntegrationAccessConfigModal } from './IntegrationAccessConfigModal';
 import { OAuthConnectModal } from './OAuthConnectModal';
-import { upsertIntegrationConnection, removeIntegrationConnection, upsertUserCompliance } from '../lib/firestoreService';
+import { upsertIntegrationConnection, removeIntegrationConnection, upsertUserCompliance } from '../lib/cloudStore';
 import { ModalOverlay } from './ui/ModalOverlay';
 
 interface SettingsModalProps {
@@ -91,7 +91,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   // Connect handler
   const handleConnectTool = async (toolKey: string, accountLabel: string) => {
-    const orgId = currentOrg?.id || currentUser.orgId || 'org_oakridge';
+    const orgId = currentOrg?.id || '';
     const scope: 'org' | 'root' = isMasterRoot ? 'org' : 'root';
 
     const newConn: IntegrationConnection = {

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { orgSync } from '../lib/cloudStore';
 import { Meeting, User, Department, Role, Assignment } from '../types';
 import { 
   Video, 
@@ -14,7 +15,7 @@ import {
 } from 'lucide-react';
 import { canCreateTask } from '../lib/orgRules';
 import { syncToGoogleCalendar } from '../lib/workspace';
-import { upsertMeeting, upsertNotification } from '../lib/firestoreService';
+import { upsertMeeting, upsertNotification } from '../lib/cloudStore';
 import { ModalOverlay } from './ui/ModalOverlay';
 
 interface MeetingsViewProps {
@@ -69,7 +70,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
     if (!meetingTitle.trim() || !deptId) return;
 
     setErrorMessage(null);
-    if (!currentUser?.orgId) {
+    if (!orgSync.orgId) {
       setErrorMessage('Your session is missing its organization. Sign in again to start a meeting.');
       return;
     }
@@ -104,7 +105,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
       const newMeeting: Meeting = {
         id: `meet-${Date.now()}`,
-        orgId: currentUser.orgId,
+        orgId: orgSync.orgId!,
         deptId: deptId,
         deptName: dept?.name || 'Department',
         title: meetingTitle.trim(),
@@ -129,7 +130,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
           .map(memberId =>
             upsertNotification({
               id: `notif-meet-${newMeeting.id}-${memberId}`,
-              orgId: currentUser.orgId,
+              orgId: orgSync.orgId!,
               userId: memberId,
               title: `Meeting started in ${dept?.name || 'Department'}`,
               message: `${currentUser.fullName} has started a live Google Meet: "${meetingTitle.trim()}". Select to join now.`,

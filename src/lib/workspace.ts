@@ -4,9 +4,9 @@
  * Gmail, Google Tasks, Google Forms, Google Classroom, and Google Keep.
  */
 
-import { getAccessToken } from './firebase';
+import { getAccessToken } from './auth';
+import { getConfig } from './api';
 import { confirmAction, notify } from './dialogService';
-import firebaseConfig from '../../firebase-applet-config.json';
 
 // Declare Google API global for Picker
 declare global {
@@ -419,6 +419,11 @@ export async function openGooglePicker(
 
   try {
     await loadPickerScript();
+    const { googleApiKey, googleAppId } = await getConfig();
+    if (!googleApiKey || !googleAppId) {
+      notify('Google Drive picking is not configured on this deployment yet (GOOGLE_API_KEY and GOOGLE_APP_ID).', 'error');
+      return;
+    }
 
     const view = new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
       .setIncludeFolders(true)
@@ -427,8 +432,8 @@ export async function openGooglePicker(
     const picker = new window.google.picker.PickerBuilder()
       .addView(view)
       .setOAuthToken(token)
-      .setDeveloperKey(firebaseConfig.apiKey)
-      .setAppId(firebaseConfig.appId)
+      .setDeveloperKey(googleApiKey)
+      .setAppId(googleAppId)
       .setCallback((data: any) => {
         if (data[window.google.picker.Response.ACTION] === window.google.picker.Action.PICKED) {
           const doc = data[window.google.picker.Response.DOCUMENTS][0];

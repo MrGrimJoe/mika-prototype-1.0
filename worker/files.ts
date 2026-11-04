@@ -58,6 +58,7 @@ export async function downloadFile(env: Env, user: User, orgId: string, fileId: 
   if (!isMember(ctx, user.id)) throw new HttpError(403, 'You are not part of this organisation');
   const meta = await getDoc<FileItem>(env, orgId, 'file', fileId);
   if (!meta) throw new HttpError(404, 'File not found');
+  if ((meta as any).archiveDestination === 'myself' && meta.uploadedByUserId !== user.id) throw new HttpError(404, 'File not found');
   const obj = await env.FILES.get(`${orgId}/${fileId}`);
   if (!obj) throw new HttpError(404, 'File contents are missing');
   const headers = new Headers({

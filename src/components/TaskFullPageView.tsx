@@ -1,3 +1,4 @@
+import { getToken } from '../lib/api';
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Task, 
@@ -107,7 +108,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
 
   const handleSetActiveTask = () => {
     localStorage.setItem('mika_active_task_id', task.id);
-    localStorage.setItem('mika_session_token', currentUser.id);
+    localStorage.setItem('mika_session_token', getToken() || '');
     setIsActiveForShortcut(true);
     setIsCopiedShortcut(true);
     setTimeout(() => setIsCopiedShortcut(false), 2500);
@@ -515,8 +516,8 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 {task.submissionEvidence.host && (
                   <div><span className="text-slate-400">Origin Host:</span> {task.submissionEvidence.host}</div>
                 )}
-                {task.submissionEvidence.commitHash && (
-                  <div><span className="text-slate-400">Git Commit:</span> {task.submissionEvidence.commitHash} ({task.submissionEvidence.branch})</div>
+                {task.submissionEvidence.commitSha && (
+                  <div><span className="text-slate-400">Git Commit:</span> {task.submissionEvidence.commitSha}</div>
                 )}
                 {task.submissionEvidence.url && (
                   <div>
@@ -577,51 +578,6 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               </div>
             ) : null}
           </div>
-
-          {/* Connected Design Tools Quick-Export Bar */}
-          {task.status !== 'done' && isAssignee && (
-            <div className="mb-5 p-3.5 bg-slate-50 border border-slate-200 rounded-xs">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-semibold text-slate-700">
-                  Quick Export from Design Integrations
-                </span>
-                <span className="text-[11px] text-slate-400 font-mono">1-Click Deliverable Capture</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  id="btn-export-figma"
-                  onClick={handleFigmaExport}
-                  disabled={isExportingFigma}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-purple-50 border border-slate-200 hover:border-purple-300 text-purple-700 text-xs font-semibold rounded-xs transition cursor-pointer"
-                >
-                  <Figma className="w-3.5 h-3.5" />
-                  <span>{isExportingFigma ? 'Exporting...' : 'Export from Figma Frame'}</span>
-                </button>
-
-                <button
-                  type="button"
-                  id="btn-export-canva"
-                  onClick={handleCanvaExport}
-                  disabled={isExportingCanva}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 text-cyan-700 text-xs font-semibold rounded-xs transition cursor-pointer"
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>{isExportingCanva ? 'Exporting...' : 'Export from Canva Design'}</span>
-                </button>
-
-                <button
-                  type="button"
-                  id="btn-trigger-shortcut-submit"
-                  onClick={handleSubmitShortcut}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-amber-800 text-xs font-semibold rounded-xs transition cursor-pointer"
-                >
-                  <Keyboard className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Simulate Ctrl+Alt+M Shortcut</span>
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Mode 1: File Dropbox */}
           {task.confirmationMode !== 'yes_no' && (

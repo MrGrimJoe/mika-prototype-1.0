@@ -280,3 +280,16 @@ export async function listInviteLinks(env: Env, orgId: string): Promise<JoinLink
 }
 
 export { getDoc, putDoc, stamp };
+
+/** Organisation settings. Only the organisation root may change them; pricing can't be set from here. */
+export async function updateOrganization(env: Env, user: User, orgId: string, patch: Partial<Organization>) {
+  const ctx = await loadOrgContext(env, orgId);
+  if (user.id !== ctx.masterRootUserId) throw new HttpError(403, 'Only the organisation root can change organisation settings');
+  const next: Organization = { ...ctx.org };
+  if (typeof patch.name === 'string' && patch.name.trim()) next.name = patch.name.trim();
+  if (typeof patch.description === 'string') next.description = patch.description;
+  if (patch.integrations !== undefined) next.integrations = patch.integrations;
+  if (patch.storageType && ['drive', 'mika', 'self_host'].includes(patch.storageType)) next.storageType = patch.storageType;
+  await env.DB.prepare('UPDATE orgs SET json = ?2 WHERE id = ?1').bind(orgId, JSON.stringify(next)).run();
+  return next;
+}

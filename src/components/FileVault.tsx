@@ -21,7 +21,7 @@ import {
   Image as ImageIcon,
   FolderSync
 } from 'lucide-react';
-import { upsertFileItem, removeFileItem, subscribeFiles } from '../lib/firestoreService';
+import { upsertFileItem, removeFileItem, subscribeFiles, uploadFileBlob } from '../lib/cloudStore';
 import confetti from 'canvas-confetti';
 import { ModalOverlay } from './ui/ModalOverlay';
 import { confirmAction } from '../lib/dialogService';
@@ -139,11 +139,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
 
   // Subscribe to Firestore files
   useEffect(() => {
-    const unsub = subscribeFiles(orgId, (incoming) => {
-      if (incoming && incoming.length > 0) {
-        setVaultFiles(incoming);
-      }
-    });
+    const unsub = subscribeFiles(orgId, (incoming) => setVaultFiles(incoming || []));
     return () => unsub();
   }, [orgId]);
 
@@ -223,7 +219,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
       type: itemSource === 'figma' ? 'application/x-figma' : itemSource === 'canva' ? 'application/x-canva' : 'text/html',
       url: itemUrl.trim(),
       uploadedByUserId: currentUserId,
-      uploadedByName: currentUser?.name || 'Authorized Member',
+      uploadedByName: currentUser?.fullName || 'Authorized Member',
       uploadedAt: new Date().toISOString(),
       archiveDestination: itemDestination,
       archivedByUserId: itemDestination === 'myself' ? currentUserId : undefined,
@@ -248,26 +244,22 @@ export const FileVault: React.FC<FileVaultProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const newItem: FileItem = {
-      id: `file_${Date.now()}`,
-      orgId,
-      deptId: selectedView !== 'myself' ? selectedView : depts[0]?.id || '',
-      name: file.name,
-      size: `${(file.size / 1024).toFixed(1)} KB`,
-      type: file.type || 'application/octet-stream',
-      url: URL.createObjectURL(file),
-      uploadedByUserId: currentUserId,
-      uploadedByName: currentUser?.name || 'Member',
-      uploadedAt: new Date().toISOString(),
-      archiveDestination: selectedView === 'myself' ? 'myself' : 'department',
-      archivedByUserId: selectedView === 'myself' ? currentUserId : undefined,
-      entryType: 'full_import',
-      integrationSource: 'upload'
-    };
-
-    setVaultFiles(prev => [newItem, ...prev]);
-    await upsertFileItem(newItem);
-    confetti({ particleCount: 30, spread: 50 });
+    try {
+      // Real upload to Mika storage; the Worker records the file and its owner.
+      const stored = await uploadFileBlob(file, { deptId: selectedView !== 'myself' ? selectedView : depts[0]?.id || '' });
+      await upsertFileItem({
+        ...stored,
+        archiveDestination: selectedView === 'myself' ? 'myself' : 'department',
+        archivedByUserId: selectedView === 'myself' ? currentUserId : undefined,
+        entryType: 'full_import',
+        integrationSource: 'upload',
+      });
+      confetti({ particleCount: 30, spread: 50 });
+    } catch {
+      /* the store already told the person why (e.g. storage kept in their own drive) */
+    } finally {
+      e.target.value = '';
+    }
   };
 
   const getSourceBadge = (source?: string) => {

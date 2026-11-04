@@ -8,7 +8,7 @@ import {
   ReachablePerson 
 } from '../lib/orgRules';
 import { sendGoogleChatMessage } from '../lib/workspace';
-import { upsertMessage } from '../lib/firestoreService';
+import { upsertMessage } from '../lib/cloudStore';
 
 interface ChatMessage {
   id: string;

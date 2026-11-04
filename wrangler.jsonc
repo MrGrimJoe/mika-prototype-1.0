@@ -36,6 +36,9 @@
   "vars": {
     // Public OAuth client id from Google Cloud Console. Leave empty until you have one.
     "GOOGLE_CLIENT_ID": "",
+    // Browser API key + project number, only needed for the Google Drive file picker.
+    "GOOGLE_API_KEY": "",
+    "GOOGLE_APP_ID": "",
     // "1" enables the clearly-labelled development sign-in. NEVER set this in production.
     "DEV_AUTH": "0"
   }

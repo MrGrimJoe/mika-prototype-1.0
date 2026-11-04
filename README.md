@@ -1,198 +1,87 @@
 # Mika — Recursive Organizational Operating System
 
-Mika is a hierarchical organizational management platform that models teams, departments, sections, and delegable authority as a typed, living relationship graph. Designed for educational institutions and structured organizations, Mika integrates deeply with Google Workspace to unify tasks, documentation, video conferencing, and cross-departmental collaboration into a single cohesive interface.
+Mika models an organization as a recursive tree of departments and roles, with authority that cascades down it. People join through role-specific, time-windowed invite links, sign in with Google only, and work through tasks that move through a strict review flow.
+
+It runs entirely on Cloudflare: **one Worker** serves the React app (static assets) and the `/api/*` routes, **D1** stores data, **R2** stores uploaded files.
 
 ---
 
-## 1. Current Status of the App
+## 1. Run it locally
 
-Mika is fully functional and running with live Firebase Firestore persistence and Google Workspace OAuth authentication:
-
-- **Department Hierarchy & Recursive Authority**:
-  - Visual relationship graph with department nesting, role definitions, and authority badges.
-  - Granular delegation engine enforcing rules: users can only manage tasks and sub-departments where their role holds authoritative jurisdiction.
-- **Task Management Engine & Full-Page View**:
-  - Multi-level delegable subtasks with real-time state tracking (`draft`, `in_progress`, `review`, `blocked`, `completed`).
-  - Google Calendar integration: task deadlines automatically create and sync with Google Calendar events.
-  - Google Drive attachment linking and cloud asset tracking.
-- **File Vault**:
-  - Direct Google Drive integration (`drive.file`, `drive.readonly`).
-  - Folder creation, file uploading, and direct creation of Google Docs, Google Sheets, and Google Slides.
-  - Native Google Picker modal to browse and attach files from Drive.
-- **Meetings & Conferences**:
-  - Live Google Meet integration generating authentic conference rooms (`https://meet.google.com/...`).
-  - Automated in-app notifications dispatched to all department members when a conference begins.
-- **Staff Directory & People**:
-  - Personnel listing with department assignments, contact profiles, and authority levels.
-- **Invitations & Role-Link Onboarding**:
-  - Cryptographic join tokens and QR codes for department-scoped onboarding.
-  - Secure role-link onboarding flow with Google Sign-In identity resolution.
-- **Internal Messaging**:
-  - Department channels and direct staff messaging with Google Chat API transport hooks.
-
----
-
-## 2. Google Workspace Integrations
-
-The application is configured with Google Cloud OAuth (Project: `idyllic-charter-w07pf`) with all necessary scopes provisioned. All integration helper functions are located in `src/lib/workspace.ts` and authenticate using the client-side Google OAuth Bearer access token.
-
-### Summary of Integrations
-
-| Service | Authorized Scopes | Primary Capabilities | Implementation Status |
-| :--- | :--- | :--- | :--- |
-| **Gmail** | `https://mail.google.com/`<br/>`gmail.modify`<br/>`gmail.send`<br/>`gmail.readonly` | Send task notifications, email digests, compose outbound alerts, read threads | Ready in `src/lib/workspace.ts` (`sendGmailMessage`, `listGmailMessages`, `getGmailMessage`) |
-| **Google Tasks** | `https://www.googleapis.com/auth/tasks`<br/>`tasks.readonly` | Sync department tasks with personal to-do lists, manage task status and due dates | Ready in `src/lib/workspace.ts` (`listGoogleTaskLists`, `listGoogleTasks`, `createGoogleTask`, `updateGoogleTask`) |
-| **Google Forms** | `https://www.googleapis.com/auth/forms.body`<br/>`forms.body.readonly`<br/>`forms.responses.readonly` | Generate intake surveys, feedback forms, and inspect submitted responses | Ready in `src/lib/workspace.ts` (`getGoogleForm`, `listGoogleFormResponses`, `createGoogleForm`) |
-| **Google Classroom** | `classroom.courses`<br/>`classroom.coursework.students`<br/>`classroom.announcements`<br/>`classroom.rosters` | Link academic departments to courses, sync coursework deliverables, broadcast announcements | Ready in `src/lib/workspace.ts` (`listClassroomCourses`, `listClassroomCourseWork`, `createClassroomAnnouncement`) |
-| **Google Keep** | `https://keep.googleapis.com/v1/notes` | Sync meeting takeaways and scratchpad notes to Google Keep | Helper ready in `src/lib/workspace.ts` (`listGoogleKeepNotes`); requires Enterprise domain-wide delegation |
-
----
-
-## 3. How to Implement and Use Each Integration
-
-### A. Gmail API
-
-#### Capabilities
-- Dispatch official email notifications to assignees when a high-priority task is created or updated.
-- Send meeting summaries and department announcements directly to staff mailboxes.
-- View recent email threads linked to specific departmental inquiries.
-
-#### Code Pattern
-```typescript
-import { sendGmailMessage, listGmailMessages } from './lib/workspace';
-
-// 1. Send an email notification (prompts user confirmation dialog per Workspace guidelines)
-await sendGmailMessage({
-  to: 'teacher@school.edu',
-  subject: '[Mika] New Task Assignment: Curriculum Review',
-  body: 'You have been assigned as lead reviewer for the Science Department Q1 Curriculum.',
-});
-
-// 2. Fetch recent incoming messages
-const messages = await listGmailMessages('subject:Curriculum', 10);
-```
-
----
-
-### B. Google Tasks API
-
-#### Capabilities
-- Allow users to export their Mika assigned subtasks to their personal Google Tasks list so they appear on mobile widgets and Google Calendar.
-- Sync task completion states: completing a task in Google Tasks can update the corresponding deliverable in Mika.
-
-#### Code Pattern
-```typescript
-import { listGoogleTaskLists, createGoogleTask, updateGoogleTask } from './lib/workspace';
-
-// 1. List user task lists
-const lists = await listGoogleTaskLists();
-const primaryListId = lists[0]?.id || '@default';
-
-// 2. Export a Mika task to Google Tasks
-await createGoogleTask(primaryListId, {
-  title: 'Submit Grade Reports',
-  notes: 'Department: Mathematics | Authoritative deadline via Mika',
-  due: '2026-09-15T17:00:00.000Z',
-});
-
-// 3. Mark task completed
-await updateGoogleTask(primaryListId, 'taskId123', {
-  status: 'completed',
-});
-```
-
----
-
-### C. Google Forms API
-
-#### Capabilities
-- Create department feedback forms, event RSVPs, or student intake questionnaires directly from Mika.
-- Retrieve form submissions to review stakeholder responses within task approval workflows.
-
-#### Code Pattern
-```typescript
-import { createGoogleForm, getGoogleForm, listGoogleFormResponses } from './lib/workspace';
-
-// 1. Create a new Google Form
-const form = await createGoogleForm('Staff Workshop Feedback Q3');
-console.log('Form created at:', form?.responderUri);
-
-// 2. Retrieve responses to analyze submissions
-if (form?.formId) {
-  const responses = await listGoogleFormResponses(form.formId);
-  console.log(`Received ${responses.length} responses.`);
-}
-```
-
----
-
-### D. Google Classroom API
-
-#### Capabilities
-- Map academic departments in Mika (e.g. Science, Humanities) to active Google Classroom course offerings.
-- List coursework deliverables and sync assignment due dates into the department task calendar.
-- Publish administrative announcements directly to enrolled students and faculty.
-
-#### Code Pattern
-```typescript
-import { listClassroomCourses, listClassroomCourseWork, createClassroomAnnouncement } from './lib/workspace';
-
-// 1. List active courses taught or administered
-const courses = await listClassroomCourses('me');
-
-// 2. Fetch coursework / assignments for a course
-if (courses.length > 0) {
-  const courseWork = await listClassroomCourseWork(courses[0].id);
-  console.log('Coursework items:', courseWork);
-}
-
-// 3. Post an announcement to a course
-await createClassroomAnnouncement(
-  courses[0].id,
-  'Final Project review sessions are now scheduled in the Mika Department Hub.'
-);
-```
-
----
-
-### E. Google Keep API & Enterprise Requirements
-
-#### Capabilities
-- Synchronize quick scratchpad notes, meeting takeaways, and checklist items to Google Keep.
-
-#### Architectural Note on Google Keep
-The Google Keep API is an **Enterprise-only** Google Workspace API. Unlike Gmail or Google Tasks, consumer Google accounts and standard OAuth consent brands cannot grant Keep scopes directly. 
-
-- **How to use on Google Workspace Enterprise**:
-  1. Access the Google Cloud Console for your Workspace domain.
-  2. Create a Service Account with **Domain-Wide Delegation (DWD)** enabled.
-  3. In the Google Workspace Admin Console (`admin.google.com`), authorize the Service Account Client ID with the Keep API scope: `https://www.googleapis.com/auth/keep`.
-  4. Use the `listGoogleKeepNotes()` function in `src/lib/workspace.ts`, which connects to `https://keep.googleapis.com/v1/notes`.
-
----
-
-## 4. User Confirmation & Security Model
-
-In accordance with Google Workspace integration security requirements:
-- **Destructive & Outbound Operations**: All functions that modify user data, delete resources, or send external communications (such as `sendGmailMessage`, `deleteGoogleTask`, and `createClassroomAnnouncement`) include explicit user confirmation prompts before execution.
-- **In-Memory Token Cache**: OAuth access tokens obtained through Google Sign-In are cached strictly in-memory (`src/lib/firebase.ts`) and are **never** persisted to `localStorage` or `sessionStorage`.
-- **RBAC Authority Verification**: Workspace actions are gated by Mika's internal authorization engine (`canCreateTask`, `canDelegateTask`) to ensure only authorized role holders can initiate organization-wide actions.
-
----
-
-## 5. Development & Running Locally
-
-### Prerequisites
-- Node.js (v18+)
-- npm or bun
-
-### Setup
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Run local development server
-npm run dev
+cp .dev.vars.example .dev.vars
+npm run db:migrate:local         # creates the local D1 tables
+npm run build                    # builds the frontend into dist/
+npm run dev:api                  # Worker + assets on http://localhost:8787
 ```
 
-The application runs on `http://localhost:3000`.
+`.dev.vars` (never committed):
+
+```
+DEV_AUTH=1
+GEMINI_API_KEY=            # optional, enables the AI helpers
+```
+
+`DEV_AUTH=1` turns on a clearly labelled "Development sign-in" form (any email) so you can use the app before you have a Google OAuth client. **Never enable it in production**: it lets anyone sign in as anyone.
+
+For frontend hot reload run `npm run dev` (Vite proxies `/api` to `:8787`) alongside `npm run dev:api`.
+
+Checks: `npm run lint` (type-checks app and Worker), `npm run test:api` (22 checks of the authority rules against a running Worker).
+
+---
+
+## 2. Deploy to Cloudflare
+
+```bash
+npx wrangler login
+npx wrangler d1 create mika                # copy the printed database_id into wrangler.jsonc
+npx wrangler r2 bucket create mika-files
+npm run db:migrate:remote                  # applies migrations/ to the real database
+npx wrangler secret put GEMINI_API_KEY     # optional
+npm run deploy                             # builds, then deploys
+```
+
+You get `https://mika.<your-subdomain>.workers.dev`. That URL is what you use when applying for Google Sign-In below.
+
+Make sure `DEV_AUTH` is `"0"` in `wrangler.jsonc` for the deployed Worker.
+
+---
+
+## 3. Applying for Google Sign-In (OAuth) with the workers.dev domain
+
+1. Go to Google Cloud Console → create a project → **APIs & Services → OAuth consent screen**.
+2. Choose **External**. App name "Mika", support email, and add your `workers.dev` host as an authorized domain (Google may ask you to verify `workers.dev` subdomains through Search Console, or to use a custom domain you own — a custom domain attached to the Worker is the smoothest route for verification).
+3. Add a privacy policy and home page URL (can be pages on the deployed app).
+4. **Scopes — start with sign-in only**: `openid`, `email`, `profile`. These are non-sensitive and need no Google review. Mika's sign-in uses only these.
+5. Workspace features (Drive file picker, Docs/Sheets/Slides creation, Calendar, Meet) request **sensitive/restricted** scopes (`drive`, `calendar`, …) lazily, only when a person uses those features. They require Google's verification (and a security assessment for restricted Drive scopes). You can ship sign-in first and apply for these later.
+6. **Credentials → Create credentials → OAuth client ID → Web application**.
+   - Authorized JavaScript origins: `https://mika.<your-subdomain>.workers.dev` (and `http://localhost:8787` for local testing).
+   - No redirect URI is needed: sign-in uses the Google Identity Services token flow.
+7. Put the client id in `wrangler.jsonc` → `vars.GOOGLE_CLIENT_ID`, redeploy. The Worker verifies each access token's audience against it. The dev form disappears once this is set and `DEV_AUTH` is off.
+8. For the Drive picker also create a browser API key (`GOOGLE_API_KEY`) and note the project number (`GOOGLE_APP_ID`).
+
+While the consent screen is in "Testing" only the test users you list can sign in; click "Publish app" when ready.
+
+---
+
+## 4. Architecture notes
+
+- **Data**: org-scoped document store in D1 (`docs(org_id, kind, id, json, updated_at, deleted)`), kinds: department, role, assignment, user, task, comment, meeting, file, notification, message, connection, compliance, event. Invite links have their own table so a token can be looked up without knowing the org.
+- **Authorization is deterministic and server-side.** The Worker imports the same pure rules as the UI (`src/lib/orgRules.ts`): who may create tasks, issue invite links, message whom, and which task state transitions each party may make. AI never decides ALLOW/DENY.
+- **Task states**: pending (red) → submitted → done (green); help (blue); rejected (orange, reason required); expired (grey). Only the assignee submits; only the reviewer approves or sends back.
+- **Privacy scoping**: you only receive your own notifications, DMs you take part in, and "myself" files you uploaded; integration secrets are never sent to the browser.
+- **Sync**: clients poll `/changes?since=` every few seconds (with a small cursor overlap). It is not realtime push; Durable Objects + WebSockets would be the upgrade.
+- **Pricing** is computed server-side: $0.30/person/month, plus either bring-your-own-storage or $20 per 250 GiB.
+- **Files**: uploaded to R2 (≤50 MB) when the org uses Mika storage; orgs on Drive/self-host storage get a 409 on upload.
+
+---
+
+## 5. Not implemented yet
+
+- GitHub, Figma and Canva integrations and GitHub webhooks return `501 not_configured` (they no longer fabricate "done" evidence).
+- Google Workspace features need a real OAuth client, picker keys and Google verification.
+- Required-integration gating on join is not enforced server-side.
+- Drive / self-host storage modes have no upload path; File Vault link items still use placeholder thumbnails.
+- No UI for switching between several organizations (the first one is used).
+- AI endpoints need the `GEMINI_API_KEY` secret.

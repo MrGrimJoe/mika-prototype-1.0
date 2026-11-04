@@ -29,8 +29,6 @@ interface AppSidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
   taskCount: number;
-  allUsers: User[];
-  onSwitchUser: (userId: string) => void;
   onSignOut: () => void;
   onOpenWalkthrough?: () => void;
   onCreateTaskClick?: () => void;
@@ -39,10 +37,6 @@ interface AppSidebarProps {
   isAnyRoot?: boolean;
   orgName?: string;
 }
-
-// Test Mode identity switching is only offered in dev builds (or when explicitly enabled).
-const viteEnv = (import.meta as any).env || {};
-const showTestMode = !viteEnv.PROD || !!viteEnv.VITE_ALLOW_DEMO_SWITCH;
 
 export const AppSidebar: React.FC<AppSidebarProps> = ({
   currentUser,
@@ -55,15 +49,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   isCollapsed,
   setIsCollapsed,
   taskCount,
-  allUsers,
-  onSwitchUser,
   onSignOut,
   onViewProfile,
   onOpenSettings,
   isAnyRoot = false,
   orgName = 'Oakridge Academy'
 }) => {
-  const [showPersonaMenu, setShowPersonaMenu] = useState(false);
 
   // Nav items per specification (Part A6: Meetings is a sibling to Dashboard/Chat/File Vault)
   const navItems = [
@@ -289,52 +280,9 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 <SettingsIcon className="w-3.5 h-3.5" />
               </button>
             )}
-            {showTestMode && (<button aria-label="Switch active user identity (Test Mode)"
-              onClick={() => setShowPersonaMenu(!showPersonaMenu)}
-              className="p-1.5 text-ink-3 hover:text-ink hover:bg-paper rounded-xs transition-colors cursor-pointer"
-              title="Switch active user identity (Test Mode)"
-            >
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>)}
           </div>
         )}
 
-        {showPersonaMenu && (
-          <div className="absolute left-0 bottom-full mb-1 w-64 bg-surface border border-hairline shadow-xl rounded-xs py-2 z-50 font-mono text-xs animate-in fade-in duration-100">
-            <div className="px-3 py-1.5 border-b border-hairline text-[11px] font-bold text-ink-3 flex items-center justify-between">
-              <span>Switch User Identity</span>
-              <span className="text-[11px] font-mono text-ink-3">Test Mode</span>
-            </div>
-            <div className="px-3 py-1 text-[11px] text-ink-2 bg-paper border-b border-hairline">
-              Active: <strong className="text-ink">{currentUser.email}</strong>
-            </div>
-
-            <div className="max-h-52 overflow-y-auto py-1 divide-y divide-paper-raised">
-              {allUsers.map(u => (
-                <button
-                  key={u.id}
-                  onClick={() => {
-                    onSwitchUser(u.id);
-                    setShowPersonaMenu(false);
-                  }}
-                  className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-paper transition-colors cursor-pointer ${
-                    u.id === currentUser.id ? 'bg-st-help-bg text-accent-fg font-bold' : 'text-ink'
-                  }`}
-                >
-                  <div className="min-w-0 pr-2">
-                    <div className="font-semibold truncate">{u.fullName}</div>
-                    <div className="text-[11px] text-ink-3 truncate">{u.email}</div>
-                  </div>
-                  {u.id === masterRootUserId && (
-                    <span className="text-[11px] bg-accent text-white px-1 rounded-xs shrink-0">
-                      ROOT
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </aside>
   );

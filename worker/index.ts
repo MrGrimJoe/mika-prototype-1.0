@@ -5,8 +5,8 @@ import {
   createSession, createUser, devAuthEnabled, endSession, findUserByEmail, findUserBySub,
   requireUser, sessionPayload, verifyGoogleAccessToken,
 } from './auth';
-import { acceptInvite, createOrganization, issueInviteLink, resolveInviteLink, type CreateOrgBody } from './orgs';
-import { orgChanges, orgState, removeDoc, writeDoc } from './docs';
+import { acceptInvite, createOrganization, issueInviteLink, resolveInviteLink, updateOrganization, type CreateOrgBody } from './orgs';
+import { orgChanges, orgState, removeDoc, submitViaShortcut, writeDoc } from './docs';
 import { downloadFile, removeFileBlob, uploadFile } from './files';
 import { assistanceGenerate, generateOrgStructure, interpret } from './ai';
 import { isMember, loadOrgContext, listDocs, orgsForUser } from './store';
@@ -70,12 +70,18 @@ router.add('POST', '/api/orgs', async ({ req }) => {
   return json({ success: true, ...(await createOrganization(env, user, body)) }, 201);
 });
 
+router.add('PATCH', '/api/orgs/:orgId', async ({ req, params }) => {
+  const env = currentEnv();
+  const user = await requireUser(env, req);
+  return json({ success: true, org: await updateOrganization(env, user, params.orgId, await readJson(req)) });
+});
+
 router.add('GET', '/api/orgs/:orgId/state', async ({ req, url, params }) => {
   const env = currentEnv();
   const user = await requireUser(env, req, url);
   const ctx = await loadOrgContext(env, params.orgId);
   if (!isMember(ctx, user.id)) throw new HttpError(403, 'You are not part of this organisation');
-  return json(await orgState(env, params.orgId));
+  return json(await orgState(env, params.orgId, user.id));
 });
 
 router.add('GET', '/api/orgs/:orgId/changes', async ({ req, url, params }) => {
@@ -83,7 +89,7 @@ router.add('GET', '/api/orgs/:orgId/changes', async ({ req, url, params }) => {
   const user = await requireUser(env, req, url);
   const ctx = await loadOrgContext(env, params.orgId);
   if (!isMember(ctx, user.id)) throw new HttpError(403, 'You are not part of this organisation');
-  return json(await orgChanges(env, params.orgId, Number(url.searchParams.get('since')) || 0));
+  return json(await orgChanges(env, params.orgId, Number(url.searchParams.get('since')) || 0, user.id));
 });
 
 router.add('PUT', '/api/orgs/:orgId/docs/:kind/:id', async ({ req, params }) => {
@@ -145,6 +151,15 @@ router.add('POST', '/api/ai/generate-org-structure', async ({ req }) => {
   return json(await generateOrgStructure(env, await readJson(req)));
 });
 
+router.add('POST', '/api/v1/tasks/submit-shortcut', async ({ req }) => {
+  const env = currentEnv();
+  const user = await requireUser(env, req);
+  const task = await submitViaShortcut(env, user, await readJson(req));
+  return json({ success: true, taskId: task.id, status: task.status, evidence: task.submissionEvidence });
+});
+router.add('POST', '/api/webhooks/github', notConfiguredLater('GitHub webhooks'));
+router.add('POST', '/api/v1/webhooks/github', notConfiguredLater('GitHub webhooks'));
+
 // ---- Integrations -------------------------------------------------------------------------
 router.add('GET', '/api/integrations/connections', async ({ req, url }) => {
   const env = currentEnv();
@@ -160,6 +175,9 @@ router.add('GET', '/api/integrations/connections', async ({ req, url }) => {
 
 router.add('GET', '/api/integrations/github/config', async () => json({ clientId: '', isConfigured: false }));
 
+function notConfiguredLater(what: string) {
+  return async () => json({ error: `${what} are not enabled on this deployment yet.`, code: 'not_configured' }, 501);
+}
 const notConfigured = (what: string) => async () =>
   json({ error: `${what} is not connected on this deployment yet.`, code: 'not_configured' }, 501);
 for (const [m, p, label] of [
@@ -182,7 +200,12 @@ export default {
     const url = new URL(req.url);
     try {
       if (url.pathname === '/api/config') {
-        return json({ googleClientId: env.GOOGLE_CLIENT_ID || null, devAuth: devAuthEnabled(env) });
+        return json({
+          googleClientId: env.GOOGLE_CLIENT_ID || null,
+          googleApiKey: env.GOOGLE_API_KEY || null,
+          googleAppId: env.GOOGLE_APP_ID || null,
+          devAuth: devAuthEnabled(env),
+        });
       }
       const res = await router.handle(req, url);
       if (res) return res;

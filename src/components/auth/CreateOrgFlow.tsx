@@ -24,35 +24,13 @@ import {
 import { DepartmentNode, Section } from '../flowchart/flowchartTypes';
 import { DepartmentFlowchartBuilder } from '../flowchart/DepartmentFlowchartBuilder';
 import { AnimatedNumber } from '../common/AnimatedNumber';
-import { signInWithGooglePopup } from '../../lib/firebase';
+import { GoogleSignIn } from './GoogleSignIn';
+import type { AuthResult } from '../../lib/auth';
+import { api, getToken } from '../../lib/api';
 import confetti from 'canvas-confetti';
 import { IntegrationConnection } from '../../types';
 import { IntegrationChecklist } from '../IntegrationChecklist';
-import { upsertIntegrationConnection } from '../../lib/firestoreService';
-
-function flattenTreeToDepartments(root: DepartmentNode, sections: Section[]) {
-  const depts: any[] = [];
-  const sectionMap = new Map(sections.map(s => [s.id, s]));
-
-  function traverse(node: DepartmentNode) {
-    if (node.id !== 'root-department') {
-      const sec = node.sectionId ? sectionMap.get(node.sectionId) : undefined;
-      depts.push({
-        id: node.id,
-        name: node.department,
-        type: sec ? 'section' : 'department',
-        rootRole: node.roots && node.roots.length > 0 ? node.roots[0] : `${node.department} Lead`,
-        roles: node.roles || []
-      });
-    }
-    if (node.children) {
-      node.children.forEach(traverse);
-    }
-  }
-
-  traverse(root);
-  return depts;
-}
+import { upsertIntegrationConnection, startOrgSync } from '../../lib/cloudStore';
 
 export type TemplateId = 'school' | 'company' | 'nonprofit' | 'creative' | 'healthcare' | 'custom';
 
@@ -149,7 +127,7 @@ interface CreateOrgFlowProps {
   } | null;
   onBackToLanding: () => void;
   onNavigateToSignIn: () => void;
-  onCreationComplete: (org: any, user: any, session: any) => void;
+  onCreationComplete: (result: { org: any; user: any; session: any; departments: any[]; roles: any[]; assignments: any[] }) => void;
 }
 
 export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
@@ -187,7 +165,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
   const [fullName, setFullName] = useState(() => initialGoogleAccount?.fullName || '');
   const [preferredName, setPreferredName] = useState(() => initialGoogleAccount?.preferredName || initialGoogleAccount?.fullName?.split(' ')[0] || '');
   const [gender, setGender] = useState<'female' | 'male' | 'non-binary' | 'prefer_not_to_say'>('prefer_not_to_say');
-  const [orgName, setOrgName] = useState('Acme Corp');
+  const [orgName, setOrgName] = useState('');
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -226,7 +204,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCreatedSuccess, setIsCreatedSuccess] = useState(false);
-  const [createdOrgData, setCreatedOrgData] = useState<{ org: any; user: any; session: any } | null>(null);
+  const [createdOrgData, setCreatedOrgData] = useState<any | null>(null);
 
   // Calculations for Step 7:
   // Formula: (team_size * $0.30) + (storage_GiB * $0.08)
@@ -290,40 +268,17 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
     goToStep(4);
   };
 
-  // Google Sign In Handler
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const authRes = await signInWithGooglePopup();
-      if (authRes.success && authRes.user) {
-        const u = authRes.user;
-        const acct = {
-          google_sub: u.uid,
-          email: u.email || 'user@workspace.org',
-          fullName: u.displayName || 'Authorized User',
-          photoUrl: u.photoURL || undefined
-        };
-        setGoogleAccount(acct);
-        setFullName(acct.fullName);
-        setPreferredName(acct.fullName.split(' ')[0] || acct.fullName);
-      } else {
-        throw new Error(authRes.error || 'Google Sign-in failed.');
-      }
-    } catch (err: any) {
-      // Safe demo fallback for preview environment
-      const demoAcct = {
-        google_sub: `sub_${Date.now()}`,
-        email: 'administrator@workspace.org',
-        fullName: 'Dr. Sarah Vance',
-        photoUrl: undefined
-      };
-      setGoogleAccount(demoAcct);
-      setFullName(demoAcct.fullName);
-      setPreferredName('Sarah');
-    } finally {
-      setLoading(false);
-    }
+  // Called once Google (verified by the Worker) says who this is.
+  const handleSignedIn = (result: AuthResult) => {
+    const acct = {
+      google_sub: result.user.id,
+      email: result.user.email,
+      fullName: result.user.fullName,
+      photoUrl: result.user.avatarUrl,
+    };
+    setGoogleAccount(acct);
+    setFullName(prev => prev || acct.fullName);
+    setPreferredName(prev => prev || acct.fullName.split(' ')[0] || acct.fullName);
   };
 
   // Logo Upload Handlers
@@ -352,81 +307,46 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
 
   // Step 7: Create Organisation Final Submission
   const handleConfirmCreate = async () => {
+    if (!getToken()) {
+      setErrorMessage('Your sign-in expired. Go back to step 2 and sign in with Google again.');
+      return;
+    }
     setLoading(true);
     setErrorMessage(null);
     try {
-      const depts = flattenTreeToDepartments(flowchartTree, flowchartSections);
-      const payload = {
-        orgName: orgName.trim(),
-        creator: {
-          google_sub: googleAccount?.google_sub || `sub_${Date.now()}`,
-          email: googleAccount?.email || 'admin@workspace.org',
-          fullName: fullName.trim(),
-          preferredName: preferredName.trim() || fullName.trim(),
-          gender
-        },
-        templateId: selectedTemplate,
-        structure: {
-          departments: depts
-        },
-        sizing: {
-          people: peopleCount,
-          storageGiB: storageType === 'mika' ? storageGiB : 0,
-          storageType,
-          monthlyTotal: totalMonthly
-        },
-        tree: flowchartTree,
-        sections: flowchartSections,
-        integrations: orgConnections
-      };
-
-      const res = await fetch('/api/org/create-v2', {
+      const data = await api<any>('/api/orgs', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: {
+          orgName: orgName.trim(),
+          creator: {
+            fullName: fullName.trim(),
+            preferredName: preferredName.trim() || fullName.trim(),
+            gender: gender.replace(/_/g, '-'),
+          },
+          templateId: selectedTemplate,
+          tree: flowchartTree,
+          sections: flowchartSections,
+          sizing: {
+            people: peopleCount,
+            storageGiB: storageType === 'mika' ? storageGiB : 0,
+            storageType,
+          },
+        },
       });
 
-      const data = await res.json();
-
-      const createdOrg = data.success ? data.org : {
-        id: `org_${Date.now()}`,
-        name: orgName,
-        slug: orgName.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-        people: peopleCount,
-        storageGiB: storageType === 'mika' ? storageGiB : 0
-      };
-
-      const createdUser = data.success ? data.user : {
-        id: `u_root_${Date.now()}`,
-        google_sub: payload.creator.google_sub,
-        email: payload.creator.email,
-        full_name: fullName,
-        preferred_name: preferredName || fullName,
-        gender,
-        isRoot: true
-      };
-
-      const createdSession = data.success ? data.session : {
-        sessionId: `sess_${Date.now()}`,
-        token: `tok_${Date.now()}`
-      };
-
-      // Persist chosen org-wide integrations if any
+      // Org-wide integrations chosen during setup are saved once the org exists.
       if (orgConnections.length > 0) {
+        await startOrgSync(data.org.id);
         for (const conn of orgConnections) {
-          await upsertIntegrationConnection({
-            ...conn,
-            orgId: createdOrg.id,
-            connectedByUserId: createdUser.id
-          }).catch(console.warn);
+          await upsertIntegrationConnection({ ...conn, orgId: data.org.id, connectedByUserId: data.user.id }).catch(console.warn);
         }
       }
 
-      setCreatedOrgData({ org: createdOrg, user: createdUser, session: createdSession });
+      setCreatedOrgData(data);
       setIsCreatedSuccess(true);
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
     } catch (err: any) {
-      setErrorMessage(err.message || 'Error initializing organization.');
+      setErrorMessage(err?.message || 'We could not create the organisation. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -457,7 +377,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           </p>
 
           <button
-            onClick={() => onCreationComplete(createdOrgData.org, createdOrgData.user, createdOrgData.session)}
+            onClick={() => onCreationComplete(createdOrgData)}
             className="w-full py-3 bg-accent hover:bg-accent-strong text-white rounded-xs font-mono text-xs font-semibold shadow-xs transition-all cursor-pointer"
           >
             Continue to Workspace
@@ -585,32 +505,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     Sign in with Google to establish master ownership
                   </span>
                   
-                  {/* Standard Google Sign-In Button Treatment */}
-                  <button
-                    onClick={handleGoogleSignIn}
-                    disabled={loading}
-                    className="w-full py-2.5 px-4 bg-surface hover:bg-neutral-50 text-ink-2 border border-hairline rounded-xs font-sans text-sm font-medium shadow-xs hover:shadow transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path
-                        fill="#4285F4"
-                        d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
-                      />
-                      <path
-                        fill="#34A853"
-                        d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
-                      />
-                      <path
-                        fill="#FBBC05"
-                        d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
-                      />
-                      <path
-                        fill="#EA4335"
-                        d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
-                      />
-                    </svg>
-                    <span>{loading ? 'Connecting...' : 'Sign in with Google'}</span>
-                  </button>
+                  <GoogleSignIn onSuccess={handleSignedIn} onError={setErrorMessage} label="Sign in with Google" />
 
                   <div className="mt-3 text-[11px] font-mono text-ink-3">
                     Verified institutional address attached automatically

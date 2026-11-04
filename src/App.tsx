@@ -16,17 +16,6 @@ import {
   OrgIntegrations,
   TaskMention
 } from './types';
-import { 
-  INITIAL_DEPARTMENTS, 
-  INITIAL_ROLES, 
-  INITIAL_USERS, 
-  INITIAL_ASSIGNMENTS, 
-  INITIAL_TASKS, 
-  INITIAL_COMMENTS, 
-  INITIAL_FILES, 
-  INITIAL_JOIN_LINKS, 
-  INITIAL_EVENTS
-} from './lib/mockData';
 import { AuthorizationEngine } from './lib/authorizationEngine';
 import { 
   isUserLead, 
@@ -42,7 +31,6 @@ import { StaffList } from './components/StaffList';
 import { FileVault } from './components/FileVault';
 import { ChatPanel } from './components/ChatPanel';
 import { CreateTaskModal } from './components/CreateTaskModal';
-import { JoinModal } from './components/JoinModal';
 import { RoleLinkJoinView } from './components/RoleLinkJoinView';
 import { LandingPage } from './components/landing/LandingPage';
 import { SignInView } from './components/auth/SignInView';
@@ -54,18 +42,26 @@ import { DashboardView } from './components/DashboardView';
 import { InvitationsView } from './components/InvitationsView';
 import { PersonProfileModal } from './components/PersonProfileModal';
 import { AdminSection } from './components/AdminSection';
-import { 
-  subscribeTasks, 
-  subscribeComments, 
-  subscribeMeetings, 
-  subscribeNotifications, 
-  subscribeIntegrationConnections,
+import {
+  subscribeKind,
+  subscribeJoinLinks,
   subscribeUserCompliance,
-  upsertTask, 
-  upsertComment, 
+  startOrgSync,
+  stopOrgSync,
+  orgSync,
+  putDoc,
+  removeDoc,
+  uploadFileBlob,
+  upsertTask,
+  upsertComment,
   upsertNotification,
-  upsertUserCompliance
-} from './lib/firestoreService';
+  upsertMeeting,
+  upsertUserCompliance,
+} from './lib/cloudStore';
+import { api, getToken, getStoredOrgId, setStoredOrgId, setToken, UNAUTHORIZED_EVENT } from './lib/api';
+import { logout, type AuthResult } from './lib/auth';
+import { ApiError } from './lib/api';
+import { notify } from './lib/dialogService';
 import { IntegrationConnection, UserIntegrationCompliance } from './types';
 import { Settings as SettingsIcon, User as UserIcon, LogOut, ChevronDown, Menu } from 'lucide-react';
 import { syncToGoogleCalendar } from './lib/workspace';
@@ -79,57 +75,36 @@ export default function App() {
     return params.get('join') || null;
   });
 
-  // Session & Authentication State
-  const [session, setSession] = useState<{ sessionId: string; token: string } | null>(() => {
-    const saved = localStorage.getItem('mika_session');
-    return saved ? JSON.parse(saved) : null;
-  });
+  // The signed-in account (from the Worker) and the organisation it is working in.
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [booting, setBooting] = useState<boolean>(() => !!getToken());
+  const [bootError, setBootError] = useState<string | null>(null);
+  const [myOrgs, setMyOrgs] = useState<Organization[]>([]);
 
-  // Primary Graph State (Synchronized with backend & Firestore)
-  const [departments, setDepartments] = useState<Department[]>(INITIAL_DEPARTMENTS);
-  const [roles, setRoles] = useState<Role[]>(INITIAL_ROLES);
-  const [users, setUsers] = useState<User[]>(INITIAL_USERS);
-  const [assignments, setAssignments] = useState<Assignment[]>(INITIAL_ASSIGNMENTS);
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
-  const [comments, setComments] = useState<Comment[]>(INITIAL_COMMENTS);
-  const [files, setFiles] = useState<FileItem[]>(INITIAL_FILES);
-  const [joinLinks, setJoinLinks] = useState<JoinLink[]>(INITIAL_JOIN_LINKS);
-  const [events, setEvents] = useState<EventBinding[]>(INITIAL_EVENTS);
+  // Everything below is mirrored from the Worker (D1) by the store in lib/cloudStore.ts.
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [joinLinks, setJoinLinks] = useState<JoinLink[]>([]);
+  const [events, setEvents] = useState<EventBinding[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [notifications, setNotifications] = useState<OrgNotification[]>([]);
-
-  // Organization Metadata & Connected Integrations
-  const [organization, setOrganization] = useState<Organization>(() => {
-    const saved = localStorage.getItem('mika_org_data');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return {
-      id: 'org_oakridge',
-      name: 'Oakridge Academy',
-      slug: 'oakridge-academy',
-      type: 'school',
-      integrations: {
-        github: { isConnected: true, defaultRepo: 'codeNinjaJane/mika-prototypes' },
-        figma: { isConnected: true },
-        canva: { isConnected: true },
-        googleDrive: { isConnected: false }
-      }
-    };
-  });
+  const [organization, setOrganization] = useState<Organization | null>(null);
 
   const handleUpdateIntegrations = (newIntegrations: OrgIntegrations) => {
-    setOrganization(prev => {
-      const updated = { ...prev, integrations: newIntegrations };
-      localStorage.setItem('mika_org_data', JSON.stringify(updated));
-      return updated;
-    });
+    if (!organization) return;
+    const before = organization;
+    setOrganization({ ...organization, integrations: newIntegrations });
+    api<{ org: Organization }>(`/api/orgs/${organization.id}`, { method: 'PATCH', body: { integrations: newIntegrations } })
+      .then(({ org }) => setOrganization(org))
+      .catch(e => { setOrganization(before); notify(e?.message || 'Could not save the integration settings.', 'error'); });
   };
 
-  // Authenticated Current User ID (Defaults to Principal so user begins directly on Dashboard)
-  const [currentUserId, setCurrentUserId] = useState<string | null>(() => {
-    return localStorage.getItem('mika_user_id') || INITIAL_USERS[0]?.id || 'u_principal';
-  });
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // Navigation & View State
   const [activeTab, setActiveTab] = useState<SidebarTab>('dashboard');
@@ -164,7 +139,6 @@ export default function App() {
     return () => document.removeEventListener('keydown', onKey);
   }, [mobileNavOpen]);
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
-  const [activeJoinModalLink, setActiveJoinModalLink] = useState<JoinLink | null>(null);
   const [viewingProfileUser, setViewingProfileUser] = useState<User | null>(null);
   const [chatTargetUserId, setChatTargetUserId] = useState<string | null>(null);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -173,94 +147,78 @@ export default function App() {
   const [integrationConnections, setIntegrationConnections] = useState<IntegrationConnection[]>([]);
   const [userCompliances, setUserCompliances] = useState<UserIntegrationCompliance[]>([]);
 
-  // Firestore Real-Time Subscriptions
-  useEffect(() => {
-    const orgId = organization?.id || 'org_oakridge';
+  // ---- Boot: restore the session, then open the organisation --------------------------------
+  const enterOrg = async (orgId: string) => {
+    const org = await startOrgSync(orgId);
+    setOrganization(org);
+    setStoredOrgId(orgId);
+  };
 
-    const unsubTasks = subscribeTasks(orgId, latestTasks => {
-      if (latestTasks && latestTasks.length > 0) {
-        setTasks(latestTasks);
-      }
-    });
-
-    const unsubComments = subscribeComments(orgId, latestComments => {
-      if (latestComments && latestComments.length > 0) {
-        setComments(latestComments);
-      }
-    });
-
-    const unsubMeetings = subscribeMeetings(orgId, latestMeetings => {
-      if (latestMeetings && latestMeetings.length > 0) {
-        setMeetings(latestMeetings);
-      }
-    });
-
-    const unsubNotifications = subscribeNotifications(orgId, latestNotifications => {
-      if (latestNotifications && latestNotifications.length > 0) {
-        setNotifications(latestNotifications);
-      }
-    });
-
-    const unsubConns = subscribeIntegrationConnections(orgId, conns => {
-      if (conns) {
-        setIntegrationConnections(conns);
-      }
-    });
-
-    return () => {
-      unsubTasks();
-      unsubComments();
-      unsubMeetings();
-      unsubNotifications();
-      unsubConns();
-    };
-  }, [organization?.id]);
-
-  useEffect(() => {
-    if (!currentUserId) return;
-    const unsubComp = subscribeUserCompliance(currentUserId, comps => {
-      if (comps) {
-        setUserCompliances(comps);
-      }
-    });
-    return () => unsubComp();
-  }, [currentUserId]);
-
-  // Fetch initial backend state
-  const refreshBackendState = async () => {
-    try {
-      const res = await fetch('/api/state');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.departments) setDepartments(data.departments);
-        if (data.roles) setRoles(data.roles);
-        if (data.users) setUsers(data.users);
-        if (data.assignments) setAssignments(data.assignments);
-        if (data.joinLinks) setJoinLinks(data.joinLinks);
-        if (data.events) setEvents(data.events);
-        if (data.tasks) setTasks(data.tasks);
-        if (data.files) setFiles(data.files);
-      }
-    } catch (e) {
-      console.warn('Backend sync in fallback mode:', e);
-    }
+  const applyAuth = async (user: User, orgs: Organization[]) => {
+    setAuthUser(user);
+    setCurrentUserId(user.id);
+    setMyOrgs(orgs);
+    const wanted = getStoredOrgId();
+    const target = orgs.find(o => o.id === wanted) || orgs[0];
+    if (target) await enterOrg(target.id);
   };
 
   useEffect(() => {
-    refreshBackendState();
+    if (!getToken()) { setBooting(false); return; }
+    let cancelled = false;
+    api<{ user: User; orgs: Organization[] }>('/api/me')
+      .then(({ user, orgs }) => applyAuth(user, orgs))
+      .catch(e => {
+        if (cancelled) return;
+        if (!(e instanceof ApiError && e.status === 401)) setBootError(e?.message || 'Could not reach Mika.');
+      })
+      .finally(() => { if (!cancelled) setBooting(false); });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // The server dropped our session (expired, signed out elsewhere): go back to sign in.
+  useEffect(() => {
+    const onUnauthorized = () => resetToSignedOut();
+    window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+  });
+
+  // Mirror the organisation's data into React state while one is open.
+  useEffect(() => {
+    if (!organization?.id) return;
+    const unsubs = [
+      subscribeKind<Department>('department', setDepartments),
+      subscribeKind<Role>('role', setRoles),
+      subscribeKind<User>('user', setUsers),
+      subscribeKind<Assignment>('assignment', setAssignments),
+      subscribeKind<Task>('task', setTasks),
+      subscribeKind<Comment>('comment', setComments),
+      subscribeKind<Meeting>('meeting', setMeetings),
+      subscribeKind<FileItem>('file', setFiles),
+      subscribeKind<OrgNotification>('notification', setNotifications),
+      subscribeKind<EventBinding>('event', setEvents),
+      subscribeKind<IntegrationConnection>('connection', setIntegrationConnections),
+      subscribeJoinLinks(setJoinLinks),
+    ];
+    return () => unsubs.forEach(u => u());
+  }, [organization?.id]);
+
+  useEffect(() => {
+    if (!currentUserId || !organization?.id) return;
+    return subscribeUserCompliance(currentUserId, setUserCompliances);
+  }, [currentUserId, organization?.id]);
 
   const currentUser = useMemo(() => {
     if (!currentUserId) return null;
-    return users.find(u => u.id === currentUserId) || null;
-  }, [users, currentUserId]);
+    return users.find(u => u.id === currentUserId) || (authUser?.id === currentUserId ? authUser : null);
+  }, [users, currentUserId, authUser]);
 
-  // Master root user from data
-  const masterRootUser = useMemo(() => {
-    const rootRole = roles.find(r => r.roleType === 'master_root' || r.slug === 'principal' || r.isRoot);
-    const rootAsgn = assignments.find(a => a.roleId === rootRole?.id);
-    return users.find(u => u.id === rootAsgn?.userId) || users[0];
-  }, [roles, assignments, users]);
+  // The organisation root is recorded on the org itself.
+  const masterRootUser = useMemo(
+    () => users.find(u => u.id === organization?.masterRootUserId),
+    [users, organization?.masterRootUserId]
+  );
 
   // Instantiate Authorization Engine
   const authEngine = useMemo(() => {
@@ -269,7 +227,7 @@ export default function App() {
       roles,
       users,
       assignments,
-      masterRootUser?.id || users[0]?.id || ''
+      masterRootUser?.id || organization?.masterRootUserId || ''
     );
   }, [departments, roles, users, assignments, masterRootUser]);
 
@@ -340,81 +298,96 @@ export default function App() {
     return taskCreatorOrLeadCheck.hasAuthority;
   };
 
-  // Login handler
-  const handleLoginSuccess = (userData: any, sessionData: any, initialTab: SidebarTab = 'dashboard') => {
-    setSession(sessionData);
-    localStorage.setItem('mika_session', JSON.stringify(sessionData));
-    localStorage.setItem('mika_user_id', userData.id);
-    setCurrentUserId(userData.id);
-    setActiveTab(initialTab);
-    refreshBackendState();
+  // After Google sign-in (or a join / org creation) the Worker hands back the account and its orgs.
+  const handleSignedIn = async (result: AuthResult) => {
+    setBootError(null);
+    try {
+      await applyAuth(result.user, result.orgs);
+      setActiveTab('dashboard');
+    } catch (e: any) {
+      setBootError(e?.message || 'Could not open your organisation.');
+    }
   };
 
-  // Sign out handler
-  const handleSignOut = () => {
-    setSession(null);
+  const resetToSignedOut = () => {
+    stopOrgSync();
+    setToken(null);
+    setStoredOrgId(null);
+    setAuthUser(null);
     setCurrentUserId(null);
+    setOrganization(null);
+    setMyOrgs([]);
+    setDepartments([]); setRoles([]); setUsers([]); setAssignments([]); setTasks([]);
+    setComments([]); setFiles([]); setJoinLinks([]); setEvents([]); setMeetings([]);
+    setNotifications([]); setIntegrationConnections([]); setUserCompliances([]);
     setAuthView('landing');
     setActiveTab('dashboard');
     setSelectedTaskId(null);
     setShowUserDropdown(false);
-    localStorage.removeItem('mika_session');
-    localStorage.removeItem('mika_user_id');
   };
 
-  // Handle successful join via Role Link
-  const handleRoleLinkJoinSuccess = (userData: any, sessionData: any) => {
+  const handleSignOut = async () => {
+    await logout();
+    resetToSignedOut();
+  };
+
+  // The person just created an organisation.
+  const handleOrgCreated = async (result: { org: Organization; user: User; session: { token: string } }) => {
+    setToken(result.session.token);
+    await handleSignedIn({ user: result.user, orgs: [result.org], isNew: false, session: result.session as any });
+  };
+
+  // The person just accepted an invite link.
+  const handleRoleLinkJoinSuccess = async (result: { user: User; orgId: string; session: { token: string } }) => {
     const url = new URL(window.location.href);
     url.searchParams.delete('join');
     window.history.replaceState({}, '', url.pathname);
-
     setActiveJoinToken(null);
-    handleLoginSuccess(userData, sessionData, 'dashboard');
+    setToken(result.session.token);
+    setStoredOrgId(result.orgId);
+    const me = await api<{ user: User; orgs: Organization[] }>('/api/me');
+    await applyAuth(me.user, me.orgs);
+    setActiveTab('dashboard');
   };
 
-  // Handlers for Task Lifecycle (Part B7 & B8)
+  // Handlers for Task Lifecycle (Part B7 & B8). The Worker enforces who may do what; the UI
+  // updates optimistically and rolls back with an explanation if a move is refused.
+  const orgIdNow = organization?.id || '';
+  const notifyUser = (userId: string | undefined, type: OrgNotification['type'], title: string, message: string, taskId: string) => {
+    if (!userId || userId === currentUser?.id) return;
+    upsertNotification({
+      id: `notif_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      orgId: orgIdNow, userId, title, message, type, read: false,
+      createdAt: new Date().toISOString(), relatedTaskId: taskId, metadata: { taskId },
+    }).catch(() => {});
+  };
+
   const handleTaskStatusChange = (taskId: string, newStatus: TaskStatus, reason?: string) => {
     const targetTask = tasks.find(t => t.id === taskId);
     if (!targetTask) return;
 
-    const updated: Task = { 
-      ...targetTask, 
-      status: newStatus,
-      updatedAt: new Date().toISOString()
-    };
-
+    const updated: Task = { ...targetTask, status: newStatus, updatedAt: new Date().toISOString() };
     if (newStatus === 'done') {
       updated.completedAt = new Date().toISOString();
       updated.rejectionReason = undefined;
-    } else if (newStatus === 'rejected' && reason) {
+    } else if (newStatus === 'rejected') {
       updated.rejectionReason = reason;
     } else if (newStatus === 'pending') {
       updated.rejectionReason = undefined;
-    } else if (newStatus === 'submitted') {
-      // B8: Notify root lead or assigner that task is submitted and awaiting review
-      const newNotif: OrgNotification = {
-        id: `notif_${Date.now()}`,
-        orgId: 'org_oakridge',
-        userId: targetTask.assignedByUserId,
-        title: 'Task Submitted for Review',
-        message: `"${targetTask.title}" has been submitted by ${currentUser?.fullName || 'Assignee'} and is awaiting review.`,
-        type: 'task_submitted',
-        read: false,
-        createdAt: new Date().toISOString(),
-        metadata: { taskId }
-      };
-      upsertNotification(newNotif).catch(console.warn);
-      setNotifications(prev => [newNotif, ...prev]);
     }
 
-    setTasks(prev => prev.map(t => (t.id === taskId ? updated : t)));
-    upsertTask(updated).catch(console.warn);
+    upsertTask(updated).then(() => {
+      const who = currentUser?.fullName || 'Someone';
+      if (newStatus === 'submitted') notifyUser(targetTask.assignedByUserId, 'task_submitted', 'Task submitted for review', `"${targetTask.title}" was submitted by ${who} and is waiting for your review.`, taskId);
+      if (newStatus === 'help') notifyUser(targetTask.assignedByUserId, 'help_requested', 'Help requested', `${who} needs help with "${targetTask.title}".`, taskId);
+      if (newStatus === 'rejected') notifyUser(targetTask.assignedToUserId, 'task_rejected', 'Task sent back', `"${targetTask.title}" was sent back${reason ? `: ${reason}` : '.'}`, taskId);
+    }).catch(() => {});
   };
 
   const handleAddComment = (taskId: string, content: string, isHelp?: boolean) => {
     if (!currentUser) return;
     const newComment: Comment = {
-      id: `c_${Date.now()}`,
+      id: `c_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       taskId,
       authorUserId: currentUser.id,
       authorName: currentUser.fullName,
@@ -423,76 +396,39 @@ export default function App() {
       isHelpNotice: !!isHelp,
       createdAt: new Date().toISOString()
     };
-    setComments(prev => [...prev, newComment]);
-    upsertComment(newComment).catch(console.warn);
-
-    // If help was flagged, update task status to 'help' (Part B2)
-    if (isHelp) {
-      handleTaskStatusChange(taskId, 'help');
-    }
+    upsertComment(newComment).then(() => {
+      if (isHelp) handleTaskStatusChange(taskId, 'help');
+    }).catch(() => {});
   };
 
-  const handleFileUpload = (taskId: string, file: File) => {
+  // Uploads the real file to Mika storage, then submits the task with it attached.
+  const handleFileUpload = async (taskId: string, file: File) => {
     if (!currentUser) return;
     const task = tasks.find(t => t.id === taskId);
     if (!task) return;
-
-    const newFileItem: FileItem = {
-      id: `f_${Date.now()}`,
-      orgId: 'org_oakridge',
-      deptId: task.deptId,
-      name: file.name,
-      size: `${(file.size / 1024).toFixed(1)} KB`,
-      type: file.type || 'application/octet-stream',
-      uploadedByUserId: currentUser.id,
-      uploadedByName: currentUser.fullName,
-      uploadedAt: new Date().toISOString(),
-      sourceTaskId: taskId,
-      isAutoArchived: true,
-      folder: 'Task Submissions'
-    };
-
-    setFiles(prev => [newFileItem, ...prev]);
-
-    // Update task file field and transition to submitted (or done) per confirmation mode
-    const updated: Task = {
-      ...task,
-      status: 'submitted',
-      confirmationFile: {
-        id: newFileItem.id,
-        name: file.name,
-        size: newFileItem.size,
-        url: `/vault/${file.name}`,
-        type: newFileItem.type
-      },
-      updatedAt: new Date().toISOString()
-    };
-
-    setTasks(prev => prev.map(t => (t.id === taskId ? updated : t)));
-    upsertTask(updated).catch(console.warn);
-    confetti({ particleCount: 40, spread: 60 });
+    try {
+      const stored = await uploadFileBlob(file, { deptId: task.deptId, folder: 'Task Submissions', sourceTaskId: taskId });
+      const updated: Task = {
+        ...task,
+        status: 'submitted',
+        confirmationFile: { id: stored.id, name: stored.name, size: stored.size, url: stored.url || '', type: stored.type },
+        updatedAt: new Date().toISOString(),
+      };
+      await upsertTask(updated);
+      notifyUser(task.assignedByUserId, 'task_submitted', 'Task submitted for review', `"${task.title}" was submitted by ${currentUser.fullName} and is waiting for your review.`, taskId);
+      confetti({ particleCount: 40, spread: 60 });
+    } catch { /* store already told the person why */ }
   };
 
   const handleRateTask = (taskId: string, score: number, comment: string, isAnonymous: boolean) => {
     if (!currentUser) return;
     const target = tasks.find(t => t.id === taskId);
     if (!target) return;
-
-    const updated: Task = {
+    upsertTask({
       ...target,
-      rating: {
-        score,
-        comment,
-        ratedByUserId: currentUser.id,
-        isAnonymous,
-        ratedAt: new Date().toISOString()
-      },
-      updatedAt: new Date().toISOString()
-    };
-
-    setTasks(prev => prev.map(t => (t.id === taskId ? updated : t)));
-    upsertTask(updated).catch(console.warn);
-    confetti({ particleCount: 30, spread: 50 });
+      rating: { score, comment, ratedByUserId: currentUser.id, isAnonymous, ratedAt: new Date().toISOString() },
+      updatedAt: new Date().toISOString(),
+    }).then(() => confetti({ particleCount: 30, spread: 50 })).catch(() => {});
   };
 
   // Task Creation Handler (Part A2, B4, B5)
@@ -511,8 +447,8 @@ export default function App() {
   }) => {
     if (!currentUser) return;
     const newTask: Task = {
-      id: `t_${Date.now()}`,
-      orgId: organization?.id || 'org_oakridge',
+      id: `t_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      orgId: orgIdNow,
       deptId: taskData.deptId,
       title: taskData.title,
       description: taskData.description,
@@ -551,19 +487,26 @@ export default function App() {
       }
     }
 
-    setTasks(prev => [newTask, ...prev]);
-    upsertTask(newTask).catch(console.warn);
+    try {
+      await upsertTask(newTask);
+    } catch {
+      return; // the store explained why; keep the form open so nothing is lost
+    }
+    notifyUser(newTask.assignedToUserId, 'task_assigned', 'New task', `${currentUser.fullName} assigned you "${newTask.title}".`, newTask.id);
     setShowCreateTaskModal(false);
     confetti({ particleCount: 35, spread: 55 });
   };
 
-  // Admin Department & Role Management Handlers
+  // Admin Department & Role Management Handlers (the Worker only lets leads do these)
+  const newId = (prefix: string) => `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+
   const handleCreateDepartment = (deptData: Partial<Department>) => {
-    const newDept: Department = {
-      id: deptData.id || `dept_${Date.now()}`,
-      orgId: 'org_oakridge',
-      name: deptData.name || 'New Department',
-      slug: (deptData.name || 'new-dept').toLowerCase().replace(/\s+/g, '-'),
+    const name = deptData.name || 'New Department';
+    const dept: Department = {
+      id: deptData.id || newId('dept'),
+      orgId: orgIdNow,
+      name,
+      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       type: deptData.type || 'department',
       parentDeptId: deptData.parentDeptId || undefined,
       isTemporary: deptData.isTemporary,
@@ -572,89 +515,72 @@ export default function App() {
       isArchived: false,
       createdAt: new Date().toISOString()
     };
-    setDepartments(prev => [...prev, newDept]);
-    confetti({ particleCount: 30, spread: 50 });
+    putDoc('department', dept, 'create the department').then(() => confetti({ particleCount: 30, spread: 50 })).catch(() => {});
   };
 
   const handleCreateRole = (roleData: Partial<Role>) => {
-    const newRole: Role = {
-      id: roleData.id || `role_${Date.now()}`,
-      orgId: 'org_oakridge',
+    const title = roleData.title || 'New Role';
+    const role: Role = {
+      id: roleData.id || newId('role'),
+      orgId: orgIdNow,
       deptId: roleData.deptId || departments[0]?.id || '',
-      title: roleData.title || 'New Role',
-      slug: roleData.slug || 'new-role',
+      title,
+      slug: roleData.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       isRoot: roleData.isRoot || false,
       roleType: roleData.roleType || 'member'
     };
-    setRoles(prev => [...prev, newRole]);
-    confetti({ particleCount: 30, spread: 50 });
+    putDoc('role', role, 'create the role').then(() => confetti({ particleCount: 30, spread: 50 })).catch(() => {});
   };
 
   const handleCreateEvent = (title: string, description: string, deptIds: string[]) => {
-    const newEvent: EventBinding = {
-      id: `evt_${Date.now()}`,
-      orgId: 'org_oakridge',
+    if (!currentUser) return;
+    const evt: EventBinding = {
+      id: newId('evt'),
+      orgId: orgIdNow,
       title,
       description,
       departmentIds: deptIds,
-      leadUserIds: [currentUser?.id || 'u_principal'],
+      leadUserIds: [currentUser.id],
       isActive: true,
       createdAt: new Date().toISOString()
     };
-    setEvents(prev => [...prev, newEvent]);
-    confetti({ particleCount: 30, spread: 50 });
+    putDoc('event', evt, 'create the event').then(() => confetti({ particleCount: 30, spread: 50 })).catch(() => {});
   };
 
   const handleArchiveTempDept = (deptId: string) => {
-    setDepartments(prev => prev.map(d => d.id === deptId ? { ...d, isArchived: true } : d));
+    const dept = departments.find(d => d.id === deptId);
+    if (dept) putDoc('department', { ...dept, isArchived: true }, 'archive the department').catch(() => {});
   };
 
   const handleRemoveMember = (assignmentId: string) => {
-    setAssignments(prev => prev.filter(a => a.id !== assignmentId));
+    removeDoc('assignment', assignmentId, 'remove this person from their role').catch(() => {});
   };
 
-  // Link Generation
+  // Link Generation: the Worker checks you have authority over the role before issuing it.
   const handleGenerateJoinLink = async (roleId: string, roleTitle: string, deptName: string, daysValid: number, requiredIntegrations?: string[]): Promise<JoinLink> => {
-    if (!currentUser) throw new Error('You must be logged in to generate invite links.');
-
-    const res = await fetch(`/api/orgs/${currentUser.orgId || 'org_oakridge'}/links`, {
+    if (!currentUser || !organization) throw new Error('You must be signed in to generate invite links.');
+    const data = await api<{ link: JoinLink }>(`/api/orgs/${organization.id}/links`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        issuerUserId: currentUser.id,
-        targetRoleId: roleId,
-        roleId,
-        daysValid,
-        requiredIntegrations: requiredIntegrations || []
-      })
+      body: { targetRoleId: roleId, daysValid, requiredIntegrations: requiredIntegrations || [] },
     });
-
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Server denied link creation due to authority constraints.');
-    }
-
-    const newLink: JoinLink = {
-      id: data.link.id,
-      orgId: data.link.orgId || currentUser.orgId || 'org_oakridge',
-      roleId,
-      roleTitle,
-      deptName,
-      token: data.link.token,
-      createdByUserId: currentUser.id,
-      createdAt: data.link.createdAt,
-      expiresAt: data.link.expiresAt,
-      useCount: data.link.useCount || 0,
-      requiredIntegrations: data.requiredIntegrations || requiredIntegrations || []
-    };
-
-    setJoinLinks(prev => [newLink, ...prev]);
-    return newLink;
+    orgSync.pollNow();
+    return { ...data.link, roleTitle: data.link.roleTitle || roleTitle, deptName: data.link.deptName || deptName };
   };
 
   // =========================================================================
   // VIEW ROUTING
   // =========================================================================
+
+  if (booting) {
+    return (
+      <div className="h-screen w-screen bg-paper flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
+          <p className="text-xs font-mono text-ink-3">Opening Mika…</p>
+        </div>
+      </div>
+    );
+  }
 
   // 1. If accessed via ?join=TOKEN, show the RoleLinkJoinView directly
   if (activeJoinToken) {
@@ -672,31 +598,25 @@ export default function App() {
     );
   }
 
-  // 2. If user is NOT authenticated, show Mika 2.0 Auth Flow (Landing, Sign In, or Create Org)
-  if (!currentUser) {
-    const seedUsersData = users.map(u => {
-      const asgn = assignments.find(a => a.userId === u.id && a.isActive);
-      const r = roles.find(ro => ro.id === asgn?.roleId);
-      const d = departments.find(dept => dept.id === asgn?.deptId);
-      return {
-        id: u.id,
-        email: u.email,
-        fullName: u.fullName,
-        preferredName: u.preferredName,
-        roleTitle: r?.title || 'Staff',
-        deptName: d?.name || 'Department',
-        isRoot: r ? isRoleRoot(r, d) : false
-      };
-    });
+  // 2. Not signed in, or signed in but not part of an organisation yet: landing, sign-in, create-org.
+  if (!currentUser || !organization) {
+    if (bootError) {
+      return (
+        <div className="h-screen w-screen bg-paper flex items-center justify-center p-6">
+          <div className="max-w-sm text-center space-y-4">
+            <h1 className="text-lg font-bold text-ink">We couldn't open Mika</h1>
+            <p className="text-sm text-ink-3">{bootError}</p>
+            <button onClick={() => window.location.reload()} className="px-4 py-2 bg-accent text-white text-sm rounded-xs cursor-pointer">Try again</button>
+          </div>
+        </div>
+      );
+    }
 
     if (authView === 'landing') {
       return (
         <LandingPage
           onNavigateToSignIn={() => setAuthView('signin')}
-          onNavigateToCreateOrg={() => {
-            setCreateOrgPrefillGoogle(null);
-            setAuthView('create-org');
-          }}
+          onNavigateToCreateOrg={() => setAuthView('create-org')}
           onOpenJoinToken={token => setActiveJoinToken(token)}
         />
       );
@@ -706,78 +626,22 @@ export default function App() {
       return (
         <SignInView
           onBackToLanding={() => setAuthView('landing')}
-          onNavigateToCreateOrg={(googleData) => {
-            setCreateOrgPrefillGoogle(googleData || null);
-            setAuthView('create-org');
-          }}
-          onLoginSuccess={(user, sess) => handleLoginSuccess(user, sess, 'dashboard')}
-          seedUsers={seedUsersData}
+          onNavigateToCreateOrg={() => setAuthView('create-org')}
+          onSignedIn={handleSignedIn}
+          onNoOrganisation={result => { setAuthUser(result.user); }}
         />
       );
     }
 
-    if (authView === 'create-org') {
-      return (
-        <CreateOrgFlow
-          initialGoogleAccount={createOrgPrefillGoogle}
-          onBackToLanding={() => setAuthView('landing')}
-          onNavigateToSignIn={() => setAuthView('signin')}
-          onCreationComplete={(org, user, sess) => {
-            if (org) {
-              setOrganization(org);
-              localStorage.setItem('mika_org_data', JSON.stringify(org));
-            }
-            handleLoginSuccess(user, sess, 'dashboard');
-          }}
-        />
-      );
-    }
+    return (
+      <CreateOrgFlow
+        initialGoogleAccount={authUser ? { email: authUser.email, fullName: authUser.fullName, preferredName: authUser.preferredName, photoUrl: authUser.avatarUrl } : null}
+        onBackToLanding={() => setAuthView('landing')}
+        onNavigateToSignIn={() => setAuthView('signin')}
+        onCreationComplete={handleOrgCreated}
+      />
+    );
   }
-
-  const handleFastSwitchUser = (userId: string) => {
-    setCurrentUserId(userId);
-    setSelectedTaskId(null);
-    localStorage.setItem('mika_user_id', userId);
-  };
-
-  // Tasks sent to a role nobody held yet go to the first person who joins that role.
-  const claimOpenTasksForRole = (userId: string, roleId: string) => {
-    setTasks(prev => prev.map(t =>
-      !t.assignedToUserId && t.assignedToRoleId === roleId && t.status === 'pending'
-        ? { ...t, assignedToUserId: userId, updatedAt: new Date().toISOString() }
-        : t
-    ));
-  };
-
-  const handleSimulateJoin = (roleId: string, deptId: string, userData: { name: string; email: string }) => {
-    const newUser: User = {
-      id: `u_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      fullName: userData.name,
-      preferredName: userData.name.split(' ')[0],
-      email: userData.email,
-      gender: 'prefer-not-to-say',
-      createdAt: new Date().toISOString()
-    };
-
-    const newAssignment: Assignment = {
-      id: `asgn_${Date.now()}`,
-      orgId: organization?.id || 'org_oakridge',
-      userId: newUser.id,
-      roleId,
-      deptId,
-      validFrom: new Date().toISOString(),
-      isActive: true
-    };
-
-    setUsers(prev => [...prev, newUser]);
-    setAssignments(prev => [...prev, newAssignment]);
-    claimOpenTasksForRole(newUser.id, roleId);
-    confetti({ particleCount: 40, spread: 60 });
-  };
-
-  const handleResetEmployees = () => {
-    setAssignments(prev => prev.filter(a => a.userId === masterRootUser?.id));
-  };
 
   const selectedTask = tasks.find(t => t.id === selectedTaskId);
 
@@ -806,12 +670,10 @@ export default function App() {
         isCollapsed={isMobile ? false : isSidebarCollapsed}
         setIsCollapsed={collapsed => (isMobile ? setMobileNavOpen(false) : setIsSidebarCollapsed(collapsed))}
         taskCount={visibleTasks.length}
-        allUsers={users.filter(u => u.id === masterRootUser?.id || assignments.some(a => a.userId === u.id && a.isActive))}
-        onSwitchUser={id => handleFastSwitchUser(id)}
         onSignOut={handleSignOut}
         onCreateTaskClick={() => setShowCreateTaskModal(true)}
         onViewProfile={u => setViewingProfileUser(u)}
-        orgName={organization?.name || "Oakridge Academy"}
+        orgName={organization?.name || ""}
       />
       </div>
 
@@ -954,7 +816,7 @@ export default function App() {
                   tasks={visibleTasks}
                   notifications={notifications.filter(n => !currentUser || n.userId === currentUser.id)}
                   onOpenTask={(id: string) => { setActiveTab('tasks'); setSelectedTaskId(id); }}
-                  orgName={organization?.name || "Oakridge Academy"}
+                  orgName={organization?.name || ""}
                   onClearNotification={(id) => {
                     setNotifications(prev => prev.filter(n => n.id !== id));
                   }}
@@ -978,8 +840,6 @@ export default function App() {
                   onGenerateInviteLink={(roleId, deptId) => {
                     handleSelectTab('invites');
                   }}
-                  onSimulateJoin={handleSimulateJoin}
-                  onResetEmployees={handleResetEmployees}
                   onViewProfile={u => setViewingProfileUser(u)}
                 />
               )}
@@ -1060,7 +920,6 @@ export default function App() {
                   assignments={assignments}
                   joinLinks={joinLinks}
                   onGenerateJoinLink={handleGenerateJoinLink}
-                  onSimulateJoin={handleSimulateJoin}
                 />
               )}
 
@@ -1134,57 +993,6 @@ export default function App() {
         />
       )}
 
-      {/* Join Role Invite Link Modal */}
-      {activeJoinModalLink && (
-        <JoinModal
-          joinLink={activeJoinModalLink}
-          allRoles={roles}
-          allDepts={departments}
-          onClose={() => setActiveJoinModalLink(null)}
-          onJoinSuccess={userData => {
-            const newUser: User = {
-              id: `u_${Date.now()}`,
-              email: userData.email,
-              fullName: userData.fullName,
-              preferredName: userData.preferredName,
-              gender: userData.gender || 'prefer-not-to-say',
-              createdAt: new Date().toISOString()
-            };
-
-            const newAssignment: Assignment = {
-              id: `asgn_${Date.now()}`,
-              orgId: organization?.id || 'org_oakridge',
-              userId: newUser.id,
-              roleId: activeJoinModalLink.roleId,
-              deptId: roles.find(r => r.id === activeJoinModalLink.roleId)?.deptId || departments[0].id,
-              validFrom: new Date().toISOString(),
-              isActive: true
-            };
-
-            setUsers(prev => [...prev, newUser]);
-            setAssignments(prev => [...prev, newAssignment]);
-            claimOpenTasksForRole(newUser.id, activeJoinModalLink.roleId);
-            setCurrentUserId(newUser.id);
-            setActiveJoinModalLink(null);
-
-            if (userData.connectedIntegrations && organization?.id) {
-              Object.entries(userData.connectedIntegrations).forEach(([key, conn]) => {
-                const connInfo = conn as { accountLabel: string; connectedAt: string };
-                upsertUserCompliance({
-                  userId: newUser.id,
-                  orgId: organization.id,
-                  integrationKey: key,
-                  connectedAccountLabel: connInfo.accountLabel,
-                  connectedAt: connInfo.connectedAt,
-                  satisfiedAt: new Date().toISOString()
-                }).catch(console.warn);
-              });
-            }
-
-            confetti({ particleCount: 50, spread: 70 });
-          }}
-        />
-      )}
     </div>
   );
 }
