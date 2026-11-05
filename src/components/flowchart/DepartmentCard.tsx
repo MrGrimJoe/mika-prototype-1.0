@@ -172,7 +172,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
       {section && (
         <div
           id={`section-banner-${node.id}`}
-          className="w-full border-b border-dashed border-neutral-400/80 px-3 py-1 flex items-center justify-between text-[11px] font-mono font-semibold bg-neutral-100/90 text-neutral-700"
+          className="w-full border-b border-dashed border-neutral-400/80 px-3 py-1 flex items-center justify-between text-xs font-mono font-semibold bg-neutral-100/90 text-neutral-700"
         >
           <div className="flex items-center gap-1.5 truncate">
             <span className="text-neutral-500 font-bold">§</span>
@@ -206,7 +206,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
             {/* Selection Checkbox (DISABLED / LOCKED on Main Dept) */}
             {isRoot ? (
               <div
-                className="flex items-center gap-1 text-[11px] font-mono text-amber-300 bg-amber-950/60 border border-amber-500/40 px-1.5 py-0.5 rounded-xs shadow-xs"
+                className="flex items-center gap-1 text-xs font-mono text-amber-300 bg-amber-950/60 border border-amber-500/40 px-1.5 py-0.5 rounded-xs shadow-xs"
                 title="Main department cannot be grouped into sections or deleted."
               >
                 <Lock size={10} className="text-amber-300" />
@@ -220,7 +220,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                   e.stopPropagation();
                   onToggleMultiSelect(node.id);
                 }}
-                className={`flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-xs border transition-all ${
+                className={`flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-xs border transition-all ${
                   isMultiSelected
                     ? 'bg-emerald-700 text-white border-emerald-800 font-bold shadow-xs'
                     : 'bg-surface hover:bg-neutral-200 text-neutral-700 border-neutral-400'
@@ -228,7 +228,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 title={isMultiSelected ? 'Deselect department' : 'Select department for grouping'}
               >
                 {isMultiSelected ? <CheckSquare size={11} /> : <Square size={11} />}
-                <span className="text-[11px]">{isMultiSelected ? 'SELECTED' : 'SELECT'}</span>
+                <span className="text-xs">{isMultiSelected ? 'SELECTED' : 'SELECT'}</span>
               </button>
             )}
 
@@ -241,7 +241,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                   e.stopPropagation();
                   onToggleCollapse(node.id);
                 }}
-                className={`flex items-center gap-0.5 text-[11px] font-mono px-1.5 py-0.5 rounded transition-colors ${
+                className={`flex items-center gap-0.5 text-xs font-mono px-1.5 py-0.5 rounded transition-colors ${
                   isRoot
                     ? 'text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700'
                     : 'text-neutral-600 hover:text-neutral-950 bg-neutral-200 hover:bg-neutral-300'
@@ -348,16 +348,16 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
         {/* Section: ROOT */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] font-bold text-indigo-950 flex items-center gap-1.5">
+            <span className="font-mono text-xs font-bold text-indigo-950 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full inline-block" />
               <span>Root (Leadership)</span>
               {node.roots.length > 0 && (
-                <span className="text-[11px] text-indigo-700 font-semibold bg-indigo-100/80 px-1 rounded-xs">
+                <span className="text-xs text-indigo-700 font-semibold bg-indigo-100/80 px-1 rounded-xs">
                   {node.roots.length}
                 </span>
               )}
             </span>
-            <span className="text-[11px] font-mono text-neutral-400">press enter</span>
+            <span className="text-xs font-mono text-neutral-400">press enter</span>
           </div>
 
           {/* Root tags */}
@@ -367,7 +367,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 <div
                   key={`root-${idx}-${rootItem}`}
                   id={`root-tag-${node.id}-${idx}`}
-                  className="group flex items-center gap-1.5 bg-indigo-50/90 hover:bg-indigo-100/90 text-indigo-950 border border-indigo-200/90 px-2 py-0.5 rounded-xs font-mono text-[11px] font-semibold max-w-full break-all shadow-xs transition-colors"
+                  className="group flex items-center gap-1.5 bg-indigo-50/90 hover:bg-indigo-100/90 text-indigo-950 border border-indigo-200/90 px-2 py-0.5 rounded-xs font-mono text-xs font-semibold max-w-full break-all shadow-xs transition-colors"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
                   <span>{rootItem}</span>
@@ -387,7 +387,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               ))}
             </div>
           ) : (
-            <div className="text-[11px] font-mono italic text-neutral-400 px-0.5">No leadership root set</div>
+            <div className="text-xs font-mono italic text-neutral-400 px-0.5">No leadership root set</div>
           )}
 
           {/* Root input */}
@@ -411,16 +411,16 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
         {/* Section: ROLES */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] font-bold text-neutral-700 flex items-center gap-1.5">
+            <span className="font-mono text-xs font-bold text-neutral-700 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-slate-500 rounded-full inline-block" />
               <span>Roles (Positions)</span>
               {node.roles.length > 0 && (
-                <span className="text-[11px] text-neutral-600 font-semibold bg-neutral-200 px-1 rounded-xs">
+                <span className="text-xs text-neutral-600 font-semibold bg-neutral-200 px-1 rounded-xs">
                   {node.roles.length}
                 </span>
               )}
             </span>
-            <span className="text-[11px] font-mono text-neutral-400">press enter</span>
+            <span className="text-xs font-mono text-neutral-400">press enter</span>
           </div>
 
           {/* Roles tags */}
@@ -430,7 +430,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 <div
                   key={`role-${idx}-${roleItem}`}
                   id={`role-tag-${node.id}-${idx}`}
-                  className="group flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 px-2 py-0.5 rounded-xs font-mono text-[11px] font-medium max-w-full break-all shadow-xs transition-colors"
+                  className="group flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 px-2 py-0.5 rounded-xs font-mono text-xs font-medium max-w-full break-all shadow-xs transition-colors"
                 >
                   <span>{roleItem}</span>
                   <button aria-label="Remove role"
@@ -449,7 +449,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               ))}
             </div>
           ) : (
-            <div className="text-[11px] font-mono italic text-neutral-400 px-0.5">No positions added</div>
+            <div className="text-xs font-mono italic text-neutral-400 px-0.5">No positions added</div>
           )}
 
           {/* Role input */}
@@ -480,7 +480,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               <Trash2 size={13} className="text-neutral-800" />
               <span>Remove department</span>
             </div>
-            <p className="text-[11px] text-neutral-600 leading-snug">
+            <p className="text-xs text-neutral-600 leading-snug">
               "{node.department || 'This department'}" has {node.children.length} sub-branch(es). How would you like to handle them?
             </p>
           </div>
@@ -493,7 +493,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 onDeleteNode(node.id, true);
                 setShowDeletePrompt(false);
               }}
-              className="flex items-center justify-center gap-1 bg-surface hover:bg-neutral-100 text-neutral-900 border border-neutral-500 py-1 px-2 rounded-xs font-semibold text-[11px] transition-colors"
+              className="flex items-center justify-center gap-1 bg-surface hover:bg-neutral-100 text-neutral-900 border border-neutral-500 py-1 px-2 rounded-xs font-semibold text-xs transition-colors"
             >
               <CornerDownRight size={12} />
               <span>Keep Sub-Branches (Reparent)</span>
@@ -505,14 +505,14 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 onDeleteNode(node.id, false);
                 setShowDeletePrompt(false);
               }}
-              className="bg-neutral-900 hover:bg-neutral-800 text-white py-1 px-2 rounded-xs font-semibold text-[11px] transition-colors"
+              className="bg-neutral-900 hover:bg-neutral-800 text-white py-1 px-2 rounded-xs font-semibold text-xs transition-colors"
             >
               Delete Department & Branches
             </button>
             <button
               type="button"
               onClick={() => setShowDeletePrompt(false)}
-              className="text-neutral-500 hover:text-neutral-900 text-[11px] text-center mt-0.5"
+              className="text-neutral-500 hover:text-neutral-900 text-xs text-center mt-0.5"
             >
               Cancel
             </button>
@@ -535,7 +535,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               e.stopPropagation();
               onAddChild(node.id);
             }}
-            className="flex items-center gap-1 text-[11px] font-mono font-medium hover:bg-neutral-800 px-2 py-1 rounded-xs transition-colors text-white"
+            className="flex items-center gap-1 text-xs font-mono font-medium hover:bg-neutral-800 px-2 py-1 rounded-xs transition-colors text-white"
           >
             <Plus size={12} />
             <span>Add Department</span>
@@ -552,7 +552,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                   e.stopPropagation();
                   onToggleMultiSelect(node.id);
                 }}
-                className="text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
+                className="text-xs font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
               >
                 {isMultiSelected ? 'Deselect' : 'Select'}
               </button>
@@ -570,7 +570,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
               setIsEditingName(true);
               setTimeout(() => deptInputRef.current?.focus(), 50);
             }}
-            className="text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
+            className="text-xs font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
             title="Rename Department"
           >
             Rename
@@ -584,7 +584,7 @@ export const DepartmentCard: React.FC<DepartmentCardProps> = ({
                 type="button"
                 id={`action-delete-${node.id}`}
                 onClick={handleDeleteClick}
-                className="text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
+                className="text-xs font-mono text-neutral-300 hover:text-white hover:bg-neutral-800 px-1.5 py-1 rounded-xs transition-colors"
                 title="Delete Department"
               >
                 Delete

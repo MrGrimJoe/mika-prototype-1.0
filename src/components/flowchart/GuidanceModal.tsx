@@ -33,7 +33,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               <h2 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900">
                 Organisation and flowchart guide
               </h2>
-              <p className="text-[11px] text-neutral-600">
+              <p className="text-xs text-neutral-600">
                 Recursive hierarchy, sections, roots, and authority boundaries
               </p>
             </div>
@@ -116,44 +116,44 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   <GitFork size={14} className="text-neutral-700" />
                   The Recursive Triple: Department &rarr; Root &rarr; Roles
                 </span>
-                <p className="text-[11px] text-neutral-700">
+                <p className="text-xs text-neutral-700">
                   Organizations are structured using universal building blocks rather than isolated ad-hoc categories. Every organizational tier behaves consistently regardless of whether it represents an entire institution, a division, a project group, or a class.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-xs block border-b border-neutral-200 pb-1">
                     Department Primitive
                   </span>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     The primary container. It represents any structural entity: School, Enterprise, Engineering, Marketing, Grade 8, or Project Phoenix. A department holds subordinate departments, a root, and roles.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-xs block border-b border-neutral-200 pb-1">
                     Roots (Leadership)
                   </span>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     The designated head of a department (e.g. Principal, Director, Headmaster). Roots hold direct authority over immediately subordinate department heads, and direct authority over tasks within their scope.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-xs block border-b border-neutral-200 pb-1">
                     Roles (Functional Positions)
                   </span>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     Specific functions inside a department (e.g. Mathematics Teacher, Software Engineer, Nurse). A role can hold multiple individuals, and one person can hold roles across several departments simultaneously.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5">
-                  <span className="font-bold text-neutral-900 text-[11px] block border-b border-neutral-200 pb-1">
+                  <span className="font-bold text-neutral-900 text-xs block border-b border-neutral-200 pb-1">
                     Direct vs. Indirect Authority
                   </span>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     Direct authority (value = 1) connects a department root to its immediate subordinates. Authority further down the chain is indirect and passes sequentially through intermediate roots.
                   </p>
                 </div>
@@ -168,21 +168,21 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   <Layers size={14} className="text-neutral-700" />
                   Why Sections Exist: Solving Overlapping Dimensions
                 </span>
-                <p className="text-[11px] text-neutral-700">
+                <p className="text-xs text-neutral-700">
                   Real organizations cannot be forced into a rigid single-parent hierarchy without causing duplicate entries or broken reporting chains. Sections solve this by allowing multiple departments to be grouped under a shared banner without changing their primary tree structure.
                 </p>
               </div>
 
               <div className="border-l-2 border-neutral-900 pl-3 py-1 space-y-1 bg-neutral-50/70 p-2 rounded-r-xs">
-                <span className="font-bold text-neutral-900 text-[11px] block">
+                <span className="font-bold text-neutral-900 text-xs block">
                   The Fundamental Section Rule
                 </span>
-                <p className="text-[11px] text-neutral-700">
+                <p className="text-xs text-neutral-700">
                   A Section Root exercises direct authority over the <strong>roles inside its grouped departments</strong>, but does <strong>not</strong> override or usurp those departments' own internal roots.
                 </p>
               </div>
 
-              <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5 text-[11px] text-neutral-700">
+              <div className="border border-neutral-200 bg-surface p-3 rounded-xs space-y-1.5 text-xs text-neutral-700">
                 <span className="font-bold text-neutral-900 block">Matrix Example:</span>
                 <p className="text-neutral-600">
                   A school can simultaneously have grade-level classes (Class 6, 7, 8) and a subject coordinator (e.g. Physics Department). By grouping Class 6, 7, and 8 into a Physics section:
@@ -203,31 +203,31 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                   <ShieldCheck size={14} className="text-neutral-900" />
                   The Main Department: Permanent Institutional Anchor
                 </span>
-                <p className="text-[11px] text-neutral-700">
+                <p className="text-xs text-neutral-700">
                   The top-most department block serves as the master root of your organization. It represents the foundational entity from which all branches descend.
                 </p>
               </div>
 
               <div className="space-y-2">
                 <div className="border border-neutral-300 bg-surface p-3 rounded-xs flex items-start gap-2.5">
-                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                     1
                   </span>
                   <div>
-                    <span className="font-bold text-neutral-900 text-[11px] block">No Section Assignment</span>
-                    <p className="text-[11px] text-neutral-600 mt-0.5">
+                    <span className="font-bold text-neutral-900 text-xs block">No Section Assignment</span>
+                    <p className="text-xs text-neutral-600 mt-0.5">
                       The Main Department cannot be selected or grouped into any section. Sections are designed to group subordinate departments; the apex root remains above all section groupings.
                     </p>
                   </div>
                 </div>
 
                 <div className="border border-neutral-300 bg-surface p-3 rounded-xs flex items-start gap-2.5">
-                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 bg-neutral-900 text-white rounded-xs flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                     2
                   </span>
                   <div>
-                    <span className="font-bold text-neutral-900 text-[11px] block">Protected from Deletion</span>
-                    <p className="text-[11px] text-neutral-600 mt-0.5">
+                    <span className="font-bold text-neutral-900 text-xs block">Protected from Deletion</span>
+                    <p className="text-xs text-neutral-600 mt-0.5">
                       The Main Department cannot be removed or destroyed. All child departments can be modified, re-parented, or pruned, but the organizational anchor always remains preserved.
                     </p>
                   </div>
@@ -242,7 +242,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <span className="font-bold text-neutral-950 text-xs ">
                   Visual Flowchart Operations:
                 </span>
-                <p className="text-[11px] text-neutral-600">
+                <p className="text-xs text-neutral-600">
                   Step-by-step actions available directly on the flowchart canvas:
                 </p>
               </div>
@@ -250,40 +250,40 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
               <div className="space-y-2">
                 <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-neutral-900 text-[11px]">Selecting Departments:</span>
-                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">[SELECT] Button</span>
+                    <span className="font-bold text-neutral-900 text-xs">Selecting Departments:</span>
+                    <span className="text-xs bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">[SELECT] Button</span>
                   </div>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     Click the SELECT toggle on any subordinate department. Pick one or multiple departments. A floating action bar will open at the bottom.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-neutral-900 text-[11px]">Grouping into a Section:</span>
-                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Floating Dock</span>
+                    <span className="font-bold text-neutral-900 text-xs">Grouping into a Section:</span>
+                    <span className="text-xs bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Floating Dock</span>
                   </div>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     Enter a section name, choose a border style (solid, dashed, or double), and select a paper grey tone. Grouped departments display a dedicated section badge and border styling.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-neutral-900 text-[11px]">Branch Removal & Reparenting:</span>
-                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Trash Icon</span>
+                    <span className="font-bold text-neutral-900 text-xs">Branch Removal & Reparenting:</span>
+                    <span className="text-xs bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Trash Icon</span>
                   </div>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     When deleting an intermediate department with child branches, you can select Reparent Sub-Branches to lift child nodes up to the parent, preserving the lower branches.
                   </p>
                 </div>
 
                 <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-neutral-900 text-[11px]">Adding Roots & Roles:</span>
-                    <span className="text-[11px] bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Enter Key</span>
+                    <span className="font-bold text-neutral-900 text-xs">Adding Roots & Roles:</span>
+                    <span className="text-xs bg-neutral-200 text-neutral-800 px-1.5 py-0.5 rounded-xs font-semibold">Enter Key</span>
                   </div>
-                  <p className="text-[11px] text-neutral-600">
+                  <p className="text-xs text-neutral-600">
                     Type a title into the Root or Roles input field and press Enter. Click the X mark on any tag to remove an entry.
                   </p>
                 </div>
@@ -297,12 +297,12 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
                 <span className="font-bold text-neutral-950 text-xs ">
                   Core Invariants & Boundaries
                 </span>
-                <p className="text-[11px] text-neutral-600">
+                <p className="text-xs text-neutral-600">
                   Fundamental axioms governing organizational validity:
                 </p>
               </div>
 
-              <div className="space-y-2 text-[11px]">
+              <div className="space-y-2 text-xs">
                 <div className="border border-neutral-200 bg-surface p-2.5 rounded-xs flex items-start gap-2">
                   <CheckCircle2 size={14} className="text-neutral-900 shrink-0 mt-0.5" />
                   <div>
@@ -349,7 +349,7 @@ export const GuidanceModal: React.FC<GuidanceModalProps> = ({ isOpen, onClose })
 
         {/* Footer */}
         <div className="border-t border-neutral-200 bg-[#f5f5f2] px-5 py-2.5 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-1 text-[11px] text-neutral-500">
+          <div className="flex items-center gap-1 text-xs text-neutral-500">
             <Info size={12} className="text-neutral-400" />
             <span>Mika Recursive Organizational Specification</span>
           </div>

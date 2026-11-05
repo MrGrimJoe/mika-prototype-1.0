@@ -271,12 +271,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                   {currentUser.fullName}
                 </span>
                 {currentUser.id === masterRootUserId && (
-                  <span className="text-[11px] font-mono bg-accent text-white px-1 rounded-xs shrink-0">
+                  <span className="text-xs font-mono bg-accent text-white px-1 rounded-xs shrink-0">
                     ROOT
                   </span>
                 )}
               </div>
-              <div className="text-[11px] font-mono text-ink-3 truncate">
+              <div className="text-xs font-mono text-ink-3 truncate">
                 {currentUserRoles.map(r => `@${r.role?.title}`).join(', ') || 'No Role Assigned'}
               </div>
             </div>

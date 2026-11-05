@@ -145,16 +145,16 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
         {/* Header bar */}
         <div className="px-6 py-4 border-b border-hairline flex items-center justify-between bg-paper">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono text-ink-3 font-bold">
+            <span className="text-xs font-mono text-ink-3 font-bold">
               Personnel Profile
             </span>
             {isSelf && (
-              <span className="text-[11px] font-mono bg-accent text-white px-2 py-0.5 rounded-full font-bold">
+              <span className="text-xs font-mono bg-accent text-white px-2 py-0.5 rounded-full font-bold">
                 You
               </span>
             )}
             {isTargetAnyRoot && (
-              <span className="text-[11px] font-mono bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
+              <span className="text-xs font-mono bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
                 Root
               </span>
             )}
@@ -203,7 +203,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                   <div className="text-xs font-bold text-ink">
                     Workspace & Integration Settings
                   </div>
-                  <div className="text-[11px] text-ink-2">
+                  <div className="text-xs text-ink-2">
                     Manage tools, OAuth connectors, and role permissions
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Organizational Assignments */}
           <div className="pt-2">
-            <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-xs font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <Building2 className="w-3.5 h-3.5" />
               <span>Assigned Positions ({rolesWithDepts.length})</span>
             </h3>
@@ -248,7 +248,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                         <div className="font-bold text-xs text-ink">
                           {role?.title || 'Staff Role'}
                         </div>
-                        <div className="text-[11px] text-ink-3 mt-0.5">
+                        <div className="text-xs text-ink-3 mt-0.5">
                           Department: <span className="font-medium text-ink-2">{dept?.name || 'Unknown'}</span>
                         </div>
                       </div>
@@ -277,7 +277,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
 
           {/* Integration Access Section (Section 4.1) */}
           <div className="pt-2 border-t border-hairline">
-            <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+            <h3 className="text-xs font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Available Connected Tools ({accessSummary.length})</span>
             </h3>
@@ -290,11 +290,11 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-slate-800">{item.tool.name}</span>
-                    <span className="text-[11px] text-slate-400 font-mono-code">
+                    <span className="text-xs text-slate-400 font-mono-code">
                       {item.accountLabel}
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono-code px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                  <span className="text-xs font-mono-code px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                     {item.grantedByLabel}
                   </span>
                 </div>
@@ -305,7 +305,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {/* Required Integrations Section (Section 4.2) */}
           {requiredList.length > 0 && (
             <div className="pt-2 border-t border-hairline">
-              <h3 className="text-[11px] font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
+              <h3 className="text-xs font-mono text-ink-3 mb-2.5 flex items-center gap-1.5 font-bold">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
                 <span>Role Required Connectors</span>
               </h3>
@@ -343,7 +343,7 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setConnectingToolKey(req.toolKey)}
-                          className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-[11px] font-semibold transition-colors shrink-0 cursor-pointer shadow-2xs"
+                          className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-xs font-semibold transition-colors shrink-0 cursor-pointer shadow-2xs"
                         >
                           Connect now
                         </button>
@@ -358,11 +358,11 @@ export const PersonProfileModal: React.FC<PersonProfileModalProps> = ({
           {/* Member Meta */}
           <div className="pt-2 border-t border-hairline grid grid-cols-2 gap-3 text-xs font-mono text-ink-3">
             <div>
-              <span className="text-[11px] text-ink-3 block">Personnel ID</span>
+              <span className="text-xs text-ink-3 block">Personnel ID</span>
               <span className="text-ink">{user.id}</span>
             </div>
             <div>
-              <span className="text-[11px] text-ink-3 block">Account Status</span>
+              <span className="text-xs text-ink-3 block">Account Status</span>
               <span className="text-[#059669] font-medium flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                 Active Enrolled

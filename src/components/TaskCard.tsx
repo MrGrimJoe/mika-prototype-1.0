@@ -55,7 +55,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {/* Status Badge per B7 & B9 */}
           <Badge
             variant={task.status as any}
-            className="text-[11px] font-semibold px-2 py-0.5"
+            className="text-xs font-semibold px-2 py-0.5"
           >
             <span 
               className="w-1.5 h-1.5 rounded-full mr-1.5 inline-block" 
@@ -65,20 +65,20 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           </Badge>
 
           {department && (
-            <span className="px-2 py-0.5 bg-paper border border-hairline text-[11px] font-mono text-ink-2 rounded-xs">
+            <span className="px-2 py-0.5 bg-paper border border-hairline text-xs font-mono text-ink-2 rounded-xs">
               {department.name}
             </span>
           )}
 
           {targetRole && (
-            <span className="px-2 py-0.5 bg-paper border border-hairline text-[11px] font-mono text-ink-2 rounded-xs">
+            <span className="px-2 py-0.5 bg-paper border border-hairline text-xs font-mono text-ink-2 rounded-xs">
               {targetRole.title}
             </span>
           )}
 
           {/* B5: Calendar Sync Indicator */}
           {(task.isCalendarSynced || task.calendarEventId) && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-st-help-bg text-st-help border border-st-help-border text-[11px] font-mono rounded-xs">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-st-help-bg text-st-help border border-st-help-border text-xs font-mono rounded-xs">
               <CalendarIcon className="w-3 h-3" />
               <span>Calendar</span>
             </span>
@@ -87,7 +87,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
         {/* Due date if set */}
         {task.dueDate && (
-          <div className="flex items-center gap-1 text-[11px] font-mono text-ink-3">
+          <div className="flex items-center gap-1 text-xs font-mono text-ink-3">
             <Clock className="w-3 h-3" />
             <span>Due {new Date(task.dueDate).toLocaleDateString()}</span>
           </div>

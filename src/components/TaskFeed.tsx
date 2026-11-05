@@ -180,7 +180,7 @@ export const TaskFeed: React.FC<TaskFeedProps> = ({
             <button
               id="btn-create-task-main"
               onClick={handleOpenModal}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent hover:bg-accent-strong text-white text-[11px] font-semibold transition-all cursor-pointer rounded-xs shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent hover:bg-accent-strong text-white text-xs font-semibold transition-all cursor-pointer rounded-xs shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Assign Task</span>

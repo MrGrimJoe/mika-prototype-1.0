@@ -229,7 +229,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="px-2 py-0.5 bg-st-help-bg text-st-help border border-st-help-border text-[11px] font-mono rounded-xs font-bold">
+                    <span className="px-2 py-0.5 bg-st-help-bg text-st-help border border-st-help-border text-xs font-mono rounded-xs font-bold">
                       {meeting.deptName}
                     </span>
                     <span className="flex items-center gap-1.5 text-xs text-st-pending font-semibold">
@@ -286,7 +286,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold text-sm text-ink">{meeting.title}</span>
-                    <span className="px-2 py-0.5 bg-paper border border-hairline text-[11px] font-mono text-ink-2 rounded-xs">
+                    <span className="px-2 py-0.5 bg-paper border border-hairline text-xs font-mono text-ink-2 rounded-xs">
                       {meeting.deptName}
                     </span>
                   </div>
@@ -330,7 +330,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
 
             <form onSubmit={handleStartMeeting} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block text-[11px] text-ink-2 font-bold mb-1">
+                <label className="block text-xs text-ink-2 font-bold mb-1">
                   Meeting Title / Topic:
                 </label>
                 <input
@@ -344,7 +344,7 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] text-ink-2 font-bold mb-1">
+                <label className="block text-xs text-ink-2 font-bold mb-1">
                   Department / Section (Members will be notified):
                 </label>
                 <select
@@ -358,12 +358,12 @@ export const MeetingsView: React.FC<MeetingsViewProps> = ({
                 </select>
               </div>
 
-              <div className="p-3 bg-st-help-bg border border-st-help-border rounded-xs text-st-help text-[11px] leading-relaxed">
+              <div className="p-3 bg-st-help-bg border border-st-help-border rounded-xs text-st-help text-xs leading-relaxed">
                 Starting this conference creates an authoritative Google Meet link and immediately notifies all department members via in-app alert.
               </div>
 
               {errorMessage && (
-                <div className="p-3 bg-st-pending-bg border border-st-pending-border rounded-xs text-st-pending text-[11px] leading-relaxed">
+                <div className="p-3 bg-st-pending-bg border border-st-pending-border rounded-xs text-st-pending text-xs leading-relaxed">
                   {errorMessage}
                 </div>
               )}

@@ -24,7 +24,7 @@
   --status-pending-text: #B91C1C;  --status-pending-bg: #FEF2F2;  --status-pending-border: #FECACA;  --status-pending-dot: #EF4444;
   --status-help-text: #1D4ED8;     --status-help-bg: #EFF6FF;     --status-help-border: #BFDBFE;     --status-help-dot: #3B82F6;
   --status-submitted-text: #854D0E;--status-submitted-bg: #FEFCE8;--status-submitted-border: #FEF08A;--status-submitted-dot: #EAB308;
-  --status-done-text: #15803D;     --status-done-bg: #F0FDF4;     --status-done-border: #BBF7D0;     --status-done-dot: #22C55E;
+  --status-done-text: #166534;     --status-done-bg: #F0FDF4;     --status-done-border: #BBF7D0;     --status-done-dot: #22C55E;
   --status-rejected-text: #9A3412; --status-rejected-bg: #FFF7ED; --status-rejected-border: #FED7AA; --status-rejected-dot: #F97316;
   --status-expired-text: #4B5563;  --status-expired-bg: #F3F4F6;  --status-expired-border: #E5E7EB;  --status-expired-dot: #9CA3AF;
 }
@@ -135,6 +135,7 @@
   --color-st-done: var(--status-done-text);
   --color-st-done-bg: var(--status-done-bg);
   --color-st-done-border: var(--status-done-border);
+  --color-st-done-dot: var(--status-done-dot);
   --color-st-expired: var(--status-expired-text);
   --color-st-expired-bg: var(--status-expired-bg);
   --color-st-expired-border: var(--status-expired-border);
@@ -279,4 +280,48 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline-offset: -1px;
+}
+
+/* Touch: every control gets at least a 44pt target (Apple HIG, Accessibility > Controls) */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  [role="tab"],
+  select,
+  summary {
+    min-height: 44px;
+  }
+  button:has(> svg:only-child),
+  [role="button"]:has(> svg:only-child) {
+    min-width: 44px;
+  }
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]) {
+    min-height: 44px;
+  }
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  label:has(> input[type="checkbox"]),
+  label:has(> input[type="radio"]) {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  a:not(p a):not(li a) {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Text links in bars and footers: never shorter than 24px for a pointer (touch already gets 44px above) */
+@media (pointer: fine) {
+  header a, header button, footer a, nav a {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+  }
 }

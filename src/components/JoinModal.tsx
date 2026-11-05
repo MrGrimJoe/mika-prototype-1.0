@@ -137,7 +137,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                   <ShieldAlert className="w-4 h-4 text-amber-600" />
                   <span>Required to activate this role</span>
                 </div>
-                <span className="text-[11px] font-mono">
+                <span className="text-xs font-mono">
                   {allRequirementsSatisfied ? (
                     <span className="text-emerald-700 font-bold flex items-center gap-1">
                       <Check className="w-3 h-3 text-emerald-600" />
@@ -151,7 +151,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                 </span>
               </div>
 
-              <p className="text-[11px] text-stone-500">
+              <p className="text-xs text-stone-500">
                 Your team lead requires these accounts to be connected before your role is activated.
               </p>
 
@@ -165,7 +165,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                     >
                       <div className="min-w-0 flex-1 mr-2">
                         <div className="font-semibold text-stone-900 truncate">{tool.name}</div>
-                        <div className="text-[11px] text-stone-500 truncate">
+                        <div className="text-xs text-stone-500 truncate">
                           {conn ? (
                             <span className="text-emerald-700 font-medium">
                               Connected as {conn.accountLabel}
@@ -178,7 +178,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
                       <div>
                         {conn ? (
-                          <span className="px-2 py-0.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded flex items-center gap-1">
+                          <span className="px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded flex items-center gap-1">
                             <Check className="w-2.5 h-2.5" />
                             Connected
                           </span>
@@ -186,7 +186,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                           <button
                             type="button"
                             onClick={() => setConnectingTool(tool)}
-                            className="px-2.5 py-1 bg-accent hover:bg-accent-strong text-white text-[11px] font-medium rounded cursor-pointer"
+                            className="px-2.5 py-1 bg-accent hover:bg-accent-strong text-white text-xs font-medium rounded cursor-pointer"
                           >
                             Connect
                           </button>
@@ -199,7 +199,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
             </div>
           )}
 
-          <div className="bg-paper p-3 rounded-lg border border-stone-200 text-stone-600 text-[11px] flex items-center gap-2">
+          <div className="bg-paper p-3 rounded-lg border border-stone-200 text-stone-600 text-xs flex items-center gap-2">
             <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
               Joining automatically establishes your role boundaries and populates your task feed.

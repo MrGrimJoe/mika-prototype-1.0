@@ -91,7 +91,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
         </div>
 
         {/* Notice regarding main department rule */}
-        <div className="flex items-start gap-2 bg-[#f6f6f3] border border-neutral-300 p-2.5 rounded-xs text-[11px] text-neutral-600">
+        <div className="flex items-start gap-2 bg-[#f6f6f3] border border-neutral-300 p-2.5 rounded-xs text-xs text-neutral-600">
           <ShieldAlert size={15} className="text-neutral-800 mt-0.5 shrink-0" />
           <span>
             <strong>System Rule:</strong> The primary Root Department cannot belong to any section and cannot be removed, ensuring the organizational flowchart foundation remains anchored.
@@ -126,7 +126,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                       />
                       <div className="flex items-center justify-between text-xs">
                         <div className="flex items-center gap-1">
-                          <span className="text-[11px] text-neutral-500">Shade:</span>
+                          <span className="text-xs text-neutral-500">Shade:</span>
                           <div className="flex items-center gap-1">
                             {SHADES.map((s) => (
                               <button aria-label={s.label}
@@ -146,14 +146,14 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                           <button
                             type="button"
                             onClick={() => handleSaveEdit(section.id)}
-                            className="bg-neutral-900 text-white px-2 py-0.5 rounded-xs text-[11px] flex items-center gap-1"
+                            className="bg-neutral-900 text-white px-2 py-0.5 rounded-xs text-xs flex items-center gap-1"
                           >
                             <Check size={12} /> Save
                           </button>
                           <button
                             type="button"
                             onClick={() => setEditingSectionId(null)}
-                            className="text-neutral-500 hover:text-neutral-900 text-[11px] px-1"
+                            className="text-neutral-500 hover:text-neutral-900 text-xs px-1"
                           >
                             Cancel
                           </button>
@@ -167,10 +167,10 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                           <span className="text-neutral-400">§</span>
                           {section.name}
                         </span>
-                        <span className="text-[11px] font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
+                        <span className="text-xs font-mono px-1.5 py-0.5 bg-neutral-200 text-neutral-700 rounded-xs">
                           {section.shade}
                         </span>
-                        <span className="text-[11px] text-neutral-500">
+                        <span className="text-xs text-neutral-500">
                           ({assignedDepts.length} {assignedDepts.length === 1 ? 'dept' : 'depts'})
                         </span>
                       </div>
@@ -212,7 +212,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                       {assignedDepts.map((dept) => (
                         <div
                           key={dept.id}
-                          className="flex items-center gap-1 bg-surface border border-neutral-300 px-2 py-0.5 rounded-xs text-[11px] text-neutral-800"
+                          className="flex items-center gap-1 bg-surface border border-neutral-300 px-2 py-0.5 rounded-xs text-xs text-neutral-800"
                         >
                           <span>{dept.name}</span>
                           <button aria-label="Remove department from this section"
@@ -227,7 +227,7 @@ export const SectionsManagerModal: React.FC<SectionsManagerModalProps> = ({
                       ))}
                     </div>
                   ) : (
-                    <div className="text-[11px] text-neutral-400 italic">No departments currently assigned</div>
+                    <div className="text-xs text-neutral-400 italic">No departments currently assigned</div>
                   )}
                 </div>
               );

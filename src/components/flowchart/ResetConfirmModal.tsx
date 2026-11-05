@@ -51,12 +51,12 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
               <span className="font-bold text-neutral-900 block mb-1">
                 Are you sure you want to reset?
               </span>
-              <p className="text-[11px] text-neutral-600">
+              <p className="text-xs text-neutral-600">
                 This action will restore the flowchart back to a single primary top department block, clear all assigned sections, and remove any child branches.
               </p>
             </div>
           </div>
-          <p className="text-[11px] text-neutral-500 font-mono italic">
+          <p className="text-xs text-neutral-500 font-mono italic">
             Note: All current local diagram changes will be replaced with fresh starter defaults.
           </p>
         </div>

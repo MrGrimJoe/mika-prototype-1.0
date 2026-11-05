@@ -698,9 +698,9 @@ export default function App() {
               </button>
             )}
             <span className="hidden sm:inline text-[13px] text-ink-3 truncate">
-              {organization?.name || 'Oakridge Academy'}
+              {organization?.name || ''}
             </span>
-            <span className="hidden sm:inline text-edge" aria-hidden="true">/</span>
+            <span className="hidden sm:inline text-ink-3" aria-hidden="true">/</span>
             <h1 className="text-[15px] font-semibold text-ink truncate">
               {({ dashboard: 'Dashboard', tasks: 'Task Feed', team: 'Staff Directory', files: 'File Vault', chat: 'Messages', invites: 'Invitations', meetings: 'Meetings', admin: 'Administration', settings: 'Settings' } as Record<string, string>)[activeTab] || activeTab}
             </h1>
@@ -742,7 +742,7 @@ export default function App() {
                 <div className="absolute right-0 top-full mt-1.5 w-56 bg-surface border border-hairline shadow-lg rounded-xs py-1.5 z-50 font-mono text-xs animate-in fade-in duration-100">
                   <div className="px-3 py-2 border-b border-hairline bg-paper">
                     <div className="font-bold text-ink truncate">{currentUser.fullName}</div>
-                    <div className="text-[11px] text-ink-2 truncate">{currentUser.email}</div>
+                    <div className="text-xs text-ink-2 truncate">{currentUser.email}</div>
                   </div>
 
                   <button

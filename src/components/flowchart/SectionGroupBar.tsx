@@ -70,7 +70,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
           <span className="font-bold text-neutral-900 text-xs">
             {count} {count === 1 ? 'department' : 'departments'} selected
           </span>
-          <span className="text-[11px] text-neutral-500 hidden sm:inline">
+          <span className="text-xs text-neutral-500 hidden sm:inline">
             (Main dept excluded)
           </span>
         </div>
@@ -114,7 +114,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                   id="existing-sections-menu"
                   className="absolute bottom-full mb-2 left-0 w-56 bg-surface border border-neutral-900 rounded-xs shadow-[3px_3px_0px_#18181b] p-1 z-50 flex flex-col gap-1 max-h-48 overflow-y-auto"
                 >
-                  <div className="text-[11px] font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
+                  <div className="text-xs font-bold text-neutral-500 px-2 py-1 border-b border-neutral-200">
                     Choose Section
                   </div>
                   {sections.map((sec) => (
@@ -128,7 +128,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                       className="flex items-center justify-between px-2 py-1 text-left hover:bg-[#f3f3f0] rounded-xs text-neutral-800 text-xs transition-colors"
                     >
                       <span className="truncate">§ {sec.name}</span>
-                      <span className="text-[11px] text-neutral-500 capitalize">{sec.shade}</span>
+                      <span className="text-xs text-neutral-500 capitalize">{sec.shade}</span>
                     </button>
                   ))}
                 </div>
@@ -206,7 +206,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Shades Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[11px] text-neutral-500 ">Shade:</span>
+              <span className="text-xs text-neutral-500 ">Shade:</span>
               <div className="flex items-center gap-1 bg-surface p-1 border border-neutral-300 rounded-xs">
                 {SHADES.map((s) => (
                   <button aria-label={s.label}
@@ -226,11 +226,11 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
 
             {/* Border Style Selector */}
             <div className="flex items-center gap-1">
-              <span className="text-[11px] text-neutral-500 ">Border:</span>
+              <span className="text-xs text-neutral-500 ">Border:</span>
               <select
                 value={selectedBorderStyle}
                 onChange={(e) => setSelectedBorderStyle(e.target.value as Section['borderStyle'])}
-                className="bg-surface border border-neutral-300 text-[11px] px-1.5 py-1 rounded-xs focus:outline-none"
+                className="bg-surface border border-neutral-300 text-xs px-1.5 py-1 rounded-xs focus:outline-none"
               >
                 <option value="dashed">Dashed</option>
                 <option value="solid">Solid</option>
@@ -264,7 +264,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                 onDeleteSelected(false);
                 setShowDeleteConfirm(false);
               }}
-              className="bg-neutral-900 hover:bg-neutral-800 text-white px-2.5 py-1 rounded-xs text-[11px] transition-colors"
+              className="bg-neutral-900 hover:bg-neutral-800 text-white px-2.5 py-1 rounded-xs text-xs transition-colors"
               title="Delete departments and all their child branches"
             >
               Delete All Sub-Branches
@@ -276,7 +276,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
                 onDeleteSelected(true);
                 setShowDeleteConfirm(false);
               }}
-              className="bg-surface hover:bg-neutral-200 border border-neutral-400 text-neutral-900 px-2.5 py-1 rounded-xs text-[11px] transition-colors"
+              className="bg-surface hover:bg-neutral-200 border border-neutral-400 text-neutral-900 px-2.5 py-1 rounded-xs text-xs transition-colors"
               title="Preserve sub-branches by connecting them to parent"
             >
               Reparent Sub-Branches
@@ -284,7 +284,7 @@ export const SectionGroupBar: React.FC<SectionGroupBarProps> = ({
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(false)}
-              className="text-neutral-500 hover:text-neutral-900 text-[11px] px-1"
+              className="text-neutral-500 hover:text-neutral-900 text-xs px-1"
             >
               Cancel
             </button>

@@ -62,7 +62,7 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({ organizati
           <div className="mt-2 text-xs text-slate-600 bg-slate-50 p-2 rounded-md">Your account: <span className="font-mono text-slate-900">{p.accountLabel}</span></div>
         )}
         {p && !p.configured && (
-          <div className="mt-3 text-[11px] text-amber-800 bg-amber-50 border border-amber-200 p-2 rounded-md flex gap-1.5">
+          <div className="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 p-2 rounded-md flex gap-1.5">
             <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <span>
               Not set up on this server yet.
@@ -162,13 +162,13 @@ export const IntegrationsPanel: React.FC<IntegrationsPanelProps> = ({ organizati
           </div>
         </div>
         {google && !google.configured && (
-          <div className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 p-2 rounded-md flex gap-1.5 mb-2">
+          <div className="text-xs text-amber-800 bg-amber-50 border border-amber-200 p-2 rounded-md flex gap-1.5 mb-2">
             <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <span>Google sign-in isn't set up on this server yet.{lead && google.missing?.length ? ` Missing: ${google.missing.join(', ')}.` : ''}</span>
           </div>
         )}
         {google?.configured && !google.pickerConfigured && (
-          <p className="text-[11px] text-slate-500 mb-2">The Drive file picker needs GOOGLE_API_KEY and GOOGLE_APP_ID{lead && google.missing?.length ? ` (missing: ${google.missing.join(', ')})` : ''}.</p>
+          <p className="text-xs text-slate-500 mb-2">The Drive file picker needs GOOGLE_API_KEY and GOOGLE_APP_ID{lead && google.missing?.length ? ` (missing: ${google.missing.join(', ')})` : ''}.</p>
         )}
         <button className={primary} disabled={!google?.configured || busy === 'google'}
           onClick={() => run('google', async () => {

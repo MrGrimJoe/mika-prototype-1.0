@@ -204,11 +204,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono text-ink-3">
+            <span className="text-xs font-mono text-ink-3">
               Organisation settings
             </span>
             {isMasterRoot && (
-              <span className="text-[11px] font-mono bg-accent text-white px-1.5 py-0.5 rounded-xs">
+              <span className="text-xs font-mono bg-accent text-white px-1.5 py-0.5 rounded-xs">
                 Master root
               </span>
             )}
@@ -224,7 +224,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         {onClose && (
           <button
             onClick={onClose}
-            className="self-start sm:self-auto text-xs font-mono text-ink-2 hover:text-ink underline"
+            className="self-start sm:self-auto text-xs font-mono text-ink-2 hover:text-ink underline py-2"
           >
             &larr; Back to Dashboard
           </button>
@@ -253,7 +253,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <LinkIcon className="w-3.5 h-3.5" />
           <span>Integrations & OAuth</span>
           {connections.length > 0 && (
-            <span className={`text-[11px] px-1.5 py-0.2 rounded-xs ${
+            <span className={`text-xs px-1.5 py-0.2 rounded-xs ${
               activeTab === 'integrations' ? 'bg-surface/20 text-white' : 'bg-hairline text-ink'
             }`}>
               {connections.length}
@@ -308,11 +308,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <h3 className="text-sm font-serif font-bold text-ink">
                   Your Personal Tool Access
                 </h3>
-                <p className="text-[11px] font-mono text-ink-2">
+                <p className="text-xs font-mono text-ink-2">
                   Inherited from your active roles: {userAssignments.map(a => `@${roles.find(r => r.id === a.roleId)?.title || 'Role'}`).join(', ') || 'None'}
                 </p>
               </div>
-              <span className="self-start sm:self-auto text-[11px] text-accent-fg bg-surface px-2 py-1 rounded-xs border border-hairline break-all">
+              <span className="self-start sm:self-auto text-xs text-accent-fg bg-surface px-2 py-1 rounded-xs border border-hairline break-all">
                 {currentUser.email}
               </span>
             </div>
@@ -333,7 +333,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     </div>
                     <div>
                       <div className="font-bold">{detail.tool.name}</div>
-                      <div className="text-[11px] text-ink-2">
+                      <div className="text-xs text-ink-2">
                         {detail.hasAccess ? (
                           detail.grantedByLabel || 'Active Connection'
                         ) : (
@@ -364,11 +364,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </p>
               </div>
               {isAnyRoot ? (
-                <span className="text-[11px] font-mono bg-accent text-white px-2 py-1 rounded-xs">
+                <span className="text-xs font-mono bg-accent text-white px-2 py-1 rounded-xs">
                   {isMasterRoot ? 'Master Root Permitted' : 'Root Authority Permitted'}
                 </span>
               ) : (
-                <span className="text-[11px] font-mono text-ink-3 bg-paper-sunken px-2 py-1 rounded-xs">
+                <span className="text-xs font-mono text-ink-3 bg-paper-sunken px-2 py-1 rounded-xs">
                   View-Only
                 </span>
               )}
@@ -393,23 +393,23 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <h4 className="font-bold text-ink flex items-center gap-2">
                 <span>⚡ Browser Userscript (Ctrl+Alt+M)</span>
               </h4>
-              <span className="text-[11px] text-accent-fg bg-st-help-bg border border-st-help-border px-2 py-0.5 rounded-xs font-semibold">
+              <span className="text-xs text-accent-fg bg-st-help-bg border border-st-help-border px-2 py-0.5 rounded-xs font-semibold">
                 Tampermonkey Ready
               </span>
             </div>
-            <p className="text-ink-2 text-[11px] leading-relaxed">
+            <p className="text-ink-2 text-xs leading-relaxed">
               Mika integrates into Google Drive, GitHub, Figma, and Canva tabs with a quick-capture overlay. Press <kbd className="px-1.5 py-0.5 bg-surface border border-hairline rounded-xs font-bold text-ink">Ctrl+Alt+M</kbd> to file tasks and share references with your team instantly.
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
                 href="/mika-companion.user.js"
                 download
-                className="px-3 py-1.5 bg-accent text-white rounded-xs text-[11px] font-semibold hover:bg-accent-strong transition-colors inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-accent text-white rounded-xs text-xs font-semibold hover:bg-accent-strong transition-colors inline-flex items-center gap-1.5"
               >
                 <span>Download Userscript</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
-              <span className="text-[11px] text-ink-3">
+              <span className="text-xs text-ink-3">
                 Works with Violentmonkey or Tampermonkey.
               </span>
             </div>
@@ -476,11 +476,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 : 'bg-paper border-hairline'
             }`}>
               <div className="font-bold text-ink">Bring Your Own Drive (BYOD)</div>
-              <p className="text-[11px] text-ink-2">
+              <p className="text-xs text-ink-2">
                 Files live inside your organization's verified Google Drive domain.
               </p>
               {currentOrg?.storageType === 'drive' && (
-                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -492,11 +492,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 : 'bg-paper border-hairline'
             }`}>
               <div className="font-bold text-ink">Mika Managed Vault</div>
-              <p className="text-[11px] text-ink-2">
+              <p className="text-xs text-ink-2">
                 Zero-knowledge encrypted cloud storage at linear continuous rates.
               </p>
               {(currentOrg?.storageType === 'mika' || !currentOrg?.storageType) && (
-                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -508,11 +508,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 : 'bg-paper border-hairline'
             }`}>
               <div className="font-bold text-ink">Self-Hosted Node</div>
-              <p className="text-[11px] text-ink-2">
+              <p className="text-xs text-ink-2">
                 On-premise S3 or MinIO bucket endpoint for sovereign airgapped networks.
               </p>
               {currentOrg?.storageType === 'self_host' && (
-                <span className="inline-block text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
+                <span className="inline-block text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
               )}
@@ -541,11 +541,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <div key={dept.id} className="p-4 flex items-center justify-between font-mono text-xs">
                   <div>
                     <div className="font-bold text-ink">{dept.name}</div>
-                    <div className="text-[11px] text-ink-2">
+                    <div className="text-xs text-ink-2">
                       Lead: {leadRole ? `@${leadRole.title}` : 'Unassigned'} • {deptRoles.length} Defined Roles
                     </div>
                   </div>
-                  <span className="text-[11px] bg-paper px-2 py-1 rounded-xs border border-hairline text-ink">
+                  <span className="text-xs bg-paper px-2 py-1 rounded-xs border border-hairline text-ink">
                     {dept.type === 'section' ? 'Section' : 'Department'}
                   </span>
                 </div>

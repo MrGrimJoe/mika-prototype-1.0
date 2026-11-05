@@ -409,7 +409,7 @@ export function DepartmentFlowchartBuilder({
               </button>
             )}
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="text-emerald-400 font-semibold text-[11px] bg-emerald-950/80 px-2.5 py-1 rounded-xs border border-emerald-700/60 shrink-0">
+              <span className="text-emerald-400 font-semibold text-xs bg-emerald-950/80 px-2.5 py-1 rounded-xs border border-emerald-700/60 shrink-0">
                 Step 4: Org Graph
               </span>
               <span className="text-white font-semibold text-sm hidden md:inline truncate max-w-sm">

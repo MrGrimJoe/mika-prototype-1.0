@@ -218,24 +218,24 @@ export const OverlappingOrgShowcase: React.FC = () => {
                 } ${node.type === 'role' ? 'min-w-[110px]' : 'min-w-[130px]'}`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`text-[11px] font-bold tracking-tight font-serif ${
+                  <span className={`text-xs font-bold tracking-tight font-serif ${
                     isHovered || isConnected ? 'text-accent-fg' : 'text-ink'
                   }`}>
                     {node.label}
                   </span>
                   {node.type === 'section' && (
-                    <span className="text-[11px] font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
+                    <span className="text-xs font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       section
                     </span>
                   )}
                   {node.type === 'subject' && (
-                    <span className="text-[11px] font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
+                    <span className="text-xs font-mono px-1 py-0.2 bg-paper-sunken text-ink-2 rounded-xs">
                       subject
                     </span>
                   )}
                 </div>
 
-                <div className="text-[11px] font-mono text-ink-3 mt-0.5 tracking-tight truncate">
+                <div className="text-xs font-mono text-ink-3 mt-0.5 tracking-tight truncate">
                   {node.role}
                 </div>
               </div>
@@ -244,7 +244,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
         })}
 
         {/* Legend Overlay bottom-left */}
-        <div className="absolute bottom-3 left-3 z-20 bg-paper/90 backdrop-blur-xs border border-hairline rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-[11px] font-mono text-ink-2">
+        <div className="absolute bottom-3 left-3 z-20 bg-paper/90 backdrop-blur-xs border border-hairline rounded-xs px-3 py-2 flex flex-wrap items-center gap-4 text-xs font-mono text-ink-2">
           <div className="flex items-center gap-1.5">
             <span className="w-3.5 h-[1.5px] bg-ink inline-block" />
             <span>Normal root nesting</span>
@@ -256,7 +256,7 @@ export const OverlappingOrgShowcase: React.FC = () => {
         </div>
 
         {/* Interactive inspection hint bottom-right */}
-        <div className="absolute bottom-3 right-3 z-20 text-[11px] font-mono text-ink-3">
+        <div className="absolute bottom-3 right-3 z-20 text-xs font-mono text-ink-3">
           {activeNode ? (
             <span className="text-ink font-semibold">
               Inspecting: {activeNode.label} &mdash; {activeNode.subtext}

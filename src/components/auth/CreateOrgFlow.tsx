@@ -430,7 +430,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
             >
               Mika
             </button>
-            <span className="text-hairline font-light">/</span>
+            <span className="text-ink-3 font-light" aria-hidden="true">/</span>
             <span className="text-xs font-mono text-ink-3 tracking-tight">
               Create Organisation
             </span>
@@ -507,7 +507,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                   
                   <GoogleSignIn onSuccess={handleSignedIn} onError={setErrorMessage} label="Sign in with Google" />
 
-                  <div className="mt-3 text-[11px] font-mono text-ink-3">
+                  <div className="mt-3 text-xs font-mono text-ink-3">
                     Verified institutional address attached automatically
                   </div>
                 </div>
@@ -523,12 +523,12 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                         <div className="text-xs font-semibold text-ink">
                           {googleAccount.fullName}
                         </div>
-                        <div className="text-[11px] font-mono text-ink-3">
+                        <div className="text-xs font-mono text-ink-3">
                           {googleAccount.email}
                         </div>
                       </div>
                     </div>
-                    <span className="text-[11px] font-mono px-2 py-0.5 bg-paper-sunken text-ink-2 rounded-xs">
+                    <span className="text-xs font-mono px-2 py-0.5 bg-paper-sunken text-ink-2 rounded-xs">
                       Verified
                     </span>
                   </div>
@@ -605,7 +605,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                             alt="Logo preview"
                             className="w-10 h-10 object-cover rounded-xs border border-hairline"
                           />
-                          <span className="text-xs text-ink-2 flex-1 font-mono text-[11px]">
+                          <span className="text-xs text-ink-2 flex-1 font-mono text-xs">
                             Custom logo attached
                           </span>
                           <button aria-label="Remove logo"
@@ -625,7 +625,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                           className="p-4 border border-dashed border-hairline hover:border-accent rounded-xs bg-paper text-center cursor-pointer transition-colors"
                         >
                           <Upload className="w-4 h-4 mx-auto text-ink-3 mb-1" />
-                          <div className="text-[11px] font-mono text-ink-2">
+                          <div className="text-xs font-mono text-ink-2">
                             Drop logo here or click to browse
                           </div>
                           <input
@@ -670,7 +670,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
             <div className="w-full space-y-6 animate-in fade-in duration-300">
               {/* Header */}
               <div className="text-center max-w-xl mx-auto">
-                <span className="text-[11px] font-mono text-ink-3">
+                <span className="text-xs font-mono text-ink-3">
                   Step 3 of 7 · Architecture
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-1 tracking-tight">
@@ -732,7 +732,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                           <div className="w-9 h-9 rounded-xs bg-paper-sunken border border-hairline flex items-center justify-center text-accent-fg group-hover:bg-accent group-hover:text-white transition-colors">
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-xs bg-paper-sunken text-ink-2 border border-hairline">
+                          <span className="text-xs font-mono px-2 py-0.5 rounded-xs bg-paper-sunken text-ink-2 border border-hairline">
                             {tpl.category}
                           </span>
                         </div>
@@ -746,7 +746,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                         </p>
 
                         {/* Clean Details List */}
-                        <div className="bg-paper border border-hairline p-3 rounded-xs space-y-1.5 mb-5 text-[11px] font-mono">
+                        <div className="bg-paper border border-hairline p-3 rounded-xs space-y-1.5 mb-5 text-xs font-mono">
                           <div className="flex items-center justify-between text-ink">
                             <span className="text-ink-3">Lead Role:</span>
                             <span className="font-semibold truncate max-w-[150px]">{tpl.rootRole}</span>
@@ -755,7 +755,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                             <span className="text-ink-3">Departments:</span>
                             <span className="font-medium text-accent-fg">{tpl.subDepts.length + 1} Included</span>
                           </div>
-                          <div className="text-[11px] text-ink-2 pt-1 border-t border-paper-sunken truncate">
+                          <div className="text-xs text-ink-2 pt-1 border-t border-paper-sunken truncate">
                             {tpl.subDepts.join(' · ')}
                           </div>
                         </div>
@@ -806,7 +806,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     <div className="w-full border-t border-hairline" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-paper px-3 text-[11px] font-mono text-ink-3">
+                    <span className="bg-paper px-3 text-xs font-mono text-ink-3">
                       Or Start from Scratch
                     </span>
                   </div>
@@ -878,7 +878,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           {/* STEP 5: TEAM SIZE (DEDICATED STEP) */}
           {currentStep === 5 && (
             <div className="max-w-lg mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs text-center">
-              <span className="text-[11px] font-mono text-ink-3">
+              <span className="text-xs font-mono text-ink-3">
                 Step 5 of 7 · Capacity
               </span>
               <h1 className="text-2xl font-serif font-bold text-ink mt-1 tracking-tight">
@@ -910,7 +910,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     onChange={e => setPeopleCount(Number(e.target.value))}
                     className="w-full h-1.5 bg-hairline rounded-lg appearance-none cursor-pointer accent-accent"
                   />
-                  <div className="flex justify-between text-[11px] font-mono text-ink-3 mt-2">
+                  <div className="flex justify-between text-xs font-mono text-ink-3 mt-2">
                     <span>1 person</span>
                     <span>250</span>
                     <span>500 people</span>
@@ -949,7 +949,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           {currentStep === 6 && (
             <div className="max-w-xl mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs">
               <div className="text-center mb-8">
-                <span className="text-[11px] font-mono text-ink-3">
+                <span className="text-xs font-mono text-ink-3">
                   Step 6 of 7 · Storage
                 </span>
                 <h1 className="text-2xl font-serif font-bold text-ink mt-1 tracking-tight">
@@ -1067,7 +1067,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     className="w-full h-1.5 bg-hairline rounded-lg appearance-none cursor-pointer accent-accent"
                   />
 
-                  <div className="flex justify-between text-[11px] font-mono text-ink-3 mt-2">
+                  <div className="flex justify-between text-xs font-mono text-ink-3 mt-2">
                     <span>1 GiB</span>
                     <span>1,000 GiB</span>
                     <span>2,000 GiB</span>
@@ -1116,7 +1116,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
           {currentStep === 7 && (
             <div className="max-w-xl mx-auto p-8 bg-surface border border-hairline rounded-xs shadow-xs">
               <div className="text-center mb-6">
-                <span className="text-[11px] font-mono text-ink-3">
+                <span className="text-xs font-mono text-ink-3">
                   Step 7 of 7 · Confirmation
                 </span>
                 <h1 className="text-2xl font-serif font-bold text-ink mt-1 tracking-tight">
@@ -1134,11 +1134,11 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     <h3 className="text-xs font-semibold text-ink">
                       Connect Org-Wide Apps (Optional)
                     </h3>
-                    <p className="text-[11px] text-ink-2">
+                    <p className="text-xs text-ink-2">
                       Optionally link Google Workspace, GitHub, Figma, or Canva defaults now or in Settings later.
                     </p>
                   </div>
-                  <span className="text-[11px] font-mono bg-paper-sunken text-ink px-2 py-0.5 rounded-xs border border-hairline">
+                  <span className="text-xs font-mono bg-paper-sunken text-ink px-2 py-0.5 rounded-xs border border-hairline">
                     {orgConnections.length} Connected
                   </span>
                 </div>
@@ -1181,7 +1181,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                       <span className="text-xs font-mono text-ink-3 block">
                         Total Monthly Investment
                       </span>
-                      <span className="text-[11px] text-ink-2 font-mono">
+                      <span className="text-xs text-ink-2 font-mono">
                         Linear, continuous pricing
                       </span>
                     </div>
@@ -1190,7 +1190,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                       <div className="text-3xl font-semibold text-ink">
                         <AnimatedNumber value={totalMonthly} prefix="$" decimals={2} />
                       </div>
-                      <span className="text-[11px] font-mono text-ink-3">
+                      <span className="text-xs font-mono text-ink-3">
                         billed monthly
                       </span>
                     </div>

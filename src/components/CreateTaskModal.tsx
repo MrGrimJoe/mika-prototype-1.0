@@ -231,7 +231,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
           <div>
-            <label className="block text-[11px] text-ink-2 font-bold mb-1">
+            <label className="block text-xs text-ink-2 font-bold mb-1">
               Task Title:
             </label>
             <input
@@ -246,10 +246,10 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="relative">
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-[11px] text-ink-2 font-bold">
+              <label className="block text-xs text-ink-2 font-bold">
                 Description & Specifications:
               </label>
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-xs text-slate-400 font-mono">
                 Type <strong className="text-indigo-600">@</strong> to reference GitHub repos, Figma, Canva, or Docs
               </span>
             </div>
@@ -274,11 +274,11 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             {/* Referenced Mentions Chips */}
             {mentions.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                <span className="text-[11px] font-bold text-slate-400 font-mono">Linked:</span>
+                <span className="text-xs font-bold text-slate-400 font-mono">Linked:</span>
                 {mentions.map((m) => (
                   <span
                     key={m.displayName}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 border border-slate-200 text-[11px] font-mono rounded text-slate-800"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 border border-slate-200 text-xs font-mono rounded text-slate-800"
                   >
                     <span>{m.displayName}</span>
                     <button
@@ -296,7 +296,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] text-ink-2 font-bold mb-1">
+              <label className="block text-xs text-ink-2 font-bold mb-1">
                 Authorized Department:
               </label>
               <select
@@ -311,7 +311,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-ink-2 font-bold mb-1">
+              <label className="block text-xs text-ink-2 font-bold mb-1">
                 Target Role:
               </label>
               <select
@@ -331,7 +331,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] text-ink-2 font-bold mb-1">
+              <label className="block text-xs text-ink-2 font-bold mb-1">
                 Assign to Member:
               </label>
               <select
@@ -349,7 +349,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-ink-2 font-bold mb-1">
+              <label className="block text-xs text-ink-2 font-bold mb-1">
                 Due Date (Google Calendar Sync):
               </label>
               <input
@@ -363,7 +363,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           {/* B4: Confirmation Mode Selection */}
           <div className="pt-2">
-            <label className="block text-[11px] text-ink-2 font-bold mb-2">
+            <label className="block text-xs text-ink-2 font-bold mb-2">
               Confirmation Mode (Creator Choice):
             </label>
             <div className="grid grid-cols-2 gap-3">
@@ -383,7 +383,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                   />
                   <span className="font-bold text-ink text-xs">File Dropbox Mode</span>
                 </div>
-                <p className="text-[11px] text-ink-2 pl-5 leading-normal">
+                <p className="text-xs text-ink-2 pl-5 leading-normal">
                   Assignee must submit a deliverable file before moving to review.
                 </p>
               </label>
@@ -404,7 +404,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                   />
                   <span className="font-bold text-ink text-xs">Yes/No Mode</span>
                 </div>
-                <p className="text-[11px] text-ink-2 pl-5 leading-normal">
+                <p className="text-xs text-ink-2 pl-5 leading-normal">
                   Assignee marks task done with a single action, no file required.
                 </p>
               </label>
@@ -413,7 +413,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
           {/* B3: Reference File Context Attachment */}
           <div className="pt-2">
-            <label className="block text-[11px] text-ink-2 font-bold mb-2">
+            <label className="block text-xs text-ink-2 font-bold mb-2">
               Reference Context File (Optional):
             </label>
             {referenceFile ? (

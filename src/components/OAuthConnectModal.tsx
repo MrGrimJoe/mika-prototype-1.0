@@ -121,7 +121,7 @@ export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">{name} isn't set up on this server yet</p>
-                <p className="text-[11px] mt-0.5 text-amber-700">
+                <p className="text-xs mt-0.5 text-amber-700">
                   {p?.missing?.length
                     ? `Add these keys, then try again: ${p.missing.join(', ')}.`
                     : 'Ask the person who runs this Mika to add the keys.'}

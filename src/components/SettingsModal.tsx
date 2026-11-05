@@ -139,12 +139,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-slate-900 font-serif-heading">Settings</h2>
                 {isMasterRoot && (
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
                     Master Root
                   </span>
                 )}
                 {!isMasterRoot && isAnyRoot && (
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
                     Root Scope
                   </span>
                 )}
@@ -315,12 +315,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               <div className="font-semibold text-slate-800 flex items-center gap-2">
                                 <span>{item.tool.name}</span>
                                 {item.scope === 'always_included' && (
-                                  <span className="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                                  <span className="text-xs text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
                                     Vault Core
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[11px] text-slate-400">
+                              <div className="text-xs text-slate-400">
                                 {item.tool.description}
                               </div>
                             </div>
@@ -328,11 +328,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                           <div className="text-right">
                             {item.hasAccess ? (
-                              <span className="text-[11px] text-slate-500 font-medium">
+                              <span className="text-xs text-slate-500 font-medium">
                                 {item.grantedByLabel}
                               </span>
                             ) : (
-                              <span className="text-[11px] text-slate-400 italic">
+                              <span className="text-xs text-slate-400 italic">
                                 Not granted to your role
                               </span>
                             )}
@@ -353,19 +353,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <h4 className="font-bold text-slate-800 mb-1">Organization Workspace</h4>
                 <div className="grid grid-cols-2 gap-4 mt-3">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Organization Name</span>
+                    <span className="text-slate-400 block text-xs">Organization Name</span>
                     <span className="font-semibold text-slate-800">{currentOrg?.name}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Slug</span>
+                    <span className="text-slate-400 block text-xs">Slug</span>
                     <span className="font-mono-code text-slate-700">{currentOrg?.slug}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Subscribed Headcount</span>
+                    <span className="text-slate-400 block text-xs">Subscribed Headcount</span>
                     <span className="font-semibold text-slate-800">{currentOrg?.teamSize || 10} members</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Storage Allocation</span>
+                    <span className="text-slate-400 block text-xs">Storage Allocation</span>
                     <span className="font-semibold text-slate-800">{currentOrg?.storageGiB || 250} GiB Cloud</span>
                   </div>
                 </div>
@@ -391,12 +391,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <Layers className="w-4 h-4 text-indigo-600" />
                         <span className="font-semibold text-slate-800">{dept.name}</span>
                         {dept.isTemporary && (
-                          <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 text-[11px]">
+                          <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 text-xs">
                             temporary
                           </span>
                         )}
                       </div>
-                      <span className="text-slate-400 text-[11px] font-mono-code">
+                      <span className="text-slate-400 text-xs font-mono-code">
                         {roles.filter((r) => r.deptId === dept.id).length} roles
                       </span>
                     </div>

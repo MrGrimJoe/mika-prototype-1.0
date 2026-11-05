@@ -171,7 +171,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <button
                 type="button"
                 onClick={() => setShowTokenInput(true)}
-                className="hover:text-ink hover:underline transition-all cursor-pointer inline-flex items-center gap-1.5"
+                className="hover:text-ink hover:underline transition-all cursor-pointer inline-flex items-center gap-1.5 py-2"
               >
                 <span>Have an invite token?</span>
                 <span className="text-accent-fg font-semibold underline">Enter here &rarr;</span>
@@ -187,7 +187,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="how-it-works" className="py-24 px-6 border-t border-hairline bg-paper-raised">
         <div className="max-w-5xl mx-auto">
           <div className="mb-14 text-center max-w-2xl mx-auto">
-            <span className="text-[11px] font-mono text-ink-3">
+            <span className="text-xs font-mono text-ink-3">
               How it works
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">
@@ -198,7 +198,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {/* Block 1 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+              <span className="text-xs font-mono text-ink-3 block mb-3">
                 Overlapping teams
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
@@ -211,7 +211,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 2 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+              <span className="text-xs font-mono text-ink-3 block mb-3">
                 Directed permissions
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
@@ -224,7 +224,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 3 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+              <span className="text-xs font-mono text-ink-3 block mb-3">
                 Automatic routing
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
@@ -237,7 +237,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Block 4 */}
             <div className="p-8 bg-paper border border-hairline rounded-xs hover:border-edge transition-all">
-              <span className="text-[11px] font-mono text-ink-3 block mb-3">
+              <span className="text-xs font-mono text-ink-3 block mb-3">
                 Rules that always hold
               </span>
               <h3 className="text-xl font-serif font-bold text-ink mb-2 tracking-tight">
@@ -257,7 +257,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="graph-showcase" className="py-24 px-6 border-t border-hairline bg-paper">
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-[11px] font-mono text-ink-3">
+            <span className="text-xs font-mono text-ink-3">
               Structure
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-ink mt-2 tracking-tight">

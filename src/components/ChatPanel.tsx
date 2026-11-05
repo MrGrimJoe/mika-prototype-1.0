@@ -192,7 +192,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Context Switcher Block */}
         <div className="p-3.5 border-b border-hairline bg-surface space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-ink-3 font-bold">
+            <span className="text-xs font-mono text-ink-3 font-bold">
               Messaging as
             </span>
           </div>
@@ -252,7 +252,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
               return (
                 <div key={ruleLabel} className="space-y-1">
-                  <div className="px-1 text-[11px] font-mono text-ink-3 font-bold">
+                  <div className="px-1 text-xs font-mono text-ink-3 font-bold">
                     {ruleLabel} ({items.length})
                   </div>
 
@@ -280,7 +280,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 e.stopPropagation();
                                 if (onViewProfile) onViewProfile(item.user);
                               }}
-                              className="w-7 h-7 rounded-xs bg-accent text-white flex items-center justify-center font-semibold text-[11px] shrink-0 cursor-pointer"
+                              className="w-7 h-7 rounded-xs bg-accent text-white flex items-center justify-center font-semibold text-xs shrink-0 cursor-pointer"
                               title={`View ${item.user.fullName}'s profile`}
                             >
                               {item.user.preferredName?.[0] || item.user.fullName[0]}
@@ -291,7 +291,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 <span className="font-bold text-xs text-ink truncate text-left">
                                   {item.user.fullName}
                                 </span>
-                                <span className={`text-[11px] font-mono px-1 rounded-xs shrink-0 font-semibold ${
+                                <span className={`text-xs font-mono px-1 rounded-xs shrink-0 font-semibold ${
                                   item.ruleType === 'rule_a' 
                                     ? 'bg-paper text-ink-2'
                                     : item.ruleType === 'rule_b'
@@ -302,7 +302,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                                 </span>
                               </div>
 
-                              <div className="text-[11px] font-mono text-ink-3 truncate mt-0.5">
+                              <div className="text-xs font-mono text-ink-3 truncate mt-0.5">
                                 {item.roleTitles.join(', ') || item.contextDescription}
                               </div>
                             </div>
@@ -349,16 +349,16 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     <span className="font-semibold text-[15px] text-ink text-left">
                       {activeContact.user.fullName}
                     </span>
-                    <span className="text-[11px] bg-paper text-ink-2 px-1.5 py-0.5 rounded-full border border-hairline whitespace-nowrap">
+                    <span className="text-xs bg-paper text-ink-2 px-1.5 py-0.5 rounded-full border border-hairline whitespace-nowrap">
                       {activeContact.ruleLabel}
                     </span>
                     {/* Part A5: Backed by Google Chat indicator */}
-                    <span className="inline-flex items-center gap-1 text-[11px] bg-st-help-bg text-st-help border border-st-help-border px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1 text-xs bg-st-help-bg text-st-help border border-st-help-border px-1.5 py-0.5 rounded-full whitespace-nowrap">
                       <Radio className="w-2.5 h-2.5" />
                       Backed by Google Chat
                     </span>
                   </div>
-                  <p className="text-[11px] font-mono text-ink-3 truncate">
+                  <p className="text-xs font-mono text-ink-3 truncate">
                     {activeContact.contextDescription} · {activeContact.user.email}
                   </p>
                 </div>
@@ -383,7 +383,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   <ShieldCheck className="w-3.5 h-3.5 text-st-done" />
                   <span>Authoritative Channel Established</span>
                 </div>
-                <p className="text-[11px] text-ink-2">
+                <p className="text-xs text-ink-2">
                   This conversation is strictly authorized under {activeContact.ruleLabel} ({
                     activeContact.ruleType === 'rule_a' ? 'Rule A: Shared Department' :
                     activeContact.ruleType === 'rule_b' ? 'Rule B: Direct Root Authority' :
@@ -406,10 +406,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                       className={`flex flex-col ${isSelf ? 'items-end' : 'items-start'}`}
                     >
                       <div className="flex items-center gap-2 mb-1 px-1">
-                        <span className="text-[11px] font-bold text-ink font-mono">
+                        <span className="text-xs font-bold text-ink font-mono">
                           {isSelf ? 'You' : msg.senderName}
                         </span>
-                        <span className="text-[11px] text-ink-3 font-mono">
+                        <span className="text-xs text-ink-3 font-mono">
                           {msg.timestamp}
                         </span>
                       </div>

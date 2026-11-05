@@ -1,0 +1,275 @@
+{
+ "d:landing": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:join": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:signin": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:create1": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:dashboard": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:staff": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [
+   "3.77 \"Active\" 12px"
+  ],
+  "noalt": 0
+ },
+ "d:feed": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:meetings": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:messages": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:vault": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:invites": {
+  "overflowX": false,
+  "small": [
+   " Require Google Drive 13x13",
+   " Require GitHub 13x13",
+   " Require Figma 13x13",
+   " Require Canva 13x13",
+   " Require Google Calendar 13x13",
+   " Require Google Meet 13x13",
+   " Require Gmail Workspace 13x13",
+   " Require Google Tasks 13x13",
+   " Require Google Forms 13x13",
+   " Require Google Classroom 13x13",
+   " Require Google Keep 13x13"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:settings": {
+  "overflowX": false,
+  "small": [
+   "#tool-checkbox-github GitHub: not connected, press 20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-figma Figma: not connected, press  20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-canva Canva: not connected, press  20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_calendar Google Calendar: not connect 20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_meet Google Meet: not connected,  20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_gmail Gmail Workspace: not connect 20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_tasks Google Tasks: not connected, 20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_forms Google Forms: not connected, 20x20",
+   " Click to connect 93x16",
+   "#tool-checkbox-google_classroom Google Classroom: not connec 20x20",
+   " Click to connect 93x16"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:task": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "d:errs": [],
+ "m:landing": {
+  "overflowX": false,
+  "small": [
+   " Log in 38x44",
+   " Privacy 43x44",
+   " Terms 35x44"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:join": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:signin": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:create1": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:dashboard": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:staff": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [
+   "3.77 \"Active\" 12px"
+  ],
+  "noalt": 0
+ },
+ "m:feed": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:meetings": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:messages": {
+  "overflowX": false,
+  "small": [
+   " View Alice Chen's profile 28x44"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:vault": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:invites": {
+  "overflowX": false,
+  "small": [
+   " Require Google Drive 20x20",
+   " Require GitHub 20x20",
+   " Require Figma 20x20",
+   " Require Canva 20x20",
+   " Require Google Calendar 20x20",
+   " Require Google Meet 20x20",
+   " Require Gmail Workspace 20x20",
+   " Require Google Tasks 20x20",
+   " Require Google Forms 20x20",
+   " Require Google Classroom 20x20",
+   " Require Google Keep 20x20"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:settings": {
+  "overflowX": false,
+  "small": [
+   "#tool-checkbox-github GitHub: not connected, press 20x44",
+   "#tool-checkbox-figma Figma: not connected, press  20x44",
+   "#tool-checkbox-canva Canva: not connected, press  20x44",
+   "#tool-checkbox-google_calendar Google Calendar: not connect 20x44",
+   "#tool-checkbox-google_meet Google Meet: not connected,  20x44",
+   "#tool-checkbox-google_gmail Gmail Workspace: not connect 20x44",
+   "#tool-checkbox-google_tasks Google Tasks: not connected, 20x44",
+   "#tool-checkbox-google_forms Google Forms: not connected, 20x44",
+   "#tool-checkbox-google_classroom Google Classroom: not connec 20x44"
+  ],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:task": {
+  "overflowX": false,
+  "small": [],
+  "tiny": [],
+  "noname": [],
+  "lowc": [],
+  "noalt": 0
+ },
+ "m:errs": []
+}

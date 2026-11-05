@@ -193,7 +193,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           }}
         >
           {/* Top Paper Header Stamp */}
-          <div className="mb-6 flex items-center gap-2 text-neutral-400 font-mono text-[11px] ">
+          <div className="mb-6 flex items-center gap-2 text-neutral-400 font-mono text-xs ">
             <span className="w-8 h-[1px] bg-neutral-300" />
             <span>Organisation flowchart</span>
             <span className="w-8 h-[1px] bg-neutral-300" />
@@ -241,7 +241,7 @@ export const FlowchartCanvas: React.FC<FlowchartCanvasProps> = ({
           type="button"
           id="reset-zoom-btn"
           onClick={handleResetZoom}
-          className="px-1.5 py-1 text-[11px] font-semibold text-neutral-800 hover:bg-neutral-100 rounded-xs transition-colors min-w-11 text-center"
+          className="px-1.5 py-1 text-xs font-semibold text-neutral-800 hover:bg-neutral-100 rounded-xs transition-colors min-w-11 text-center"
           title="Reset to 100%"
         >
           {Math.round(zoom * 100)}%

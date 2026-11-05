@@ -65,8 +65,8 @@ export const TaskEvidenceIntegrations: React.FC<{ task: Task; onSubmitted?: () =
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <p className="text-[11px] text-ink-3">Include this tag in a commit message or pull request title when you push. Only your own linked GitHub account counts.</p>
-          {!github.orgConnected && <p className="text-[11px] text-amber-800">A lead needs to install the Mika GitHub App for the organisation first (Admin, Integrations).</p>}
+          <p className="text-xs text-ink-3">Include this tag in a commit message or pull request title when you push. Only your own linked GitHub account counts.</p>
+          {!github.orgConnected && <p className="text-xs text-amber-800">A lead needs to install the Mika GitHub App for the organisation first (Admin, Integrations).</p>}
           {github.orgConnected && !github.linked && (
             <button className={ghost} disabled={busy === 'link-github'} onClick={() => link('github')}>Link my GitHub account</button>
           )}
@@ -120,7 +120,7 @@ export const TaskEvidenceIntegrations: React.FC<{ task: Task; onSubmitted?: () =
         </div>
       )}
 
-      {busy && <p className="text-[11px] text-ink-3 animate-pulse">Working with the other service. This can take a few seconds.</p>}
+      {busy && <p className="text-xs text-ink-3 animate-pulse">Working with the other service. This can take a few seconds.</p>}
       {msg && <p className={`text-xs ${msg.ok ? 'text-emerald-700' : 'text-red-700'}`} role="status">{msg.text}</p>}
     </div>
   );

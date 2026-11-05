@@ -125,7 +125,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-slate-800">{toolName}</span>
-                    <span className="text-[11px] text-slate-500 font-mono-code bg-surface px-2 py-0.5 rounded border border-slate-200">
+                    <span className="text-xs text-slate-500 font-mono-code bg-surface px-2 py-0.5 rounded border border-slate-200">
                       {conn.accountLabel}
                     </span>
                   </div>
@@ -165,7 +165,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
                   {/* Specific Roles Checklist */}
                   {!isAll && (
                     <div className="ml-6 mt-3 p-3 bg-surface rounded-xl border border-slate-200 space-y-2">
-                      <div className="text-[11px] font-semibold text-slate-400">
+                      <div className="text-xs font-semibold text-slate-400">
                         Choose eligible roles ({selectedRoleIds.length}/{roles.length} selected):
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
@@ -187,7 +187,7 @@ export const IntegrationAccessConfigModal: React.FC<IntegrationAccessConfigModal
                                 <div className="font-medium text-slate-800 truncate">
                                   {role.title}
                                 </div>
-                                <div className="text-[11px] text-slate-400 truncate">
+                                <div className="text-xs text-slate-400 truncate">
                                   {dept?.name || 'Department'}
                                 </div>
                               </div>

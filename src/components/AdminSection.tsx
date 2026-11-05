@@ -184,7 +184,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {/* Admin Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-hairline">
         <div>
-          <div className="text-[11px] font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
+          <div className="text-xs font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
             Administration Module // 06
           </div>
           <h2 className="text-xl font-bold text-ink tracking-tight flex items-center gap-2">
@@ -200,7 +200,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
         <div className="flex items-center gap-1 bg-paper border border-hairline p-1 rounded-xs">
           <button
             onClick={() => setActiveTab('hierarchy')}
-            className={`px-3 py-1.5 text-[11px] font-semibold rounded-xs transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xs transition-all cursor-pointer ${
               activeTab === 'hierarchy' ? 'bg-accent text-white shadow-xs' : 'text-ink-3 hover:text-ink'
             }`}
           >
@@ -208,7 +208,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('links')}
-            className={`px-3 py-1.5 text-[11px] font-semibold rounded-xs transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xs transition-all cursor-pointer ${
               activeTab === 'links' ? 'bg-accent text-white shadow-xs' : 'text-ink-3 hover:text-ink'
             }`}
           >
@@ -216,7 +216,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('events')}
-            className={`px-3 py-1.5 text-[11px] font-semibold rounded-xs transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xs transition-all cursor-pointer ${
               activeTab === 'events' ? 'bg-accent text-white shadow-xs' : 'text-ink-3 hover:text-ink'
             }`}
           >
@@ -224,7 +224,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('temp')}
-            className={`px-3 py-1.5 text-[11px] font-semibold rounded-xs transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xs transition-all cursor-pointer ${
               activeTab === 'temp' ? 'bg-accent text-white shadow-xs' : 'text-ink-3 hover:text-ink'
             }`}
           >
@@ -232,7 +232,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('integrations')}
-            className={`px-3 py-1.5 text-[11px] font-semibold rounded-xs transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xs transition-all cursor-pointer ${
               activeTab === 'integrations' ? 'bg-accent text-white shadow-xs' : 'text-ink-3 hover:text-ink'
             }`}
           >
@@ -247,14 +247,14 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           <div className="flex justify-end gap-2">
             <button
               onClick={() => setShowDeptModal(true)}
-              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-[11px] font-semibold rounded-xs inline-flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs inline-flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <FolderPlus className="w-3.5 h-3.5" />
               Add Department / Section
             </button>
             <button
               onClick={() => setShowRoleModal(true)}
-              className="px-4 py-2 bg-paper hover:bg-paper-raised text-ink border border-hairline text-[11px] font-semibold rounded-xs inline-flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-4 py-2 bg-paper hover:bg-paper-raised text-ink border border-hairline text-xs font-semibold rounded-xs inline-flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <UserPlus className="w-3.5 h-3.5 text-ink" />
               Add Role
@@ -289,7 +289,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                       </div>
                       <div>
                         <h3 className="font-bold text-ink text-xs font-mono ">{dept.name}</h3>
-                        <span className="text-[11px] px-1.5 py-0.5 rounded-xs font-semibold bg-paper border border-hairline text-ink-3">
+                        <span className="text-xs px-1.5 py-0.5 rounded-xs font-semibold bg-paper border border-hairline text-ink-3">
                           TYPE: {dept.type}
                         </span>
                       </div>
@@ -298,7 +298,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                     {isTemp && !dept.isArchived && (
                       <button
                         onClick={() => onArchiveTempDept(dept.id)}
-                        className="text-[11px] font-mono text-amber-700 hover:text-amber-900 font-bold underline cursor-pointer"
+                        className="text-xs font-mono text-amber-700 hover:text-amber-900 font-bold underline cursor-pointer"
                       >
                         Archive Dept
                       </button>
@@ -308,14 +308,14 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                   {/* Section groupings info if section */}
                   {isSection && dept.groupedDeptIds && dept.groupedDeptIds.length > 0 && (
                     <div className="mb-3 p-3 rounded-xs bg-paper border border-hairline text-xs font-mono">
-                      <p className="font-bold text-ink text-[11px] mb-1.5">
+                      <p className="font-bold text-ink text-xs mb-1.5">
                         Direct Role Reaches inside Grouped Departments:
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {dept.groupedDeptIds.map(gId => {
                           const gDept = allDepts.find(d => d.id === gId);
                           return (
-                            <span key={gId} className="px-2 py-0.5 rounded-xs bg-surface text-ink border border-hairline font-mono text-[11px]">
+                            <span key={gId} className="px-2 py-0.5 rounded-xs bg-surface text-ink border border-hairline font-mono text-xs">
                               {gDept?.name || gId}
                             </span>
                           );
@@ -326,7 +326,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
 
                   {/* Roles defined in this department */}
                   <div className="space-y-1.5 mt-3 pt-3 border-t border-hairline">
-                    <p className="text-[11px] font-bold text-ink-3 font-mono">Defined Roles ({deptRoles.length}):</p>
+                    <p className="text-xs font-bold text-ink-3 font-mono">Defined Roles ({deptRoles.length}):</p>
                     <div className="flex flex-wrap gap-1.5">
                       {deptRoles.map(role => {
                         const assignedUsers = assignments
@@ -337,15 +337,15 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                         return (
                           <div
                             key={role.id}
-                            className={`p-1.5 rounded-xs text-[11px] border flex items-center gap-1.5 font-mono ${
+                            className={`p-1.5 rounded-xs text-xs border flex items-center gap-1.5 font-mono ${
                               role.isRoot 
                                 ? 'bg-accent text-white border-accent font-bold' 
                                 : 'bg-paper border-hairline text-ink'
                             }`}
                           >
                             <span>@{role.title}</span>
-                            {role.isRoot && <span className="text-[11px] px-1.5 bg-accent text-white rounded-xs font-semibold">Root</span>}
-                            <span className={`text-[11px] ${role.isRoot ? 'text-ink-3' : 'text-ink-3'}`}>({assignedUsers.length})</span>
+                            {role.isRoot && <span className="text-xs px-1.5 bg-accent text-white rounded-xs font-semibold">Root</span>}
+                            <span className={`text-xs ${role.isRoot ? 'text-ink-3' : 'text-ink-3'}`}>({assignedUsers.length})</span>
                           </div>
                         );
                       })}
@@ -380,7 +380,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           {/* Link Generator Form */}
           <form onSubmit={handleGenerateLinkSubmit} className="bg-surface p-4 rounded-xs border border-hairline shadow-xs flex flex-wrap items-end gap-3 font-mono">
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-[11px] font-bold text-ink-3 mb-1">
+              <label className="block text-xs font-bold text-ink-3 mb-1">
                 Target Role for Invite Link:
               </label>
               <select
@@ -402,7 +402,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             </div>
 
             <div className="w-36">
-              <label className="block text-[11px] font-bold text-ink-3 mb-1">
+              <label className="block text-xs font-bold text-ink-3 mb-1">
                 Validity Window:
               </label>
               <select
@@ -420,7 +420,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             <button
               type="submit"
               disabled={!selectedRoleIdForLink}
-              className="px-5 py-2 bg-accent hover:bg-accent-strong disabled:opacity-50 text-white rounded-xs text-[11px] font-semibold inline-flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-5 py-2 bg-accent hover:bg-accent-strong disabled:opacity-50 text-white rounded-xs text-xs font-semibold inline-flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <Link2 className="w-3.5 h-3.5" />
               Generate Scoped Link
@@ -430,7 +430,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
           {/* Active Links Table */}
           <div className="bg-surface rounded-xs border border-hairline overflow-hidden shadow-xs">
             <div className="p-3 bg-paper border-b border-hairline">
-              <h3 className="text-[11px] font-bold text-ink font-mono">
+              <h3 className="text-xs font-bold text-ink font-mono">
                 Active Multi-Use Invite Tokens
               </h3>
             </div>
@@ -443,11 +443,11 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                         @{link.roleTitle}
                       </span>
                       <span className="text-ink-3 text-xs font-mono">in {link.deptName}</span>
-                      <span className="px-2 py-0.5 bg-emerald-50 text-[#10B981] border border-emerald-200 rounded-xs text-[11px] font-semibold">
+                      <span className="px-2 py-0.5 bg-emerald-50 text-[#10B981] border border-emerald-200 rounded-xs text-xs font-semibold">
                         ACTIVE_TOKEN
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-ink-3 font-mono text-[11px]">
+                    <div className="flex items-center gap-3 text-xs text-ink-3 font-mono text-xs">
                       <span>Expires: {new Date(link.expiresAt).toLocaleDateString()}</span>
                       <span>Uses: {link.useCount} {link.maxUses ? `/ ${link.maxUses}` : ''}</span>
                     </div>
@@ -463,7 +463,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                     </button>
                     <button
                       onClick={() => handleCopyLink(link)}
-                      className={`px-3 py-1.5 rounded-xs text-[11px] font-semibold inline-flex items-center gap-1.5 border transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-xs text-xs font-semibold inline-flex items-center gap-1.5 border transition-all cursor-pointer ${
                         copiedLinkId === link.id
                           ? 'bg-emerald-50 text-[#10B981] border-emerald-300'
                           : 'bg-surface hover:bg-paper text-ink border-hairline'
@@ -494,7 +494,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             </p>
             <button
               onClick={() => setShowEventModal(true)}
-              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-[11px] font-semibold rounded-xs inline-flex items-center gap-2 cursor-pointer shadow-xs"
+              className="px-4 py-2 bg-accent hover:bg-accent-strong text-white text-xs font-semibold rounded-xs inline-flex items-center gap-2 cursor-pointer shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               Create Event Binding
@@ -509,18 +509,18 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                     <Calendar className="w-4 h-4 text-ink" />
                     {event.title}
                   </h3>
-                  <span className="px-2 py-0.5 rounded-xs text-[11px] font-semibold bg-emerald-50 text-[#10B981] border border-emerald-200">
+                  <span className="px-2 py-0.5 rounded-xs text-xs font-semibold bg-emerald-50 text-[#10B981] border border-emerald-200">
                     ACTIVE_BINDING
                   </span>
                 </div>
                 <p className="text-xs text-ink-3 mb-3 font-mono">{event.description}</p>
                 <div className="border-t border-hairline pt-2.5">
-                  <p className="text-[11px] font-bold text-ink-3 font-mono mb-1.5">Bound Departments:</p>
+                  <p className="text-xs font-bold text-ink-3 font-mono mb-1.5">Bound Departments:</p>
                   <div className="flex flex-wrap gap-1.5">
                     {event.departmentIds.map(dId => {
                       const dept = allDepts.find(d => d.id === dId);
                       return (
-                        <span key={dId} className="px-2 py-0.5 rounded-xs bg-paper text-ink border border-hairline text-[11px] font-mono">
+                        <span key={dId} className="px-2 py-0.5 rounded-xs bg-paper text-ink border border-hairline text-xs font-mono">
                           {dept?.name || dId}
                         </span>
                       );
@@ -537,7 +537,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {activeTab === 'temp' && (
         <div className="space-y-4">
           <div className="bg-paper border border-hairline p-4 rounded-xs text-xs text-ink font-mono">
-            <h4 className="font-bold mb-1 flex items-center gap-1.5 text-[11px]">
+            <h4 className="font-bold mb-1 flex items-center gap-1.5 text-xs">
               <Clock className="w-4 h-4 text-ink" />
               Temporary Department Lifecycle & History Preservation
             </h4>
@@ -552,7 +552,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               <div key={d.id} className="bg-surface rounded-xs p-4 border border-hairline shadow-xs">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-bold text-ink text-xs font-mono ">{d.name}</h3>
-                  <span className={`px-2 py-0.5 rounded-xs text-[11px] font-semibold ${
+                  <span className={`px-2 py-0.5 rounded-xs text-xs font-semibold ${
                     d.isArchived ? 'bg-paper text-ink-3 border border-hairline' : 'bg-amber-50 text-amber-800 border border-amber-200'
                   }`}>
                     {d.isArchived ? 'ARCHIVED' : 'ACTIVE_TEMPORAL'}
@@ -564,7 +564,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
                 {!d.isArchived && (
                   <button
                     onClick={() => onArchiveTempDept(d.id)}
-                    className="px-3.5 py-1.5 bg-accent hover:bg-accent-strong text-white rounded-xs text-[11px] font-semibold cursor-pointer"
+                    className="px-3.5 py-1.5 bg-accent hover:bg-accent-strong text-white rounded-xs text-xs font-semibold cursor-pointer"
                   >
                     Close & Archive Department
                   </button>
@@ -589,7 +589,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {qrModalLink && (
         <ModalOverlay onClose={() => setQrModalLink(null)} className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-xs shadow-2xl max-w-sm w-full p-6 text-center border border-hairline">
-            <div className="text-[11px] font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
+            <div className="text-xs font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
               Access Token
             </div>
             <h3 className="text-base font-bold text-ink font-mono mb-1">
@@ -602,10 +602,10 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             {/* Generated QR visual */}
             <div className="w-48 h-48 mx-auto bg-paper border border-hairline rounded-xs p-3 flex flex-col items-center justify-center mb-4">
               <QrCode className="w-32 h-32 text-ink" />
-              <p className="text-[11px] text-ink-3 font-mono mt-2 font-bold ">Scan to sign up</p>
+              <p className="text-xs text-ink-3 font-mono mt-2 font-bold ">Scan to sign up</p>
             </div>
 
-            <div className="bg-paper p-2.5 rounded-xs border border-hairline text-[11px] font-mono truncate mb-4 text-ink">
+            <div className="bg-paper p-2.5 rounded-xs border border-hairline text-xs font-mono truncate mb-4 text-ink">
               {window.location.origin}/?join={qrModalLink.token}
             </div>
 
@@ -633,7 +633,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {showDeptModal && (
         <ModalOverlay onClose={() => setShowDeptModal(false)} className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-xs shadow-2xl max-w-md w-full p-6 border border-hairline">
-            <div className="text-[11px] font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
+            <div className="text-xs font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
               Topology Setup
             </div>
             <h3 className="text-base font-bold text-ink font-mono mb-4">
@@ -641,7 +641,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             </h3>
             <form onSubmit={handleCreateDeptSubmit} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Name:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Name:</label>
                 <input
                   type="text"
                   required
@@ -653,7 +653,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Structural Type:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Structural Type:</label>
                 <select
                   value={newDeptType}
                   onChange={e => setNewDeptType(e.target.value as DeptType)}
@@ -667,7 +667,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Parent Department:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Parent Department:</label>
                 <select
                   value={newDeptParentId}
                   onChange={e => setNewDeptParentId(e.target.value)}
@@ -682,7 +682,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
 
               {newDeptType === 'section' && (
                 <div>
-                  <label className="block font-bold text-ink-3 text-[11px] mb-1">
+                  <label className="block font-bold text-ink-3 text-xs mb-1">
                     Select Departments Grouped by this Section:
                   </label>
                   <div className="space-y-1.5 max-h-32 overflow-y-auto border border-hairline rounded-xs p-2.5 bg-paper">
@@ -730,7 +730,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {showRoleModal && (
         <ModalOverlay onClose={() => setShowRoleModal(false)} className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-xs shadow-2xl max-w-md w-full p-6 border border-hairline">
-            <div className="text-[11px] font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
+            <div className="text-xs font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
               Role Position Definition
             </div>
             <h3 className="text-base font-bold text-ink font-mono mb-4">
@@ -738,7 +738,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             </h3>
             <form onSubmit={handleCreateRoleSubmit} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Role Title:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Role Title:</label>
                 <input
                   type="text"
                   required
@@ -750,7 +750,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Belongs to Department:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Belongs to Department:</label>
                 <select
                   value={newRoleDeptId}
                   onChange={e => setNewRoleDeptId(e.target.value)}
@@ -800,7 +800,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       {showEventModal && (
         <ModalOverlay onClose={() => setShowEventModal(false)} className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-xs shadow-2xl max-w-md w-full p-6 border border-hairline">
-            <div className="text-[11px] font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
+            <div className="text-xs font-bold tracking-[0.2em] text-ink-3 mb-1 font-mono">
               Horizontal Binding
             </div>
             <h3 className="text-base font-bold text-ink font-mono mb-4">
@@ -808,7 +808,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
             </h3>
             <form onSubmit={handleCreateEventSubmit} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Event Title:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Event Title:</label>
                 <input
                   type="text"
                   required
@@ -820,7 +820,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">Description:</label>
+                <label className="block font-bold text-ink-3 text-xs mb-1">Description:</label>
                 <textarea
                   rows={2}
                   placeholder="Brief description of the collaboration scope..."
@@ -831,7 +831,7 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-ink-3 text-[11px] mb-1">
+                <label className="block font-bold text-ink-3 text-xs mb-1">
                   Select 2 or more Departments to Bind:
                 </label>
                 <div className="space-y-1.5 max-h-36 overflow-y-auto border border-hairline rounded-xs p-2.5 bg-paper">

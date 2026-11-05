@@ -45,11 +45,11 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             <h1 className="font-bold text-sm sm:text-base tracking-tight text-neutral-900 font-sans">
               Mika Organizational Flowchart
             </h1>
-            <span className="font-mono text-[11px] font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded-xs">
+            <span className="font-mono text-xs font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded-xs">
               Mika Standard
             </span>
           </div>
-          <p className="text-[11px] text-neutral-500 font-mono">
+          <p className="text-xs text-neutral-500 font-mono">
             Recursive Departments • Section Groupings • Anchored Primary Root
           </p>
         </div>
@@ -62,30 +62,30 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       >
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-          <span className="text-[11px] text-neutral-500 font-semibold">Depts:</span>
+          <span className="text-xs text-neutral-500 font-semibold">Depts:</span>
           <span className="font-bold text-neutral-900">{stats.totalDepartments}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" />
-          <span className="text-[11px] text-neutral-500 font-semibold">Sections:</span>
+          <span className="text-xs text-neutral-500 font-semibold">Sections:</span>
           <span className="font-bold text-neutral-900">{stats.totalSections}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />
-          <span className="text-[11px] text-neutral-500 font-semibold">Roots:</span>
+          <span className="text-xs text-neutral-500 font-semibold">Roots:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoots}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
           <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-          <span className="text-[11px] text-neutral-500 font-semibold">Roles:</span>
+          <span className="text-xs text-neutral-500 font-semibold">Roles:</span>
           <span className="font-bold text-neutral-900">{stats.totalRoles}</span>
         </div>
         <span className="text-neutral-200">|</span>
         <div className="flex items-center gap-1.5 text-neutral-800">
-          <span className="text-[11px] text-neutral-500 font-semibold">Tiers:</span>
+          <span className="text-xs text-neutral-500 font-semibold">Tiers:</span>
           <span className="font-bold text-neutral-900">{stats.maxDepth}</span>
         </div>
       </div>
@@ -105,7 +105,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Paper Style Selector */}
-        <div className="hidden sm:flex items-center bg-surface border border-neutral-400 rounded-xs p-0.5 text-[11px] font-mono shadow-[1px_1px_0px_#27272a]">
+        <div className="hidden sm:flex items-center bg-surface border border-neutral-400 rounded-xs p-0.5 text-xs font-mono shadow-[1px_1px_0px_#27272a]">
           <button aria-label="Graph Grid"
             type="button"
             id="style-grid-btn"

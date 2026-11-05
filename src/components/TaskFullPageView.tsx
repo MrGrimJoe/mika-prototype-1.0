@@ -379,7 +379,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <FileText className="w-5 h-5 text-accent-fg" />
                 <div>
                   <p className="text-xs font-bold text-ink font-mono">{task.referenceFile.name}</p>
-                  <p className="text-[11px] text-ink-3 font-mono">{task.referenceFile.size || 'Attached File'}</p>
+                  <p className="text-xs text-ink-3 font-mono">{task.referenceFile.size || 'Attached File'}</p>
                 </div>
               </div>
               {task.referenceFile.url && (
@@ -409,9 +409,9 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {/* Connected Mentions Chips (GitHub repos/files, Figma, Canva, Drive) */}
           {task.mentions && task.mentions.length > 0 && (
             <div className="mt-4 pt-4 border-t border-hairline">
-              <h4 className="text-[11px] font-semibold text-ink-3 mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-semibold text-ink-3 mb-2 flex items-center gap-1.5">
                 <span>Referenced Assets & Repositories</span>
-                <span className="text-[11px] bg-slate-100 px-1.5 py-0.2 rounded text-slate-600">
+                <span className="text-xs bg-slate-100 px-1.5 py-0.2 rounded text-slate-600">
                   {task.mentions.length}
                 </span>
               </h4>
@@ -448,7 +448,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
                 <span>Verified Integration Evidence Captured</span>
               </div>
-              <div className="text-slate-600 space-y-0.5 text-[11px]">
+              <div className="text-slate-600 space-y-0.5 text-xs">
                 <div><span className="text-slate-400">Source:</span> {task.submissionEvidence.source}</div>
                 {task.submissionEvidence.host && (
                   <div><span className="text-slate-400">Origin Host:</span> {task.submissionEvidence.host}</div>
@@ -614,7 +614,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               <div>
                 <p className="text-xs font-bold font-mono ">Task Denied by Root Authority</p>
                 <p className="text-xs text-st-pending mt-1">{task.rejectionReason}</p>
-                <p className="text-[11px] text-st-pending mt-2 font-mono">
+                <p className="text-xs text-st-pending mt-2 font-mono">
                   Please revise your work and resubmit when ready.
                 </p>
               </div>
@@ -629,13 +629,13 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                   <ShieldCheck className="w-4 h-4 text-accent-fg" />
                   Root Authority Review Actions
                 </span>
-                <span className="text-[11px] font-mono text-ink-3">Decision Required</span>
+                <span className="text-xs font-mono text-ink-3">Decision Required</span>
               </div>
 
               {/* Submitted deliverable summary for reviewer */}
               {(task.confirmationText || task.submissionEvidence || task.confirmationFile) && (
                 <div className="mb-4 p-3 bg-surface border border-hairline rounded-xs text-xs space-y-2">
-                  <div className="font-semibold text-[11px] text-ink-2">
+                  <div className="font-semibold text-xs text-ink-2">
                     Submitted Deliverables for Inspection:
                   </div>
                   {task.confirmationText && (
@@ -650,7 +650,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                         <span className="font-bold">Verified Evidence:</span> {task.submissionEvidence.source} ({task.submissionEvidence.host || 'web'})
                       </div>
                       {task.submissionEvidence.url && (
-                        <a href={task.submissionEvidence.url} target="_blank" rel="noreferrer" className="underline font-medium text-[11px]">
+                        <a href={task.submissionEvidence.url} target="_blank" rel="noreferrer" className="underline font-medium text-xs">
                           View External Source ↗
                         </a>
                       )}
@@ -731,7 +731,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                       : 'bg-paper border-hairline text-ink'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-mono text-ink-3 mb-1">
+                  <div className="flex items-center justify-between text-xs font-mono text-ink-3 mb-1">
                     <span className="font-bold text-ink">{comment.authorName}</span>
                     <span>{new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
@@ -824,7 +824,7 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 Submit deliverables directly from whatever tab you are working in (Figma, Canva, Google Docs, Sheets, or GitHub) with a single global keystroke:
               </p>
               
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-md font-mono text-[11px] space-y-1.5">
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-md font-mono text-xs space-y-1.5">
                 <div className="font-bold text-slate-900">How it works:</div>
                 <div>1. Click <strong className="text-amber-700">Set Active (Ctrl+Alt+M)</strong> on this task.</div>
                 <div>2. Switch to your work in Figma, Canva, or Google Docs.</div>
@@ -833,10 +833,10 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
               </div>
 
               <div className="pt-2">
-                <div className="font-bold text-slate-800 mb-1 font-mono text-[11px] ">
+                <div className="font-bold text-slate-800 mb-1 font-mono text-xs ">
                   Install Browser Userscript:
                 </div>
-                <p className="text-[11px] text-slate-500 mb-3">
+                <p className="text-xs text-slate-500 mb-3">
                   Requires Tampermonkey, Violentmonkey, or Violent Chrome extension. Click below to install with 1 click:
                 </p>
                 <a
