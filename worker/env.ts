@@ -5,7 +5,6 @@ export interface Env {
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_API_KEY?: string;
   GOOGLE_APP_ID?: string;
-  GEMINI_API_KEY?: string;
   DEV_AUTH?: string;
 }
 

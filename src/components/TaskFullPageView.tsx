@@ -51,7 +51,7 @@ interface TaskFullPageViewProps {
   comments: Comment[];
   hasAuthorityToReview: boolean;
   onBack: () => void;
-  onStatusChange: (taskId: string, newStatus: TaskStatus, reason?: string) => void;
+  onStatusChange: (taskId: string, newStatus: TaskStatus, reason?: string, extra?: Partial<Task>) => void;
   onAddComment: (taskId: string, content: string, isHelp?: boolean) => void;
   onFileUpload: (taskId: string, file: File) => void;
   onRateTask?: (taskId: string, score: number, comment: string, isAnonymous: boolean) => void;
@@ -91,8 +91,6 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
     return localStorage.getItem('mika_active_task_id') === task.id;
   });
   const [isCopiedShortcut, setIsCopiedShortcut] = useState(false);
-  const [isExportingFigma, setIsExportingFigma] = useState(false);
-  const [isExportingCanva, setIsExportingCanva] = useState(false);
 
   // Global Ctrl+Alt+M Keyboard Shortcut Listener
   useEffect(() => {
@@ -159,68 +157,6 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
     confetti({ particleCount: 30, spread: 50 });
   };
 
-  const handleFigmaExport = async () => {
-    setIsExportingFigma(true);
-    try {
-      const res = await fetch('/api/integrations/figma/export', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          taskId: task.id,
-          fileKey: 'fig_brand_v1',
-          frameId: '0-1',
-          exportType: 'preview_link'
-        })
-      });
-      const data = await res.json();
-      if (onUpdateTask) {
-        onUpdateTask({
-          ...task,
-          status: 'submitted',
-          submissionEvidence: data.evidence
-        });
-      } else {
-        onStatusChange(task.id, 'submitted');
-      }
-      onAddComment(task.id, `Imported verified Figma design frame deliverable.`);
-      confetti({ particleCount: 45, spread: 60 });
-    } catch (err) {
-      console.warn('Figma export failed:', err);
-    } finally {
-      setIsExportingFigma(false);
-    }
-  };
-
-  const handleCanvaExport = async () => {
-    setIsExportingCanva(true);
-    try {
-      const res = await fetch('/api/integrations/canva/export', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          taskId: task.id,
-          designId: 'canva_pres_q3'
-        })
-      });
-      const data = await res.json();
-      if (onUpdateTask) {
-        onUpdateTask({
-          ...task,
-          status: 'submitted',
-          submissionEvidence: data.evidence
-        });
-      } else {
-        onStatusChange(task.id, 'submitted');
-      }
-      onAddComment(task.id, `Imported verified Canva presentation deliverable.`);
-      confetti({ particleCount: 45, spread: 60 });
-    } catch (err) {
-      console.warn('Canva export failed:', err);
-    } finally {
-      setIsExportingCanva(false);
-    }
-  };
-
   const assigner = allUsers.find(u => u.id === task.assignedByUserId);
   const assignee = allUsers.find(u => u.id === task.assignedToUserId);
   const targetRole = allRoles.find(r => r.id === task.assignedToRoleId);
@@ -258,14 +194,14 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
       spread: 60,
       origin: { y: 0.6 }
     });
-    onStatusChange(task.id, 'done');
+    // Status and rating go in one write so neither overwrites the other.
+    onStatusChange(task.id, 'done', undefined, ratingScore > 0 ? {
+      rating: { score: ratingScore, comment: ratingComment, ratedByUserId: currentUser.id, isAnonymous: isAnonymousRating, ratedAt: new Date().toISOString() },
+    } : undefined);
     onAddComment(
       task.id,
       `Approved by ${currentUser.fullName}. Assignment completed.`
     );
-    if (onRateTask && ratingScore > 0) {
-      onRateTask(task.id, ratingScore, ratingComment, isAnonymousRating);
-    }
   };
 
   // Review denial (Red)

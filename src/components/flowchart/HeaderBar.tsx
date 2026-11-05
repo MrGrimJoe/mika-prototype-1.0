@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TreeStats, PaperStyle, Section, DepartmentNode } from './flowchartTypes';
 import { HelpCircle, RotateCcw, Printer, Layers, MessageSquare } from 'lucide-react';
-import { AssistanceModal } from './AssistanceModal';
 import { GuidanceModal } from './GuidanceModal';
 import { ResetConfirmModal } from './ResetConfirmModal';
 
@@ -15,7 +14,6 @@ interface HeaderBarProps {
   onOpenSectionsManager: () => void;
   onClearSelection: () => void;
   onReset: () => void;
-  onApplyStructure?: (tree: DepartmentNode, sections: Section[]) => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
@@ -28,9 +26,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   onOpenSectionsManager,
   onClearSelection,
   onReset,
-  onApplyStructure,
 }) => {
-  const [showAssistance, setShowAssistance] = useState(false);
   const [showGuidance, setShowGuidance] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -96,22 +92,6 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
 
       {/* Right: Section Manager & Controls */}
       <div className="flex items-center gap-2 flex-wrap">
-        {/* Assistance Button - Named "Assistance", Green with Hover and Pulse */}
-        <button aria-label="Connect with an employee to build your organization for free on the spot"
-          type="button"
-          id="call-assistance-top-btn"
-          onClick={() => setShowAssistance(true)}
-          className="flex items-center gap-2 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-mono text-xs font-semibold rounded-xs shadow-[2px_2px_0px_#064e3b] transition-all cursor-pointer hover:-translate-y-0.5"
-          title="Connect with an employee to build your organization for free on the spot"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-200"></span>
-          </span>
-          <MessageSquare size={13} className="text-white" />
-          <span>Assistance</span>
-        </button>
-
         {/* Sections Manager Drawer Button */}
         <button aria-label="Manage grouped sections"
           type="button"
@@ -215,13 +195,6 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           <span>Guide</span>
         </button>
       </div>
-
-      {/* Assistance Modal (Name Input -> Chat UI) */}
-      <AssistanceModal
-        isOpen={showAssistance}
-        onClose={() => setShowAssistance(false)}
-        onApplyStructure={onApplyStructure}
-      />
 
       {/* Guide Modal */}
       <GuidanceModal

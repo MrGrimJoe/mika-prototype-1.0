@@ -362,11 +362,11 @@ export default function App() {
     }).catch(() => {});
   };
 
-  const handleTaskStatusChange = (taskId: string, newStatus: TaskStatus, reason?: string) => {
+  const handleTaskStatusChange = (taskId: string, newStatus: TaskStatus, reason?: string, extra?: Partial<Task>) => {
     const targetTask = tasks.find(t => t.id === taskId);
     if (!targetTask) return;
 
-    const updated: Task = { ...targetTask, status: newStatus, updatedAt: new Date().toISOString() };
+    const updated: Task = { ...targetTask, ...extra, status: newStatus, updatedAt: new Date().toISOString() };
     if (newStatus === 'done') {
       updated.completedAt = new Date().toISOString();
       updated.rejectionReason = undefined;
@@ -674,6 +674,9 @@ export default function App() {
         onCreateTaskClick={() => setShowCreateTaskModal(true)}
         onViewProfile={u => setViewingProfileUser(u)}
         orgName={organization?.name || ""}
+        orgs={myOrgs}
+        currentOrgId={organization?.id}
+        onSwitchOrg={id => { setStoredOrgId(id); window.location.reload(); }}
       />
       </div>
 

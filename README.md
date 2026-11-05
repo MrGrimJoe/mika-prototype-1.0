@@ -20,7 +20,6 @@ npm run dev:api                  # Worker + assets on http://localhost:8787
 
 ```
 DEV_AUTH=1
-GEMINI_API_KEY=            # optional, enables the AI helpers
 ```
 
 `DEV_AUTH=1` turns on a clearly labelled "Development sign-in" form (any email) so you can use the app before you have a Google OAuth client. **Never enable it in production**: it lets anyone sign in as anyone.
@@ -38,7 +37,6 @@ npx wrangler login
 npx wrangler d1 create mika                # copy the printed database_id into wrangler.jsonc
 npx wrangler r2 bucket create mika-files
 npm run db:migrate:remote                  # applies migrations/ to the real database
-npx wrangler secret put GEMINI_API_KEY     # optional
 npm run deploy                             # builds, then deploys
 ```
 
@@ -82,6 +80,4 @@ While the consent screen is in "Testing" only the test users you list can sign i
 - GitHub, Figma and Canva integrations and GitHub webhooks return `501 not_configured` (they no longer fabricate "done" evidence).
 - Google Workspace features need a real OAuth client, picker keys and Google verification.
 - Required-integration gating on join is not enforced server-side.
-- Drive / self-host storage modes have no upload path; File Vault link items still use placeholder thumbnails.
-- No UI for switching between several organizations (the first one is used).
-- AI endpoints need the `GEMINI_API_KEY` secret.
+- Drive / self-host storage modes have no upload path; File Vault link entries are plain links (no thumbnails or snapshots).

@@ -8,7 +8,6 @@ import {
 import { acceptInvite, createOrganization, issueInviteLink, resolveInviteLink, updateOrganization, type CreateOrgBody } from './orgs';
 import { orgChanges, orgState, removeDoc, submitViaShortcut, writeDoc } from './docs';
 import { downloadFile, removeFileBlob, uploadFile } from './files';
-import { assistanceGenerate, generateOrgStructure, interpret } from './ai';
 import { isMember, loadOrgContext, listDocs, orgsForUser } from './store';
 import type { IntegrationConnection } from '../src/types';
 
@@ -135,20 +134,6 @@ router.add('GET', '/api/orgs/:orgId/files/:fileId', async ({ req, url, params })
   const env = currentEnv();
   const user = await requireUser(env, req, url);
   return downloadFile(env, user, params.orgId, params.fileId);
-});
-
-// ---- AI (key stays on the server) ---------------------------------------------------------
-router.add('POST', '/api/assistance/generate', async ({ req }) => {
-  const env = currentEnv(); await requireUser(env, req);
-  return json(await assistanceGenerate(env, await readJson(req)));
-});
-router.add('POST', '/api/ai/interpret', async ({ req }) => {
-  const env = currentEnv(); await requireUser(env, req);
-  return json(await interpret(env, await readJson(req)));
-});
-router.add('POST', '/api/ai/generate-org-structure', async ({ req }) => {
-  const env = currentEnv(); await requireUser(env, req);
-  return json(await generateOrgStructure(env, await readJson(req)));
 });
 
 router.add('POST', '/api/v1/tasks/submit-shortcut', async ({ req }) => {

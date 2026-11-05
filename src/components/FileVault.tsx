@@ -42,11 +42,11 @@ export const FileVault: React.FC<FileVaultProps> = ({
   departments = [],
   allDepts = [],
   tasks = [],
-  orgId = 'org_school',
+  orgId = '',
   onUploadFile
 }) => {
   const depts = allDepts.length > 0 ? allDepts : departments;
-  const currentUserId = currentUser?.id || 'u_principal';
+  const currentUserId = currentUser?.id || '';
 
   // Active view: either a deptId or 'myself'
   const [selectedView, setSelectedView] = useState<string>(depts[0]?.id || 'myself');
@@ -56,74 +56,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
 
   // Local state for items
   const [vaultFiles, setVaultFiles] = useState<FileItem[]>(() => {
-    if (files.length > 0) return files;
-    // Initial seeded items covering Google, Figma, Canva, and Code
-    return [
-      {
-        id: 'file_curriculum_2026',
-        orgId: 'org_school',
-        deptId: 'dept_kindergarde',
-        name: 'Early Learning Curriculum Plan 2026.gdoc',
-        size: '1.2 MB',
-        type: 'application/vnd.google-apps.document',
-        url: 'https://docs.google.com/document/d/sample-curriculum/edit',
-        uploadedByUserId: 'u_principal',
-        uploadedByName: 'Principal Anderson',
-        uploadedAt: '2026-09-02T10:00:00Z',
-        archiveDestination: 'department',
-        entryType: 'preview_link',
-        integrationSource: 'google_docs',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300&q=80'
-      },
-      {
-        id: 'file_brand_figma',
-        orgId: 'org_school',
-        deptId: 'dept_kindergarde',
-        name: 'School Visual Design System v2.fig',
-        size: '14.5 MB',
-        type: 'application/x-figma',
-        url: 'https://www.figma.com/file/fig_brand_v1?node-id=0-1',
-        uploadedByUserId: 'u_principal',
-        uploadedByName: 'Principal Anderson',
-        uploadedAt: '2026-09-03T11:30:00Z',
-        archiveDestination: 'department',
-        entryType: 'preview_link',
-        integrationSource: 'figma',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80'
-      },
-      {
-        id: 'file_canva_stem',
-        orgId: 'org_school',
-        deptId: 'dept_kindergarde',
-        name: 'Annual STEM Week Flyer.canva',
-        size: '3.8 MB',
-        type: 'application/x-canva',
-        url: 'https://www.canva.com/design/canva_flyer_stem',
-        uploadedByUserId: 'u_principal',
-        uploadedByName: 'Principal Anderson',
-        uploadedAt: '2026-09-04T09:15:00Z',
-        archiveDestination: 'department',
-        entryType: 'preview_link',
-        integrationSource: 'canva',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&q=80'
-      },
-      {
-        id: 'file_priv_notes',
-        orgId: 'org_school',
-        deptId: 'dept_school',
-        name: 'Executive Personnel Notes & Strategy.pdf',
-        size: '420 KB',
-        type: 'application/pdf',
-        url: 'https://drive.google.com/file/d/sample-priv-notes/view',
-        uploadedByUserId: 'u_principal',
-        uploadedByName: 'Principal Anderson',
-        uploadedAt: '2026-09-05T08:00:00Z',
-        archiveDestination: 'myself',
-        archivedByUserId: 'u_principal',
-        entryType: 'preview_link',
-        integrationSource: 'google_drive'
-      }
-    ];
+    return files;
   });
 
   // Modal for Adding link or uploading
@@ -133,7 +66,6 @@ export const FileVault: React.FC<FileVaultProps> = ({
   const [itemUrl, setItemUrl] = useState('');
   const [itemSource, setItemSource] = useState<'google_docs' | 'figma' | 'canva' | 'github' | 'upload'>('figma');
   const [itemDestination, setItemDestination] = useState<'department' | 'myself'>('department');
-  const [itemEntryType, setItemEntryType] = useState<'preview_link' | 'full_import'>('preview_link');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -183,7 +115,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
       ...file,
       archiveDestination: newDest,
       archivedByUserId: newDest === 'myself' ? currentUserId : undefined,
-      deptId: newDest === 'department' ? (file.deptId || selectedView !== 'myself' ? selectedView : depts[0]?.id || '') : file.deptId
+      deptId: newDest === 'department' ? (file.deptId || (selectedView !== 'myself' ? selectedView : depts[0]?.id || '')) : file.deptId
     };
 
     // Update in state
@@ -215,7 +147,7 @@ export const FileVault: React.FC<FileVaultProps> = ({
       orgId,
       deptId: itemDestination === 'department' ? (selectedView !== 'myself' ? selectedView : depts[0]?.id || '') : undefined,
       name: itemName.trim(),
-      size: itemEntryType === 'full_import' ? '5.4 MB' : 'Link',
+      size: 'Link',
       type: itemSource === 'figma' ? 'application/x-figma' : itemSource === 'canva' ? 'application/x-canva' : 'text/html',
       url: itemUrl.trim(),
       uploadedByUserId: currentUserId,
@@ -223,13 +155,8 @@ export const FileVault: React.FC<FileVaultProps> = ({
       uploadedAt: new Date().toISOString(),
       archiveDestination: itemDestination,
       archivedByUserId: itemDestination === 'myself' ? currentUserId : undefined,
-      entryType: itemEntryType,
+      entryType: 'preview_link',
       integrationSource: itemSource,
-      thumbnailUrl: itemSource === 'figma' 
-        ? 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80'
-        : itemSource === 'canva'
-        ? 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&q=80'
-        : 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300&q=80'
     };
 
     setVaultFiles(prev => [newItem, ...prev]);
@@ -627,17 +554,6 @@ export const FileVault: React.FC<FileVaultProps> = ({
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Storage Mode</label>
-                  <select
-                    value={itemEntryType}
-                    onChange={(e) => setItemEntryType(e.target.value as any)}
-                    className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="preview_link">Preview Link Entry</option>
-                    <option value="full_import">Full Import (Snapshot)</option>
-                  </select>
-                </div>
               </div>
 
               <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">

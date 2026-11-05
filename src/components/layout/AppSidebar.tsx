@@ -36,6 +36,9 @@ interface AppSidebarProps {
   onOpenSettings?: () => void;
   isAnyRoot?: boolean;
   orgName?: string;
+  orgs?: { id: string; name: string }[];
+  currentOrgId?: string;
+  onSwitchOrg?: (orgId: string) => void;
 }
 
 export const AppSidebar: React.FC<AppSidebarProps> = ({
@@ -53,7 +56,10 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   onViewProfile,
   onOpenSettings,
   isAnyRoot = false,
-  orgName = 'Oakridge Academy'
+  orgName = '',
+  orgs = [],
+  currentOrgId,
+  onSwitchOrg
 }) => {
 
   // Nav items per specification (Part A6: Meetings is a sibling to Dashboard/Chat/File Vault)
@@ -131,9 +137,18 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               <span className="font-semibold text-[15px] text-ink tracking-tight truncate block leading-tight">
                 {orgName}
               </span>
-              <span className="text-xs text-ink-3 truncate block">
-                Recursive Authority
-              </span>
+              {orgs.length > 1 && onSwitchOrg ? (
+                <select
+                  aria-label="Switch organisation"
+                  value={currentOrgId}
+                  onChange={e => onSwitchOrg(e.target.value)}
+                  className="text-xs text-ink-3 bg-transparent max-w-full cursor-pointer"
+                >
+                  {orgs.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
+                </select>
+              ) : (
+                <span className="text-xs text-ink-3 truncate block">Recursive Authority</span>
+              )}
             </div>
           </div>
 
