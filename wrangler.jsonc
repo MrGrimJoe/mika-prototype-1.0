@@ -32,8 +32,17 @@
     }
   ],
 
-  // Non-secret config. Secrets (GOOGLE_CLIENT_SECRET, GEMINI_API_KEY) are set with `wrangler secret put`.
+  // Non-secret config. Real secrets are set with `wrangler secret put` (see INTEGRATION_SECRETS.md).
+  // A value that is empty or still says REPLACE_ME simply leaves that integration switched off (it answers 501 not_configured).
   "vars": {
+    // Public address people use to reach Mika. Used for OAuth callbacks and webhook URLs.
+    "APP_URL": "REPLACE_ME",
+    // Integration identifiers that are not secret.
+    "GITHUB_APP_SLUG": "REPLACE_ME",
+    "GITHUB_APP_ID": "REPLACE_ME",
+    "GITHUB_APP_CLIENT_ID": "REPLACE_ME",
+    "FIGMA_CLIENT_ID": "REPLACE_ME",
+    "CANVA_CLIENT_ID": "REPLACE_ME",
     // Public OAuth client id from Google Cloud Console. Leave empty until you have one.
     "GOOGLE_CLIENT_ID": "",
     // Browser API key + project number, only needed for the Google Drive file picker.

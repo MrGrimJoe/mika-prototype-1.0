@@ -1,1 +1,20 @@
 DEV_AUTH=1
+
+# ---- Integrations: every value below is a placeholder. See INTEGRATION_SECRETS.md for where each one comes from.
+# Anything left as REPLACE_ME just keeps that integration switched off.
+APP_URL=http://localhost:8787
+TOKEN_ENCRYPTION_KEY=REPLACE_ME            # openssl rand -base64 32
+OAUTH_STATE_SECRET=REPLACE_ME              # openssl rand -base64 32
+
+GITHUB_APP_SLUG=REPLACE_ME
+GITHUB_APP_ID=REPLACE_ME
+GITHUB_APP_CLIENT_ID=REPLACE_ME
+GITHUB_APP_CLIENT_SECRET=REPLACE_ME
+GITHUB_APP_PRIVATE_KEY=REPLACE_ME          # the .pem contents; a single line with literal \n is fine
+GITHUB_WEBHOOK_SECRET=REPLACE_ME           # openssl rand -hex 32
+
+FIGMA_CLIENT_ID=REPLACE_ME
+FIGMA_CLIENT_SECRET=REPLACE_ME
+
+CANVA_CLIENT_ID=REPLACE_ME
+CANVA_CLIENT_SECRET=REPLACE_ME

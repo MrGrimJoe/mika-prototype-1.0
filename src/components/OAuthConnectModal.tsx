@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Shield,
-  X,
-  Lock,
-  ArrowRight,
-  ExternalLink,
-  AlertCircle,
-  Github
-} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Shield, X, Lock, ArrowRight, AlertCircle, Github } from 'lucide-react';
 import { IntegrationToolDefinition, INTEGRATION_TOOLS } from '../lib/integrationService';
+import { connectProvider, fetchIntegrationStatus, isServerProvider, type IntegrationStatus } from '../lib/integrationsApi';
+import { getAccessToken } from '../lib/auth';
 import confetti from 'canvas-confetti';
 import { ModalOverlay } from './ui/ModalOverlay';
 
@@ -24,300 +18,140 @@ interface OAuthConnectModalProps {
   onClose: () => void;
 }
 
+/**
+ * Real connection dialog. GitHub / Figma / Canva go through the server (OAuth in a popup, tokens stay on the server).
+ * Google Workspace tools ask Google for the person's consent in the browser. Nothing is typed in and nothing is faked:
+ * if a provider is not set up on the server, this says so.
+ */
 export const OAuthConnectModal: React.FC<OAuthConnectModalProps> = ({
-  tool,
-  toolKey,
-  scope = 'org',
-  isEnterprise = false,
-  defaultAccount = '',
-  orgId,
-  userId,
-  onSuccess,
-  onClose,
+  tool, toolKey, scope = 'org', defaultAccount = '', orgId, onSuccess, onClose,
 }) => {
-  const effectiveTool =
-    tool ||
-    INTEGRATION_TOOLS.find((t) => t.key === toolKey) || {
-      key: (toolKey || 'github') as any,
-      name: toolKey === 'github' ? 'GitHub' : 'Integration',
-      category: 'Engineering',
-      description: 'Connect repository and team integration.',
-      authProviderName: 'OAuth Provider',
-      defaultScopeLabel: 'Organization integration'
-    };
+  const effectiveTool = tool || INTEGRATION_TOOLS.find(t => t.key === toolKey);
+  const key = effectiveTool?.key || toolKey || '';
+  const name = effectiveTool?.name || 'Integration';
+  const server = isServerProvider(key);
 
-  const isGitHub = effectiveTool.key === 'github';
+  const [status, setStatus] = useState<IntegrationStatus | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // State for non-github providers (Figma, Canva, Google)
-  const [accountInput, setAccountInput] = useState(
-    defaultAccount || (effectiveTool.key.startsWith('google') ? 'admin@mika.school' : 'mika-team')
-  );
-  const [isAuthorizing, setIsAuthorizing] = useState(false);
-  const [githubConfigError, setGithubConfigError] = useState<string | null>(null);
-
-  // Listen for popup window callback postMessage
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === 'GITHUB_OAUTH_SUCCESS') {
-        const accountLabel = event.data.accountLabel || 'connected';
-        try {
-          confetti({ particleCount: 35, spread: 60, origin: { y: 0.7 } });
-        } catch (e) {
-          // ignore
-        }
-        setIsAuthorizing(false);
-        onSuccess(accountLabel);
+    if (!server || !orgId) return;
+    fetchIntegrationStatus(orgId).then(setStatus).catch(() => setStatus(null));
+  }, [server, orgId]);
+
+  const done = (label: string) => {
+    try { confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } }); } catch { /* cosmetic */ }
+    onSuccess(label);
+  };
+
+  const connect = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (!server) {
+        // Google Workspace: the person's own consent, asked by Google in the browser.
+        const token = await getAccessToken();
+        if (!token) { setError('Google did not grant access. Check that Google sign-in is set up for this app, then try again.'); return; }
+        done(defaultAccount || 'Google account');
+        return;
       }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [onSuccess]);
-
-  // Real GitHub OAuth redirect & popup flow
-  const handleGitHubAuthorize = async () => {
-    setIsAuthorizing(true);
-    setGithubConfigError(null);
-
-    let clientId = (import.meta as any).env?.VITE_GITHUB_CLIENT_ID || '';
-    if (!clientId) {
-      try {
-        const res = await fetch('/api/integrations/github/config');
-        if (res.ok) {
-          const data = await res.json();
-          clientId = data.clientId || '';
-        }
-      } catch (err) {
-        console.warn('Failed to query GitHub OAuth config:', err);
-      }
-    }
-
-    if (!clientId) {
-      setIsAuthorizing(false);
-      setGithubConfigError(
-        'GITHUB_CLIENT_ID is not configured. Please add GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET to your environment variables or AI Studio Secrets.'
-      );
-      return;
-    }
-
-    const currentOrgId = orgId || localStorage.getItem('mika_org_id') || 'org_school';
-    const currentUserId = userId || localStorage.getItem('mika_user_id') || 'u_principal';
-
-    const redirectUri = `${window.location.origin}/api/integrations/github/callback`;
-    const statePayload = JSON.stringify({
-      scope,
-      orgId: currentOrgId,
-      userId: currentUserId,
-      ts: Date.now()
-    });
-
-    const params = new URLSearchParams({
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      scope: 'repo read:user',
-      state: statePayload
-    });
-
-    const authUrl = `https://github.com/login/oauth/authorize?${params.toString()}`;
-
-    // Prefer popup if inside an iframe (AI Studio preview) to bypass X-Frame-Options
-    if (window.self !== window.top) {
-      const popup = window.open(authUrl, 'mika_github_oauth', 'width=600,height=750,menubar=no,toolbar=no');
-      if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-        // Fallback to top window or location redirect
-        try {
-          window.top!.location.href = authUrl;
-        } catch {
-          window.location.href = authUrl;
-        }
-      }
-    } else {
-      window.location.href = authUrl;
+      if (!orgId) { setError('Open an organisation first.'); return; }
+      const p = status?.providers[key];
+      const lead = !!status?.isLead;
+      const result = key === 'github'
+        // A lead installs the Mika GitHub App once for the whole organisation; everyone else links their own account.
+        ? await connectProvider('github', orgId, { mode: lead && scope === 'org' && !p?.orgConnected ? 'install' : 'link' })
+        : await connectProvider(key, orgId, { scope: lead ? scope : 'user' });
+      if (result.ok) done(result.accountLabel || name);
+      else setError(result.message);
+    } finally {
+      setBusy(false);
     }
   };
 
-  // Generic handler for untouched providers (Figma, Canva, Google)
-  const handleAuthorize = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!accountInput.trim()) return;
-
-    setIsAuthorizing(true);
-    setTimeout(() => {
-      setIsAuthorizing(false);
-      try {
-        confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
-      } catch (e) {
-        // ignore
-      }
-      onSuccess(accountInput.trim());
-    }, 700);
-  };
+  const p = server ? status?.providers[key as 'github'] : undefined;
+  const notConfigured = server && p && !p.configured;
+  const needsOrg = server && !orgId;
 
   return (
-    <ModalOverlay onClose={onClose}
-      id="oauth-connect-modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
-    >
-      <div
-        id="oauth-connect-modal-container"
-        className="w-full max-w-md bg-surface rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
-      >
-        {/* Header */}
+    <ModalOverlay onClose={onClose} id="oauth-connect-modal-backdrop"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+      <div id="oauth-connect-modal-container" className="w-full max-w-md bg-surface rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
         <div className="bg-accent text-white p-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-surface/10 flex items-center justify-center border border-white/20">
-              {isGitHub ? (
-                <Github className="w-5 h-5 text-white" />
-              ) : (
-                <Shield className="w-5 h-5 text-indigo-400" />
-              )}
+              {key === 'github' ? <Github className="w-5 h-5 text-white" /> : <Shield className="w-5 h-5 text-indigo-400" />}
             </div>
             <div>
-              <h3 className="text-sm font-bold tracking-tight">
-                Connect {effectiveTool.name}
-              </h3>
-              <p className="text-xs text-slate-400">
-                {isGitHub ? 'Real OAuth 2.0 Flow' : effectiveTool.authProviderName} • {scope === 'org' ? 'Organization-Wide' : 'Root Scope'}
-              </p>
+              <h3 className="text-sm font-bold tracking-tight">Connect {name}</h3>
+              <p className="text-xs text-slate-400">{effectiveTool?.authProviderName || 'OAuth'}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-surface/10 transition-colors"
-          >
+          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-surface/10 transition-colors" aria-label="Close">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* GitHub Path: No typed-account form! Direct OAuth authorization */}
-        {isGitHub ? (
-          <div className="p-6 space-y-4">
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 text-xs">
-              <div className="flex items-center gap-2 text-slate-900 font-semibold">
-                <Lock className="w-4 h-4 text-indigo-600" />
-                <span>GitHub OAuth Permission Request</span>
-              </div>
-              <p className="text-slate-600 leading-relaxed">
-                Mika will redirect you to GitHub to authorize access with the following scopes:
-              </p>
-              <ul className="list-disc pl-4 text-slate-600 space-y-1 font-mono text-[11px]">
-                <li><strong className="text-slate-800">repo</strong>: Read & write access to repositories for git tree inspection and commit trailers.</li>
-                <li><strong className="text-slate-800">read:user</strong>: Read profile handle to link your real GitHub identity.</li>
-              </ul>
-              <div className="pt-1 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>Redirects to <code className="bg-slate-200 px-1 py-0.5 rounded text-[11px]">github.com/login/oauth/authorize</code></span>
-              </div>
+        <div className="p-6 space-y-4">
+          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-2">
+            <div className="flex items-center gap-2 text-slate-800 font-semibold">
+              <Lock className="w-3.5 h-3.5 text-indigo-600" />
+              <span>What happens</span>
             </div>
-
-            {githubConfigError && (
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold">OAuth Credentials Required</p>
-                  <p className="text-[11px] mt-0.5 text-amber-700">{githubConfigError}</p>
-                </div>
-              </div>
+            <p>{effectiveTool?.description}</p>
+            {server ? (
+              <p className="text-slate-500">
+                You will approve access on {name}'s own page. Mika keeps the connection on its server and never shows it to anyone.
+                {key === 'github' && ' Task completion still needs a reviewer to approve it.'}
+              </p>
+            ) : (
+              <p className="text-slate-500">Google will ask for your permission. Mika uses it only in your browser, for you.</p>
             )}
-
-            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={onClose}
-                disabled={isAuthorizing}
-                className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                id="confirm-github-oauth-btn"
-                onClick={handleGitHubAuthorize}
-                disabled={isAuthorizing}
-                className="px-4 py-2 bg-accent hover:bg-accent-strong disabled:opacity-50 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-2 shadow-sm transition-colors"
-              >
-                {isAuthorizing ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Connecting to GitHub...</span>
-                  </>
-                ) : (
-                  <>
-                    <Github className="w-3.5 h-3.5" />
-                    <span>Continue to GitHub Authorization</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </>
-                )}
-              </button>
-            </div>
           </div>
-        ) : (
-          /* Untouched original form for other providers (Figma, Canva, Google) */
-          <form onSubmit={handleAuthorize} className="p-6 space-y-4">
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-2">
-              <div className="flex items-center gap-2 text-slate-800 font-semibold">
-                <Lock className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Permission Request</span>
+
+          {needsOrg && (
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700">
+              You can connect {name} as soon as you have joined. Mika will ask you on your first screen.
+            </div>
+          )}
+
+          {notConfigured && (
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold">{name} isn't set up on this server yet</p>
+                <p className="text-[11px] mt-0.5 text-amber-700">
+                  {p?.missing?.length
+                    ? `Add these keys, then try again: ${p.missing.join(', ')}.`
+                    : 'Ask the person who runs this Mika to add the keys.'}
+                </p>
               </div>
-              <p>
-                Mika will securely access <strong>{effectiveTool.name}</strong> to support:
-              </p>
-              <ul className="list-disc pl-4 text-slate-500 space-y-1">
-                <li>{effectiveTool.description}</li>
-                <li>Read & write authorization for assigned team members</li>
-                <li>Automatic token refresh and audit logging</li>
-              </ul>
             </div>
+          )}
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                {effectiveTool.key.startsWith('google') ? 'Workspace Account Email' : `${effectiveTool.name} Username or Team ID`}
-              </label>
-              <input
-                type={effectiveTool.key.startsWith('google') ? 'email' : 'text'}
-                required
-                value={accountInput}
-                onChange={(e) => setAccountInput(e.target.value)}
-                placeholder={effectiveTool.key.startsWith('google') ? 'e.g. admin@yourdomain.edu' : 'e.g. acme-corp'}
-                className="w-full px-3.5 py-2.5 bg-surface border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-              />
-              <p className="text-[11px] text-slate-400 mt-1">
-                {scope === 'org'
-                  ? 'This account will serve as the shared connector for eligible roles.'
-                  : 'This account will be scoped exclusively to your subordinate roles.'}
-              </p>
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-800 text-xs flex items-start gap-2" role="alert">
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+              <span>{error}</span>
             </div>
+          )}
 
-            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={onClose}
-                disabled={isAuthorizing}
-                className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                id="confirm-oauth-authorize-btn"
-                disabled={isAuthorizing || !accountInput.trim()}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 shadow-sm transition-colors"
-              >
-                {isAuthorizing ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Connecting...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Authorize & Link</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        )}
+          <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+            <button type="button" onClick={onClose} disabled={busy}
+              className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
+              Cancel
+            </button>
+            <button type="button" id="confirm-oauth-authorize-btn" onClick={connect} disabled={busy || needsOrg || !!notConfigured}
+              className="px-4 py-2 bg-accent hover:bg-accent-strong disabled:opacity-50 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-2 shadow-sm transition-colors">
+              {busy ? (
+                <><div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Waiting for {name}...</span></>
+              ) : (
+                <><span>Continue to {server ? name : 'Google'}</span><ArrowRight className="w-3.5 h-3.5" /></>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </ModalOverlay>
   );

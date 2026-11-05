@@ -41,6 +41,7 @@ import confetti from 'canvas-confetti';
 import { Badge, Button } from './ui';
 import { taskStateColors, colors, typography } from '../lib/designSystem';
 import { ModalOverlay } from './ui/ModalOverlay';
+import { TaskEvidenceIntegrations } from './TaskEvidenceIntegrations';
 
 interface TaskFullPageViewProps {
   task: Task;
@@ -570,6 +571,11 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
                 </div>
               ) : null}
             </div>
+          )}
+
+          {/* Evidence from GitHub / Figma / Canva: only for the person the task is assigned to, while it is open */}
+          {task.assignedToUserId === currentUser.id && (task.status === 'pending' || task.status === 'help' || task.status === 'rejected') && (
+            <TaskEvidenceIntegrations task={task} />
           )}
 
           {/* Mode 2: Yes/No Confirmation */}

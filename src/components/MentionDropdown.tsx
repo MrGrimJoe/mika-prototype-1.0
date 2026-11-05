@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TaskMention, FileItem, OrgIntegrations } from '../types';
+import { getStoredOrgId } from '../lib/api';
+import { githubRepos, githubTree, type GithubRepo } from '../lib/integrationsApi';
 import { 
   Github, 
   Figma, 
@@ -26,29 +28,35 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
   onSelect,
   onClose
 }) => {
-  const [remoteGithubFiles, setRemoteGithubFiles] = useState<{ path: string; repo: string }[]>([]);
+  const orgId = getStoredOrgId();
+  const [repos, setRepos] = useState<GithubRepo[]>([]);
+  const [remoteGithubFiles, setRemoteGithubFiles] = useState<{ path: string; repo: string; url: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // If query starts with a repo name followed by '/', e.g. "mika-core/src"
+  // If query starts with a repo name followed by '/', e.g. "mika-core/src/"
   const isRepoFileDrilldown = query.includes('/');
   const [drillRepo, ...rest] = query.split('/');
-  const fileDrillQuery = rest.join('/').toLowerCase();
+  const dirPath = rest.slice(0, -1).join('/');            // folder being browsed
+  const fileDrillQuery = (rest[rest.length - 1] || '').toLowerCase(); // what has been typed of the file name
 
-  // Fetch GitHub tree if drilling into repo
+  // Real repositories from the GitHub App installation (empty when GitHub is not connected)
   useEffect(() => {
-    if (isRepoFileDrilldown && drillRepo) {
-      setIsLoading(true);
-      fetch(`/api/integrations/github/tree?repo=${encodeURIComponent(drillRepo)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.files) {
-            setRemoteGithubFiles(data.files.map((f: any) => ({ path: f.path, repo: drillRepo })));
-          }
-        })
-        .catch(err => console.warn('GitHub tree error:', err))
-        .finally(() => setIsLoading(false));
-    }
-  }, [isRepoFileDrilldown, drillRepo]);
+    if (!orgId) return;
+    githubRepos(orgId).then(r => setRepos(r.repos)).catch(() => setRepos([]));
+  }, [orgId]);
+
+  // Browse one folder of the repo being typed
+  const drillFullName = repos.find(r => r.name.toLowerCase() === drillRepo.toLowerCase())?.fullName;
+  useEffect(() => {
+    if (!isRepoFileDrilldown || !orgId || !drillFullName) { setRemoteGithubFiles([]); return; }
+    let cancelled = false;
+    setIsLoading(true);
+    githubTree(orgId, drillFullName, dirPath)
+      .then(d => { if (!cancelled) setRemoteGithubFiles(d.items.filter(i => i.type === 'file').map(i => ({ path: i.path, repo: drillRepo, url: i.url }))); })
+      .catch(() => { if (!cancelled) setRemoteGithubFiles([]); })
+      .finally(() => { if (!cancelled) setIsLoading(false); });
+    return () => { cancelled = true; };
+  }, [isRepoFileDrilldown, orgId, drillFullName, dirPath, drillRepo]);
 
   // Compute matched items
   const suggestions = useMemo(() => {
@@ -58,14 +66,14 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
     // 1. If drilldown into repo files (@repo/path)
     if (isRepoFileDrilldown && drillRepo) {
       remoteGithubFiles
-        .filter(f => !fileDrillQuery || f.path.toLowerCase().includes(fileDrillQuery))
+        .filter(f => !fileDrillQuery || f.path.split('/').pop()!.toLowerCase().includes(fileDrillQuery))
         .slice(0, 8)
         .forEach(f => {
           list.push({
             type: 'github_file',
             externalId: `${f.repo}/${f.path}`,
             displayName: `@${f.repo}/${f.path}`,
-            url: `https://github.com/codeNinjaJane/${f.repo}/blob/main/${f.path}`,
+            url: f.url,
             repo: f.repo,
             path: f.path
           });
@@ -74,15 +82,9 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
     }
 
     // 2. Connected GitHub Repositories
-    const repos = [
-      { id: 'mika-core', name: 'mika-core', url: 'https://github.com/codeNinjaJane/mika-core' },
-      { id: 'mika-prototypes', name: 'mika-prototypes', url: 'https://github.com/codeNinjaJane/mika-prototypes' },
-      { id: 'school-portal', name: 'school-portal', url: 'https://github.com/school-edu/portal' },
-      { id: 'org-docs', name: 'org-docs', url: 'https://github.com/org/docs' }
-    ];
-
     repos
       .filter(r => !q || r.name.toLowerCase().includes(q))
+      .slice(0, 8)
       .forEach(r => {
         list.push({
           type: 'github_repo',
@@ -112,7 +114,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
       });
 
     return list;
-  }, [query, isRepoFileDrilldown, drillRepo, fileDrillQuery, remoteGithubFiles, vaultFiles]);
+  }, [query, isRepoFileDrilldown, drillRepo, fileDrillQuery, remoteGithubFiles, vaultFiles, repos]);
 
   const getIcon = (type: TaskMention['type']) => {
     switch (type) {
@@ -145,7 +147,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
       <div className="max-h-60 overflow-y-auto py-1">
         {suggestions.length === 0 ? (
           <div className="px-4 py-3 text-xs text-slate-400 text-center">
-            No matching repo, file, or design found.
+            No matching repo, file, or design found. GitHub repos appear here once GitHub is connected.
           </div>
         ) : (
           suggestions.map((item, idx) => (

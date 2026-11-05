@@ -32,6 +32,7 @@ import {
 import { IntegrationChecklist } from './IntegrationChecklist';
 import { IntegrationAccessConfigModal } from './IntegrationAccessConfigModal';
 import { OAuthConnectModal } from './OAuthConnectModal';
+import { isServerProvider } from '../lib/integrationsApi';
 import {
   upsertIntegrationConnection,
   removeIntegrationConnection,
@@ -158,6 +159,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     if (!tool) return;
 
     try {
+      if (isServerProvider(tool.key)) {
+        // GitHub / Figma / Canva: the server has already recorded this connection.
+        setStatusFeedback(`Successfully connected ${tool.name} as ${accountLabel}.`);
+        setTimeout(() => setStatusFeedback(null), 4000);
+        return;
+      }
       const scope: 'org' | 'root' = isMasterRoot ? 'org' : 'root';
       const newConn: IntegrationConnection = {
         id: `conn_${Date.now()}_${tool.key}`,

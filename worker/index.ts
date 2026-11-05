@@ -10,6 +10,7 @@ import { orgChanges, orgState, removeDoc, submitViaShortcut, writeDoc } from './
 import { downloadFile, removeFileBlob, uploadFile } from './files';
 import { isMember, loadOrgContext, listDocs, orgsForUser } from './store';
 import type { IntegrationConnection } from '../src/types';
+import { registerIntegrationRoutes } from './integrations/routes';
 
 const router = new Router();
 
@@ -142,8 +143,6 @@ router.add('POST', '/api/v1/tasks/submit-shortcut', async ({ req }) => {
   const task = await submitViaShortcut(env, user, await readJson(req));
   return json({ success: true, taskId: task.id, status: task.status, evidence: task.submissionEvidence });
 });
-router.add('POST', '/api/webhooks/github', notConfiguredLater('GitHub webhooks'));
-router.add('POST', '/api/v1/webhooks/github', notConfiguredLater('GitHub webhooks'));
 
 // ---- Integrations -------------------------------------------------------------------------
 router.add('GET', '/api/integrations/connections', async ({ req, url }) => {
@@ -158,22 +157,7 @@ router.add('GET', '/api/integrations/connections', async ({ req, url }) => {
   return json({ connections: conns.map(({ accessToken, refreshToken, ...safe }: any) => safe) });
 });
 
-router.add('GET', '/api/integrations/github/config', async () => json({ clientId: '', isConfigured: false }));
-
-function notConfiguredLater(what: string) {
-  return async () => json({ error: `${what} are not enabled on this deployment yet.`, code: 'not_configured' }, 501);
-}
-const notConfigured = (what: string) => async () =>
-  json({ error: `${what} is not connected on this deployment yet.`, code: 'not_configured' }, 501);
-for (const [m, p, label] of [
-  ['GET', '/api/integrations/github/repos', 'GitHub'],
-  ['GET', '/api/integrations/github/tree', 'GitHub'],
-  ['GET', '/api/integrations/github/callback', 'GitHub'],
-  ['GET', '/api/integrations/figma/files', 'Figma'],
-  ['POST', '/api/integrations/figma/export', 'Figma'],
-  ['GET', '/api/integrations/canva/designs', 'Canva'],
-  ['POST', '/api/integrations/canva/export', 'Canva'],
-] as const) router.add(m, p, notConfigured(label));
+registerIntegrationRoutes(router, () => _env);
 
 // ---- Entry -------------------------------------------------------------------------------
 let _env: Env;

@@ -25,6 +25,7 @@
   },
   "exclude": [
     "worker",
+    "scripts",
     "node_modules",
     "dist"
   ]

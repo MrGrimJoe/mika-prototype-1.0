@@ -75,9 +75,19 @@ While the consent screen is in "Testing" only the test users you list can sign i
 
 ---
 
-## 5. Not implemented yet
+## 5. Integrations
 
-- GitHub, Figma and Canva integrations and GitHub webhooks return `501 not_configured` (they no longer fabricate "done" evidence).
+GitHub (App + webhook), Figma (OAuth, preview export, version-label webhook) and Canva (OAuth + PKCE, design export) live in `worker/integrations/`. Tokens are encrypted (AES-GCM) in D1 and never reach the browser. A task is referenced by the tag `mika#<taskId>` in a commit message, pull request title/description, or Figma version name; only the assigned person's own linked account can submit it.
+
+```
+npx tsx scripts/integrations-unit.test.ts     # crypto, OAuth state, GitHub App JWT, link parsing (no server needed)
+npm run dev:api  &&  python3 scripts/integrations-e2e.py   # webhooks, isolation, guards (needs the test values in .dev.vars)
+```
+
+## 6. Not implemented yet
+
+- GitHub, Figma and Canva are implemented but switched off until you add their keys (`INTEGRATION_SECRETS.md`); until then they answer `501 not_configured`. They only ever submit tasks for review, never mark them done.
+- Figma and Canva calls were written against their documentation but could not be exercised without real credentials: test them with a real app registration first.
 - Google Workspace features need a real OAuth client, picker keys and Google verification.
 - Required-integration gating on join is not enforced server-side.
 - Drive / self-host storage modes have no upload path; File Vault link entries are plain links (no thumbnails or snapshots).

@@ -20,6 +20,7 @@ import {
 import confetti from 'canvas-confetti';
 import { INTEGRATION_TOOLS, IntegrationToolDefinition } from '../lib/integrationService';
 import { OAuthConnectModal } from './OAuthConnectModal';
+import { isServerProvider } from '../lib/integrationsApi';
 import { upsertUserCompliance, startOrgSync } from '../lib/cloudStore';
 
 interface RoleLinkJoinViewProps {
@@ -80,7 +81,8 @@ export const RoleLinkJoinView: React.FC<RoleLinkJoinViewProps> = ({
 
   const allRequirementsSatisfied = useMemo(() => {
     if (requiredKeys.length === 0) return true;
-    return requiredKeys.every(k => !!connectedIntegrations[k]);
+    // GitHub, Figma and Canva connect through the server, which needs membership first: they are completed right after joining.
+    return requiredKeys.filter(k => !isServerProvider(k)).every(k => !!connectedIntegrations[k]);
   }, [requiredKeys, connectedIntegrations]);
 
   // Fetch link info on mount
