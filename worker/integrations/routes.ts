@@ -5,8 +5,10 @@ import { requireUser } from '../auth';
 import { listDocs } from '../store';
 import type { IntegrationConnection } from '../../src/types';
 import { isLead, isSet, memberContext, missingFor, type Provider } from './common';
-import { canvaCallback, canvaDesigns, canvaDisconnect, canvaExport, canvaStart } from './canva';
-import { figmaCallback, figmaDisconnect, figmaExport, figmaFileInfo, figmaStart, figmaWatch, figmaWebhook } from './figma';
+import { canvaCallback, canvaDesigns, canvaStart } from './canva';
+import { figmaCallback, figmaFileInfo, figmaStart, figmaWatch, figmaWebhook } from './figma';
+import { adapterFor } from './adapters';
+import { linkAndSubmit, linkResource, listTaskWork, submitResource, syncResource, unlinkResource } from './resources';
 import { githubCallback, githubConfig, githubDisconnect, githubRepos, githubStart, githubTree, githubWebhook } from './github';
 
 const scopeOf = (v: unknown): 'user' | 'org' | 'root' => (v === 'org' || v === 'root' ? v : 'user');
@@ -28,6 +30,8 @@ async function status(env: Env, req: Request, url: URL) {
     const inst = results.find(r => r.provider === provider && r.kind === 'installation');
     return {
       configured: missing.length === 0,
+      // What this provider can and cannot do, so the screens never imply more than the API offers.
+      ...(provider === 'figma' || provider === 'canva' ? { capabilities: adapterFor(provider).capabilities } : {}),
       // Names of unset secrets are only useful to (and only shown to) people who can fix them.
       ...(lead && missing.length ? { missing } : {}),
       linked: !!mine, accountLabel: mine?.label ?? null,
@@ -78,8 +82,12 @@ export function registerIntegrationRoutes(router: Router, getEnv: () => Env) {
   router.add('GET', '/api/integrations/figma/callback', async ({ req, url }) => figmaCallback(getEnv(), req, url));
   router.add('GET', '/api/integrations/figma/files', async ({ req, url }) =>
     json(await figmaFileInfo(getEnv(), await authed(req, url), q(url, 'orgId'), q(url, 'url'))));
-  router.add('POST', '/api/integrations/figma/export', async ({ req }) =>
-    json(await figmaExport(getEnv(), await authed(req), await readJson(req))));
+  // One-step "attach a preview and submit", kept for existing callers: it links the file, then submits it.
+  router.add('POST', '/api/integrations/figma/export', async ({ req }) => {
+    const b = await readJson<{ orgId?: string; taskId?: string; fileUrl?: string }>(req);
+    const r = await linkAndSubmit(getEnv(), await authed(req), 'figma', { orgId: b.orgId, taskId: b.taskId, input: b.fileUrl });
+    return json({ task: r.task, file: r.file, resource: r.resource });
+  });
   router.add('POST', '/api/integrations/figma/watch', async ({ req }) =>
     json(await figmaWatch(getEnv(), await authed(req), await readJson(req))));
   router.add('POST', '/api/webhooks/figma', async ({ req }) => figmaWebhook(getEnv(), req));
@@ -92,8 +100,29 @@ export function registerIntegrationRoutes(router: Router, getEnv: () => Env) {
   router.add('GET', '/api/integrations/canva/callback', async ({ req, url }) => canvaCallback(getEnv(), req, url));
   router.add('GET', '/api/integrations/canva/designs', async ({ req, url }) =>
     json(await canvaDesigns(getEnv(), await authed(req, url), q(url, 'orgId'), q(url, 'query'))));
-  router.add('POST', '/api/integrations/canva/export', async ({ req }) =>
-    json(await canvaExport(getEnv(), await authed(req), await readJson(req))));
+  router.add('POST', '/api/integrations/canva/export', async ({ req }) => {
+    const b = await readJson<{ orgId?: string; taskId?: string; design?: string; format?: string }>(req);
+    const r = await linkAndSubmit(getEnv(), await authed(req), 'canva', { orgId: b.orgId, taskId: b.taskId, input: b.design, format: b.format });
+    return json({ task: r.task, file: r.file, resource: r.resource });
+  });
+
+  // ---- Linked work: provider-neutral. Linking is not submitting; activity is not completion.
+  router.add('GET', '/api/integrations/work', async ({ req, url }) =>
+    json(await listTaskWork(getEnv(), await authed(req, url), q(url, 'orgId'), q(url, 'taskId'))));
+  router.add('POST', '/api/integrations/resources', async ({ req }) =>
+    json(await linkResource(getEnv(), await authed(req), await readJson(req)), 201));
+  router.add('POST', '/api/integrations/resources/:id/sync', async ({ req, params }) => {
+    const b = await readJson<{ orgId?: string }>(req);
+    return json(await syncResource(getEnv(), await authed(req), b.orgId || '', params.id));
+  });
+  router.add('POST', '/api/integrations/resources/:id/submit', async ({ req, params }) => {
+    const b = await readJson<{ orgId?: string; format?: string }>(req);
+    return json(await submitResource(getEnv(), await authed(req), { orgId: b.orgId, resourceId: params.id, format: b.format }));
+  });
+  router.add('POST', '/api/integrations/resources/:id/unlink', async ({ req, params }) => {
+    const b = await readJson<{ orgId?: string }>(req);
+    return json(await unlinkResource(getEnv(), await authed(req), b.orgId || '', params.id));
+  });
 
   // ---- Disconnect (the caller's own link; leads can also remove the org-wide GitHub install)
   router.add('POST', '/api/integrations/:provider/disconnect', async ({ req, params }) => {
@@ -102,9 +131,7 @@ export function registerIntegrationRoutes(router: Router, getEnv: () => Env) {
     const b = await readJson<{ orgId?: string; target?: string }>(req);
     const orgId = b.orgId || '';
     if (params.provider === 'github') await githubDisconnect(env, user, orgId, b.target === 'installation' ? 'installation' : 'user');
-    else if (params.provider === 'figma') await figmaDisconnect(env, user, orgId);
-    else if (params.provider === 'canva') await canvaDisconnect(env, user, orgId);
-    else throw new HttpError(404, 'Unknown integration');
+    else await adapterFor(params.provider).disconnect(env, user, orgId); // figma | canva (404 for anything else)
     return json({ ok: true });
   });
 }

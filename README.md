@@ -84,10 +84,12 @@ npx tsx scripts/integrations-unit.test.ts     # crypto, OAuth state, GitHub App 
 npm run dev:api  &&  python3 scripts/integrations-e2e.py   # webhooks, isolation, guards (needs the test values in .dev.vars)
 ```
 
+Figma and Canva files can be linked to a task, with recorded activity kept separate from submission and review: see `docs/INTEGRATIONS_FIGMA_CANVA.md`. `npm run test:unit` runs both unit suites (the second applies the real migrations to an in-memory SQLite and mocks the providers).
+
 ## 6. Not implemented yet
 
 - GitHub, Figma and Canva are implemented but switched off until you add their keys (`INTEGRATION_SECRETS.md`); until then they answer `501 not_configured`. They only ever submit tasks for review, never mark them done.
-- Figma and Canva calls were written against their documentation but could not be exercised without real credentials: test them with a real app registration first.
+- Figma and Canva calls follow their documentation and are tested against mocks only: run the manual checks in `docs/INTEGRATIONS_FIGMA_CANVA.md` with a real app registration first.
 - Google Workspace features need a real OAuth client, picker keys and Google verification.
 - Required-integration gating on join is not enforced server-side.
 - Drive / self-host storage modes have no upload path; File Vault link entries are plain links (no thumbnails or snapshots).

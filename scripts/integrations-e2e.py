@@ -42,7 +42,7 @@ def push(sender, msg, inst=5551, delivery=None):
         'commits': [{'id': 'abc123', 'message': msg, 'url': 'https://github.com/acme/x/commit/abc123', 'timestamp': '2026-11-05T10:00:00Z'}]}, delivery)
 
 # start from a clean slate so the script can be re-run
-sql('DELETE FROM integration_accounts', 'DELETE FROM integration_webhooks', 'DELETE FROM webhook_deliveries')
+sql('DELETE FROM integration_accounts', 'DELETE FROM integration_webhooks', 'DELETE FROM webhook_deliveries', 'DELETE FROM integration_watches', 'DELETE FROM integration_resources', 'DELETE FROM integration_events')
 
 tree = {'id': 'root-department', 'department': 'Test School', 'roots': ['Principal'], 'roles': [], 'children': [
     {'id': 'n1', 'department': 'Class 1', 'roots': ['Class 1 Lead'], 'roles': ['Math Teacher'], 'children': []}]}
@@ -151,6 +151,27 @@ s, r = fig({**ev, 'version_id': 'v3', 'label': 'done mika#t11'}); check('figma: 
 t11 = task_in(call('GET', f'/api/orgs/{OID}/state', tok=T)[1], 't11')
 check('  evidence is a figma.com plugin submission', (t11['status'], t11['submissionEvidence']['source'], t11['submissionEvidence']['host']), ('submitted', 'plugin', 'figma.com'))
 s, r = fig({**ev, 'version_id': 'v3', 'label': 'done mika#t11'}); check('figma: redelivery is a no-op', r.get('duplicate'), True)
+
+# ---- 5b. linked work routes (Figma/Canva): authorization boundaries over real HTTP ---------------------------------------
+s, r = call('GET', f'/api/integrations/work?orgId={OID}&taskId=t10', tok=None); check('work: anonymous blocked', s, 401)
+s, r = call('GET', f'/api/integrations/work?orgId={OID}&taskId=t10', tok=AT); check('work: the assignee can read it', (s, r.get('resources')), (200, []))
+s, r = call('GET', f'/api/integrations/work?orgId={OID}&taskId=t10', tok=T); check('work: the person who assigned it can read it', s, 200)
+s, r = call('GET', f'/api/integrations/work?orgId={OID}&taskId=t10', tok=BT); check('work: a teammate not involved is refused', s, 403)
+s, r = call('GET', f'/api/integrations/work?orgId={OID}&taskId=t10', tok=TB); check('work: another organisation is refused', s, 403)
+s, r = call('GET', f'/api/integrations/work?orgId={OIDB}&taskId=t10', tok=TB); check("work: a task id from another organisation does not exist", s, 404)
+s, r = call('POST', '/api/integrations/resources', {'orgId': OID, 'taskId': 't10', 'provider': 'figma', 'input': 'https://www.figma.com/design/AbCdEf1234567890/x'}, AT)
+check('link with placeholder keys -> 501 not_configured', (s, r.get('code')), (501, 'not_configured'))
+s, r = call('POST', '/api/integrations/resources', {'orgId': OID, 'taskId': 't10', 'provider': 'github', 'input': 'x'}, AT); check('link: only registered design providers', s, 404)
+s, r = call('POST', '/api/integrations/resources/res_nope/sync', {'orgId': OID}, AT); check('sync of an unknown linked file -> 404', s, 404)
+s, r = call('POST', '/api/integrations/resources/res_nope/submit', {'orgId': OID}, AT); check('submit of an unknown linked file -> 404', s, 404)
+s, r = call('POST', '/api/integrations/resources/res_nope/unlink', {'orgId': OID}, None); check('unlink anonymous blocked', s, 401)
+s, st3 = call('GET', f'/api/integrations/status?orgId={OID}', tok=AT)
+check('status reports Canva comments/webhooks as preview only', (st3['providers']['canva']['capabilities']['comments'], st3['providers']['canva']['capabilities']['webhooks']), ('preview_only', 'preview_only'))
+s, r = call('POST', '/api/integrations/canva/export', {'orgId': OID, 'taskId': 't10', 'design': 'DAGabc123XYZ'}, AT); check('legacy canva export still routed (501 until configured)', s, 501)
+sql(f"INSERT INTO integration_watches VALUES ('figma','whw1','{OID}','FILEKEY2','FILE_COMMENT','{ALICE}','{hashlib.sha256(b'pw').hexdigest()}',{now})")
+s, r = fig({'webhook_id': 'whw1', 'passcode': 'bad', 'event_type': 'FILE_COMMENT', 'file_key': 'FILEKEY2', 'comment_id': 'c'}); check('activity webhook: wrong passcode -> 401', s, 401)
+s, r = fig({'webhook_id': 'whw1', 'passcode': 'pw', 'event_type': 'PING'}); check('activity webhook: ping ok', r.get('pong'), True)
+s, r = fig({'webhook_id': 'whw1', 'passcode': 'pw', 'event_type': 'FILE_COMMENT', 'file_key': 'FILEKEY2', 'comment_id': 'c'}); check('activity webhook with no linked file records nothing', (r.get('recorded'), r.get('matched')), (0, 0))
 
 # ---- 6. what the shared docs API lets a member claim (informational) ------------------------------------------------
 s, r = call('PUT', f'/api/orgs/{OID}/docs/compliance/{BOB}_github', {'id': f'{BOB}_github', 'userId': BOB, 'orgId': OID, 'integrationKey': 'github', 'connectedAccountLabel': 'fake'}, BT)

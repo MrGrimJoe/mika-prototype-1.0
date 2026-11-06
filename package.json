@@ -13,7 +13,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply mika --remote",
     "lint": "tsc --noEmit && tsc -p tsconfig.worker.json",
     "test:api": "python3 scripts/api-test.py",
-    "test:unit": "npx --yes tsx scripts/integrations-unit.test.ts",
+    "test:unit": "npx --yes tsx scripts/integrations-unit.test.ts && npx --yes tsx scripts/integrations-adapters.test.ts",
     "test:integrations": "python3 scripts/integrations-e2e.py"
   },
   "dependencies": {

@@ -76,17 +76,30 @@ export async function readTokens(env: Env, row: AccountRow): Promise<TokenSet> {
   return decryptJson<TokenSet>(env, row.secret_enc, row.id);
 }
 
-/** A usable access token, refreshed (and re-stored) when it is about to expire. */
+/**
+ * A usable access token, refreshed (and re-stored) when it is about to expire, or immediately when `force`
+ * is set (the provider answered 401 although the token looked valid: it was revoked or rotated).
+ * Some providers (Canva) issue single-use refresh tokens, so when a refresh fails we first check whether a
+ * concurrent request just refreshed it; only then is the person asked to reconnect.
+ */
 export async function freshAccessToken(
   env: Env, row: AccountRow,
-  refresh: (refreshToken: string) => Promise<{ access_token: string; refresh_token?: string; expires_in?: number }>
+  refresh: (refreshToken: string) => Promise<{ access_token: string; refresh_token?: string; expires_in?: number }>,
+  force = false
 ): Promise<string> {
   const t = await readTokens(env, row);
-  if (!t.expires_at || t.expires_at - 60_000 > Date.now()) return t.access_token;
+  if (!force && (!t.expires_at || t.expires_at - 60_000 > Date.now())) return t.access_token;
   if (!t.refresh_token) throw new HttpError(409, 'Your connection expired. Please reconnect.', { code: 'reconnect' });
   let next;
   try { next = await refresh(t.refresh_token); }
-  catch { throw new HttpError(409, 'Your connection expired. Please reconnect.', { code: 'reconnect' }); }
+  catch {
+    const latest = await env.DB.prepare('SELECT * FROM integration_accounts WHERE id = ?1').bind(row.id).first<AccountRow>();
+    if (latest?.secret_enc && latest.secret_enc !== row.secret_enc) {
+      const other = await readTokens(env, latest);
+      if (other.access_token !== t.access_token && (!other.expires_at || other.expires_at - 5_000 > Date.now())) return other.access_token;
+    }
+    throw new HttpError(409, 'Your connection expired. Please reconnect.', { code: 'reconnect' });
+  }
   const updated: TokenSet = {
     access_token: next.access_token,
     refresh_token: next.refresh_token ?? t.refresh_token,
@@ -95,6 +108,20 @@ export async function freshAccessToken(
   await env.DB.prepare('UPDATE integration_accounts SET secret_enc = ?2, updated_at = ?3 WHERE id = ?1')
     .bind(row.id, await encryptJson(env, updated, row.id), Date.now()).run();
   return updated.access_token;
+}
+
+/**
+ * Runs one provider request with the person's token. On 401 it forces a single refresh and retries once; a second
+ * 401 means the grant was revoked, which surfaces as a "reconnect" error rather than a vague failure.
+ */
+export async function authedCall<R extends { status: number }>(
+  env: Env, row: AccountRow,
+  refresh: (refreshToken: string) => Promise<{ access_token: string; refresh_token?: string; expires_in?: number }>,
+  doFetch: (token: string) => Promise<R>
+): Promise<R> {
+  let r = await doFetch(await freshAccessToken(env, row, refresh));
+  if (r.status === 401) r = await doFetch(await freshAccessToken(env, row, refresh, true));
+  return r;
 }
 
 export const tokenSetFrom = (r: { access_token: string; refresh_token?: string; expires_in?: number }): TokenSet => ({

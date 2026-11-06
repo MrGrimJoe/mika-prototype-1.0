@@ -3,20 +3,35 @@ import { HttpError } from '../env';
 import { json } from '../util';
 import { publicUser } from '../store';
 import {
-  assertIdentityFree, freshAccessToken, getUserAccount, markConnected, markDisconnected, removeAccounts, saveAccount, tokenSetFrom, type AccountRow,
+  assertIdentityFree, authedCall, getUserAccount, markConnected, markDisconnected, readTokens, removeAccounts, saveAccount, tokenSetFrom, type AccountRow,
 } from './accounts';
 import {
-  callbackUrl, checkNonce, downloadBytes, fetchJson, memberContext, newNonce, nonceCookie, requireConfigured, requireLead, resultPage,
+  callbackUrl, checkNonce, downloadBytes, failFor, fetchJson, fetchJsonRetry, memberContext, newNonce, nonceCookie, requireConfigured, requireLead, resultPage,
 } from './common';
 import { decryptJson, encryptJson, pkcePair, signState, toB64, verifyState } from './crypto';
-import { assertSubmittable, attachEvidenceFile, submitWithEvidence } from './evidence';
+import { parseProviderTime } from './events';
+import type { IntegrationAdapter, PreviewFile, ProviderCapabilities, ResourceRef, ResourceSnapshot, SyncResult, SyncState } from './adapter';
 import type { User } from '../../src/types';
 
 const API = 'https://api.canva.com/rest/v1';
 const AUTH_URL = 'https://www.canva.com/api/oauth/authorize';
 const TOKEN_URL = `${API}/oauth/token`;
+const REVOKE_URL = `${API}/oauth/revoke`;
 // Minimum needed to list/read designs and export them. Scopes do not cascade in Canva, so each one is listed.
 const SCOPES = ['design:meta:read', 'design:content:read', 'profile:read'];
+
+// What Canva's Connect API offers to ordinary integrations today. Comments and webhook notifications are marked
+// "preview" by Canva (unstable, and preview features block a public integration from passing Canva's review), so Mika does
+// not build on them: activity for Canva comes from refreshing the design's metadata, and says so.
+const CAPABILITIES: ProviderCapabilities = {
+  provider: 'canva', label: 'Canva',
+  thumbnails: true, versions: false, comments: 'preview_only', webhooks: 'preview_only', exportPreview: true,
+  notes: [
+    'Mika only sees designs you link to an assignment. It reads the title, a preview and when the design was last changed.',
+    'Canva does not give Mika a revision history, comment feed or change notifications that are generally available yet. Use Refresh to see whether the design changed.',
+    'A change in Canva is a signal that someone edited the design, not proof that the work is finished.',
+  ],
+};
 
 const basic = (env: Env) => 'Basic ' + toB64(new TextEncoder().encode(`${env.CANVA_CLIENT_ID}:${env.CANVA_CLIENT_SECRET}`));
 
@@ -33,9 +48,13 @@ async function tokenRequest(env: Env, form: Record<string, string>) {
 // Canva refresh tokens are single use: every refresh returns a new one, which freshAccessToken stores.
 const refreshWith = (env: Env) => (refresh_token: string) => tokenRequest(env, { grant_type: 'refresh_token', refresh_token });
 
+/** One Canva call with the person's own token: refreshes when due, forces one refresh on 401, retries rate limits on reads. */
 async function canva(env: Env, row: AccountRow, path: string, init: RequestInit = {}) {
-  const token = await freshAccessToken(env, row, refreshWith(env));
-  return fetchJson(`${API}${path}`, { ...init, headers: { ...(init.headers || {}), Authorization: `Bearer ${token}` } });
+  const read = !init.method || init.method === 'GET';
+  return authedCall(env, row, refreshWith(env), token => {
+    const req = { ...init, headers: { ...(init.headers || {}), Authorization: `Bearer ${token}` } };
+    return read ? fetchJsonRetry(`${API}${path}`, req) : fetchJson(`${API}${path}`, req);
+  });
 }
 
 export async function canvaStart(env: Env, user: User, orgId: string, scope: 'user' | 'org' | 'root') {
@@ -96,6 +115,23 @@ export async function canvaCallback(env: Env, req: Request, url: URL): Promise<R
 
 export async function canvaDisconnect(env: Env, user: User, orgId: string) {
   await memberContext(env, user, orgId);
+  const account = await getUserAccount(env, orgId, 'canva', user.id);
+  // End the grant at Canva too (best effort): without this, "disconnect" would only forget the token on our side.
+  if (account?.secret_enc) {
+    try {
+      const t = await readTokens(env, account);
+      if (t.refresh_token) {
+        await fetchJson(REVOKE_URL, {
+          method: 'POST', headers: { Authorization: basic(env), 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ token: t.refresh_token }),
+        });
+      }
+    } catch { /* already revoked, or Canva unreachable: the local credentials are removed regardless */ }
+  }
+  await env.DB.prepare(
+    `UPDATE integration_resources SET sync_state = 'reconnect', sync_error = 'Canva was disconnected. Reconnect to resume syncing.', next_sync_after = NULL
+     WHERE org_id = ?1 AND provider = 'canva' AND linked_by = ?2`
+  ).bind(orgId, user.id).run();
   await removeAccounts(env, orgId, 'canva', 'user', user.id);
   await markDisconnected(env, { orgId, userId: user.id, provider: 'canva', org: false });
 }
@@ -112,11 +148,11 @@ export async function canvaDesigns(env: Env, user: User, orgId: string, query = 
   const q = new URLSearchParams({ limit: '20', sort_by: 'modified_descending' });
   if (query.trim()) q.set('query', query.trim().slice(0, 100));
   const r = await canva(env, await accountOrThrow(env, orgId, user.id), `/designs?${q}`);
-  if (!r.ok) throw new HttpError(502, `Canva returned ${r.status} while listing designs.`);
+  if (!r.ok) throw failFor(r, 'Canva');
   return {
     designs: (r.data?.items ?? []).map((d: any) => ({
       id: d.id, title: d.title || 'Untitled design', thumbnailUrl: d.thumbnail?.url ?? null,
-      editUrl: d.urls?.edit_url ?? null, viewUrl: d.urls?.view_url ?? null, updatedAt: d.updated_at ?? null,
+      editUrl: d.urls?.edit_url ?? null, viewUrl: d.urls?.view_url ?? null, updatedAt: parseProviderTime(d.updated_at),
     })),
   };
 }
@@ -135,49 +171,82 @@ export function parseCanvaDesignId(raw: string): string {
 }
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+const safeHttps = (v: unknown): string | null => (typeof v === 'string' && /^https:\/\//i.test(v) ? v : null);
 
-export async function canvaExport(env: Env, user: User, b: { orgId?: string; taskId?: string; design?: string; format?: string }) {
-  requireConfigured(env, 'canva', 'Canva');
-  if (!b.orgId || !b.taskId || !b.design) throw new HttpError(400, 'orgId, taskId and design are required');
-  const format = b.format === 'pdf' ? 'pdf' : 'png';
-  await memberContext(env, user, b.orgId);
-  await assertSubmittable(env, b.orgId, b.taskId, user.id);
-  const designId = parseCanvaDesignId(b.design);
-  const row = await accountOrThrow(env, b.orgId, user.id);
-
-  const d = await canva(env, row, `/designs/${encodeURIComponent(designId)}`);
-  if (d.status === 403 || d.status === 404) throw new HttpError(404, 'Your Canva account cannot open that design.');
-  if (!d.ok) throw new HttpError(502, `Canva returned ${d.status}.`);
-  const design = d.data?.design ?? {};
-
-  const start = await canva(env, row, '/exports', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ design_id: designId, format: { type: format } }),
-  });
-  const jobId = start.data?.job?.id;
-  if (!start.ok || !jobId) throw new HttpError(502, 'Canva could not start the export.');
-
-  let urls: string[] | undefined;
-  for (let i = 0; i < 12; i++) {
-    const job = (await canva(env, row, `/exports/${encodeURIComponent(jobId)}`)).data?.job;
-    if (job?.status === 'success') { urls = job.urls; break; }
-    if (job?.status === 'failed') throw new HttpError(502, 'Canva could not export that design.');
-    await sleep(1500);
-  }
-  if (!urls?.length) throw new HttpError(504, 'Canva is still exporting. Try again in a moment.');
-
-  const dl = await downloadBytes(urls[0]); // multi-page designs export one file per page; the first page is the preview
-  const safe = String(design.title || 'Canva design').replace(/[^\w .()-]/g, '').slice(0, 80);
-  const file = await attachEvidenceFile(env, {
-    orgId: b.orgId, user, taskId: b.taskId, name: `${safe}.${format}`,
-    type: format === 'pdf' ? 'application/pdf' : (dl.type.startsWith('image/') ? dl.type : 'image/png'), bytes: dl.bytes, source: 'canva',
-  });
-  const task = await submitWithEvidence(env, {
-    orgId: b.orgId, taskId: b.taskId, actorUserId: user.id, file,
-    evidence: {
-      source: 'plugin', url: design.urls?.view_url || design.urls?.edit_url || `https://www.canva.com/design/${designId}`,
-      host: 'canva.com', capturedAt: new Date().toISOString(), previewUrl: file?.url, fullImport: !!file,
-    },
-  });
-  return { task, file, pages: urls.length };
+function snapshotFrom(design: any): ResourceSnapshot {
+  return {
+    title: String(design?.title || 'Untitled design').slice(0, 200), type: 'design',
+    // Canva has no revision id. The last-modified time is the only change indicator it gives.
+    version: null,
+    modifiedAt: parseProviderTime(design?.updated_at),
+    thumbnailUrl: safeHttps(design?.thumbnail?.url),
+    viewUrl: safeHttps(design?.urls?.view_url) ?? safeHttps(design?.urls?.edit_url),
+  };
 }
+
+export const canvaAdapter: IntegrationAdapter = {
+  key: 'canva', label: 'Canva', capabilities: CAPABILITIES,
+
+  parseResource(input: string): ResourceRef {
+    const id = parseCanvaDesignId(input);
+    const trimmed = input.trim();
+    return { provider: 'canva', externalId: id, url: /^https:\/\//i.test(trimmed) ? trimmed : `https://www.canva.com/design/${id}`, type: 'design' };
+  },
+
+  async fetchSnapshot(env, account, ref): Promise<ResourceSnapshot> {
+    const r = await canva(env, account, `/designs/${encodeURIComponent(ref.externalId)}`);
+    if (!r.ok) throw failFor(r, 'Canva');
+    return snapshotFrom(r.data?.design);
+  },
+
+  async sync(env, account, ref, prev: SyncState): Promise<SyncResult> {
+    const snapshot = await this.fetchSnapshot(env, account, ref);
+    const activity: SyncResult['activity'] = [];
+    // The only change signal Canva gives is the modified time. An increase since the last look is reported as exactly that.
+    if (prev.modifiedAt !== null && snapshot.modifiedAt !== null && snapshot.modifiedAt > prev.modifiedAt) {
+      activity.push({ sourceEventId: `canva:update:${ref.externalId}:${snapshot.modifiedAt}`, type: 'resource_updated', occurredAt: snapshot.modifiedAt });
+    }
+    return { snapshot, activity, cursor: null, limits: [] };
+  },
+
+  async exportPreview(env, account, ref, opts): Promise<PreviewFile> {
+    const format = opts.format === 'pdf' ? 'pdf' : 'png';
+    const d = await canva(env, account, `/designs/${encodeURIComponent(ref.externalId)}`);
+    if (!d.ok) throw failFor(d, 'Canva');
+    const design = d.data?.design ?? {};
+
+    const start = await canva(env, account, '/exports', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ design_id: ref.externalId, format: { type: format } }),
+    });
+    if (start.status === 429) throw failFor(start, 'Canva');
+    const jobId = start.data?.job?.id;
+    if (!start.ok || !jobId) throw new HttpError(502, 'Canva could not start the export.');
+
+    let urls: string[] | undefined;
+    for (let i = 0; i < 12; i++) {
+      const jr = await canva(env, account, `/exports/${encodeURIComponent(jobId)}`);
+      if (jr.status === 429) throw failFor(jr, 'Canva');
+      const job = jr.data?.job;
+      if (job?.status === 'success') { urls = job.urls; break; }
+      if (job?.status === 'failed') throw new HttpError(502, 'Canva could not export that design.');
+      await sleep(1500);
+    }
+    if (!urls?.length) throw new HttpError(504, 'Canva is still exporting. Try again in a moment.');
+
+    const dl = await downloadBytes(urls[0]); // multi-page designs export one file per page; the first page is the preview
+    const safe = String(design.title || 'Canva design').replace(/[^\w .()-]/g, '').slice(0, 80);
+    return {
+      name: `${safe}.${format}`,
+      type: format === 'pdf' ? 'application/pdf' : (dl.type.startsWith('image/') ? dl.type : 'image/png'),
+      bytes: dl.bytes,
+      viewUrl: safeHttps(design.urls?.view_url) ?? safeHttps(design.urls?.edit_url) ?? ref.url,
+    };
+  },
+
+  // Canva's webhook notifications are a preview feature: not available to ordinary integrations, so none are registered.
+  async subscribe() { return { status: 'unsupported' as const, reason: 'Canva does not offer change notifications to apps like Mika yet. Use Refresh.' }; },
+  async unsubscribe() { /* nothing was registered */ },
+
+  disconnect: canvaDisconnect,
+};

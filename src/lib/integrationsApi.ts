@@ -6,7 +6,13 @@ export const SERVER_PROVIDERS: ServerProvider[] = ['github', 'figma', 'canva'];
 /** GitHub, Figma and Canva connect through the server. Google Workspace runs in the browser with the person's own consent. */
 export const isServerProvider = (key?: string): key is ServerProvider => !!key && (SERVER_PROVIDERS as string[]).includes(key);
 
+export interface ProviderCapabilities {
+  provider: 'figma' | 'canva'; label: string; thumbnails: boolean; versions: boolean;
+  comments: 'yes' | 'plan_required' | 'preview_only' | 'no'; webhooks: 'yes' | 'plan_required' | 'preview_only' | 'no';
+  exportPreview: boolean; notes: string[];
+}
 export interface ProviderStatus {
+  capabilities?: ProviderCapabilities;   // figma and canva
   configured: boolean;
   missing?: string[];            // only sent to leads
   linked: boolean;               // this person's own account is linked
@@ -87,12 +93,41 @@ export const githubTree = (orgId: string, repo: string, path = '') =>
   api<{ repo: string; path: string; items: { name: string; path: string; type: string; url: string }[] }>(
     `/api/integrations/github/tree?orgId=${encodeURIComponent(orgId)}&repo=${encodeURIComponent(repo)}&path=${encodeURIComponent(path)}`);
 
-export const figmaExport = (orgId: string, taskId: string, fileUrl: string) =>
-  api(`/api/integrations/figma/export`, { method: 'POST', body: { orgId, taskId, fileUrl } });
 export const figmaWatch = (orgId: string, taskId: string, fileUrl: string) =>
   api<{ webhookId: string; tag: string; reused: boolean }>(`/api/integrations/figma/watch`, { method: 'POST', body: { orgId, taskId, fileUrl } });
-export const canvaExport = (orgId: string, taskId: string, design: string, format: 'png' | 'pdf') =>
-  api(`/api/integrations/canva/export`, { method: 'POST', body: { orgId, taskId, design, format } });
+export interface CanvaDesign { id: string; title: string; thumbnailUrl: string | null; editUrl: string | null; viewUrl: string | null; updatedAt: number | null }
+export const canvaDesigns = (orgId: string, query = '') =>
+  api<{ designs: CanvaDesign[] }>(`/api/integrations/canva/designs?orgId=${encodeURIComponent(orgId)}&query=${encodeURIComponent(query)}`);
+
+// ---- Linked work (provider neutral) ---------------------------------------------------------------------------------
+
+export type DesignProviderKey = 'figma' | 'canva';
+export interface LinkedResource {
+  id: string; provider: DesignProviderKey; type: string; url: string; title: string; linkedBy: string; linkedAt: number;
+  version: string | null; providerModifiedAt: number | null; thumbnailUrl: string | null;
+  lastSyncedAt: number | null; syncState: 'never' | 'ok' | 'error' | 'reconnect'; syncError: string | null; nextSyncAfter: number | null; limits: string[];
+  submission: { status: 'not_submitted' | 'submitted'; at: number | null; by: string | null };
+  review: { status: 'none' | 'awaiting' | 'accepted' | 'returned'; at: number | null; reviewerUserId: string | null; feedback: string | null };
+}
+export type WorkEventType = 'resource_updated' | 'version_created' | 'comment_added' | 'resource_linked' | 'resource_unlinked' | 'export_completed' | 'submission_made' | 'deliverable_accepted' | 'deliverable_returned';
+export interface WorkEvent {
+  id: string; resourceId: string; provider: string; type: WorkEventType; category: 'activity' | 'link' | 'submission' | 'review';
+  occurredAt: number; receivedAt: number; actorUserId: string | null; hasActor: boolean; metadata: Record<string, string | number | boolean | null>;
+}
+export interface TaskWork { resources: LinkedResource[]; events: WorkEvent[]; taskStatus: string; canLink: boolean }
+
+export const fetchTaskWork = (orgId: string, taskId: string) =>
+  api<TaskWork>(`/api/integrations/work?orgId=${encodeURIComponent(orgId)}&taskId=${encodeURIComponent(taskId)}`);
+export const linkResource = (orgId: string, taskId: string, provider: DesignProviderKey, input: string) =>
+  api<{ resource: LinkedResource; created: boolean; webhook: { status: 'active' | 'unavailable' | 'unsupported'; reason?: string } }>(
+    '/api/integrations/resources', { method: 'POST', body: { orgId, taskId, provider, input } });
+export const syncResource = (orgId: string, id: string) =>
+  api<{ resource: LinkedResource; throttled?: boolean; retryAt?: number; recorded?: number; error?: { code: string; message: string } }>(
+    `/api/integrations/resources/${encodeURIComponent(id)}/sync`, { method: 'POST', body: { orgId } });
+export const submitResource = (orgId: string, id: string, format?: 'png' | 'pdf') =>
+  api(`/api/integrations/resources/${encodeURIComponent(id)}/submit`, { method: 'POST', body: { orgId, format } });
+export const unlinkResource = (orgId: string, id: string) =>
+  api(`/api/integrations/resources/${encodeURIComponent(id)}/unlink`, { method: 'POST', body: { orgId } });
 
 /** What to put in a commit message, PR title/description, or Figma version name to submit a task. */
 export const taskTag = (taskId: string) => `mika#${taskId}`;

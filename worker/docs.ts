@@ -7,6 +7,7 @@ import {
   canCreateTask, canMessagePair, hasDirectAuthority, isUserLead,
 } from '../src/lib/orgRules';
 import { listInviteLinks } from './orgs';
+import { recordReviewOutcome } from './integrations/events';
 import type { Assignment, Department, Role, Task, User, Message } from '../src/types';
 
 const asKind = (k: string): DocKind => {
@@ -97,6 +98,11 @@ export async function writeDoc(env: Env, user: User, orgId: string, kindRaw: str
   const existing = await getDoc(env, orgId, kind, id);
   const doc = await authorize(env, ctx, user, kind, existing, { ...incoming, id, ...(kind === 'user' ? {} : {}) });
   await putDoc(env, orgId, kind, id, doc);
+  if (kind === 'task' && existing) {
+    // Mirror a reviewer's decision onto any deliverable that was explicitly submitted. Never allowed to fail the task write.
+    try { await recordReviewOutcome(env, orgId, existing as Task, doc as Task, user.id); }
+    catch (e) { console.error('review outcome not recorded', e); }
+  }
   return doc;
 }
 
@@ -229,7 +235,7 @@ async function authorize(env: Env, ctx: OrgContext, user: User, kind: DocKind, e
   }
 }
 
-function taskParticipant(ctx: OrgContext, user: User, task: Task): boolean {
+export function taskParticipant(ctx: OrgContext, user: User, task: Task): boolean {
   if (task.assignedToUserId === user.id || task.assignedByUserId === user.id) return true;
   if (user.id === ctx.masterRootUserId) return true;
   return hasDirectAuthority(user.id, { targetRoleId: task.assignedToRoleId }, ctx.departments, ctx.roles, ctx.assignments, ctx.masterRootUserId).allowed;

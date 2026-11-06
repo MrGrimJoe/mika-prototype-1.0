@@ -38,8 +38,8 @@ Create it at GitHub, Settings, Developer settings, GitHub Apps, New. Then set:
 ## Figma
 
 Create the app at Figma, Developers, My apps. **Callback URL:** `APP_URL/api/integrations/figma/callback`.
-Scopes requested: `current_user:read`, `file_content:read`, `file_metadata:read`, `webhooks:write`. If Figma's scope picker names them differently, edit `SCOPES` in `worker/integrations/figma.ts`.
-The version-label webhook needs a paid Figma plan; attaching a preview does not. Webhook passcodes are generated per webhook and stored only as a hash, so you do not supply one.
+Scopes requested (space separated): `current_user:read`, `file_content:read`, `file_metadata:read`, `file_versions:read`, `file_comments:read`, `webhooks:write`. If Figma's scope picker names them differently, edit `SCOPES` in `worker/integrations/figma.ts`. Enable all six on the app.
+Webhooks (activity and the version-label shortcut) need a Figma plan that allows them and an `https://` `APP_URL`; linking, Refresh and previews do not. Details: `docs/INTEGRATIONS_FIGMA_CANVA.md`. Webhook passcodes are generated per webhook and stored only as a hash, so you do not supply one.
 
 | Name | Type | Placeholder | Where it comes from | Status |
 |---|---|---|---|---|

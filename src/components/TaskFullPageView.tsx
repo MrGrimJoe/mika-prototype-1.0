@@ -42,6 +42,7 @@ import { Badge, Button } from './ui';
 import { taskStateColors, colors, typography } from '../lib/designSystem';
 import { ModalOverlay } from './ui/ModalOverlay';
 import { TaskEvidenceIntegrations } from './TaskEvidenceIntegrations';
+import { LinkedWork } from './LinkedWork';
 
 interface TaskFullPageViewProps {
   task: Task;
@@ -577,6 +578,9 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
           {task.assignedToUserId === currentUser.id && (task.status === 'pending' || task.status === 'help' || task.status === 'rejected') && (
             <TaskEvidenceIntegrations task={task} />
           )}
+
+          {/* Figma / Canva work linked to this task: visible to everyone involved, editable by the assignee */}
+          <LinkedWork task={task} currentUser={currentUser} allUsers={allUsers} />
 
           {/* Mode 2: Yes/No Confirmation */}
           {task.confirmationMode === 'yes_no' && (
