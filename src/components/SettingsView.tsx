@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { SelfHostStorageForm } from './SelfHostStorageForm';
 import {
   Settings as SettingsIcon,
   Shield,
@@ -509,12 +510,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             }`}>
               <div className="font-bold text-ink">Self-Hosted Node</div>
               <p className="text-xs text-ink-2">
-                On-premise S3 or MinIO bucket endpoint for sovereign airgapped networks.
+                Your own S3-compatible server (Garage, SeaweedFS, RustFS, MinIO) for sovereign networks.
               </p>
               {currentOrg?.storageType === 'self_host' && (
                 <span className="inline-block text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-xs font-semibold">
                   Active Provider
                 </span>
+              )}
+              {currentOrg?.storageType === 'self_host' && (
+                <div className="font-sans"><SelfHostStorageForm org={currentOrg} currentUser={currentUser} isRoot={currentUser.id === currentOrg.masterRootUserId} /></div>
               )}
             </div>
           </div>

@@ -84,7 +84,7 @@ npx tsx scripts/integrations-unit.test.ts     # crypto, OAuth state, GitHub App 
 npm run dev:api  &&  python3 scripts/integrations-e2e.py   # webhooks, isolation, guards (needs the test values in .dev.vars)
 ```
 
-Figma and Canva files can be linked to a task, with recorded activity kept separate from submission and review: see `docs/INTEGRATIONS_FIGMA_CANVA.md`. `npm run test:unit` runs both unit suites (the second applies the real migrations to an in-memory SQLite and mocks the providers).
+Figma and Canva files can be linked to a task, with recorded activity kept separate from submission and review: see `docs/INTEGRATIONS_FIGMA_CANVA.md`. Organisations that choose "Host your own server" store files on their own S3-compatible server (`docs/SELF_HOSTED_STORAGE.md`). Tasks also carry Google tools (new Doc/Sheet/Slides, calendar, Meet, Google Tasks, Gmail, Forms, Classroom) that follow each organisation's role permissions. `npm run test:unit` runs the unit suites (the second applies the real migrations to an in-memory SQLite and mocks the providers).
 
 ## 6. Not implemented yet
 

@@ -9,7 +9,10 @@ import {
   TaskStatus, 
   TaskAttachment,
   SubmissionEvidence,
-  TaskMention
+  TaskMention,
+  Organization,
+  IntegrationConnection,
+  Assignment
 } from '../types';
 import { 
   ArrowLeft, 
@@ -59,6 +62,10 @@ interface TaskFullPageViewProps {
   onRateTask?: (taskId: string, score: number, comment: string, isAnonymous: boolean) => void;
   onViewProfile?: (user: User) => void;
   onUpdateTask?: (updatedTask: Task) => void;
+  // Needed to apply the organisation's own rules about which Google tools a role may use.
+  currentOrg?: Organization | null;
+  connections?: IntegrationConnection[];
+  assignments?: Assignment[];
 }
 
 export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
@@ -75,7 +82,10 @@ export const TaskFullPageView: React.FC<TaskFullPageViewProps> = ({
   onFileUpload,
   onRateTask,
   onViewProfile,
-  onUpdateTask
+  onUpdateTask,
+  currentOrg,
+  connections = [],
+  assignments = []
 }) => {
   const [commentText, setCommentText] = useState('');
   const [denialModalOpen, setDenialModalOpen] = useState(false);

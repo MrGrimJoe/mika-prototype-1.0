@@ -173,6 +173,17 @@ s, r = fig({'webhook_id': 'whw1', 'passcode': 'bad', 'event_type': 'FILE_COMMENT
 s, r = fig({'webhook_id': 'whw1', 'passcode': 'pw', 'event_type': 'PING'}); check('activity webhook: ping ok', r.get('pong'), True)
 s, r = fig({'webhook_id': 'whw1', 'passcode': 'pw', 'event_type': 'FILE_COMMENT', 'file_key': 'FILEKEY2', 'comment_id': 'c'}); check('activity webhook with no linked file records nothing', (r.get('recorded'), r.get('matched')), (0, 0))
 
+# ---- 5c. own-server storage routes: authorization and validation over real HTTP -----------------------------------------
+s, r = call('GET', f'/api/orgs/{OID}/storage', tok=None); check('storage: anonymous blocked', s, 401)
+s, r = call('GET', f'/api/orgs/{OID}/storage', tok=AT); check('storage: a member sees type, never server details', (s, r.get('selfHost'), 'secret' in json.dumps(r).lower()), (200, None, False))
+s, r = call('GET', f'/api/orgs/{OID}/storage', tok=TB); check('storage: another organisation is refused', s, 403)
+body = {'endpoint': 'https://storage.school.example', 'bucket': 'school-files', 'accessKeyId': 'K', 'secretAccessKey': 'S'}
+s, r = call('PUT', f'/api/orgs/{OID}/storage', body, AT); check('storage: a non-root cannot save', s, 403)
+s, r = call('POST', f'/api/orgs/{OID}/storage/test', body, AT); check('storage: a non-root cannot test', s, 403)
+s, r = call('POST', f'/api/orgs/{OID}/storage/test', {**body, 'endpoint': 'https://10.0.0.5'}, T); check('storage: private address refused for the root', s, 400)
+s, r = call('POST', f'/api/orgs/{OID}/storage/test', {**body, 'endpoint': 'http://storage.school.example'}, T); check('storage: plain http refused', s, 400)
+s, r = call('DELETE', f'/api/orgs/{OID}/storage', None, AT); check('storage: a non-root cannot forget the server', s, 403)
+
 # ---- 6. what the shared docs API lets a member claim (informational) ------------------------------------------------
 s, r = call('PUT', f'/api/orgs/{OID}/docs/compliance/{BOB}_github', {'id': f'{BOB}_github', 'userId': BOB, 'orgId': OID, 'integrationKey': 'github', 'connectedAccountLabel': 'fake'}, BT)
 print(f'INFO  a member can write their own "compliance" doc through the generic docs API: status {s}')

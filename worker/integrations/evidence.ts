@@ -1,4 +1,5 @@
 import type { Env } from '../env';
+import { storeFor } from '../storage';
 import { HttpError } from '../env';
 import { getDoc, getOrg, putDoc } from '../store';
 import { randomId } from '../util';
@@ -42,26 +43,24 @@ export async function submitWithEvidence(env: Env, o: {
   return updated;
 }
 
-/** Stores a downloaded preview/export in R2 as an auto-archived file of the task. Null when the org keeps files elsewhere. */
+/** Stores a downloaded preview/export (Mika storage or the org's own server) as an auto-archived file of the task. Null when the org keeps files in its own drive. */
 export async function attachEvidenceFile(env: Env, o: {
   orgId: string; user: { id: string; fullName: string }; taskId: string; name: string; type: string; bytes: ArrayBuffer;
   source: NonNullable<FileItem['integrationSource']>;
 }): Promise<FileItem | null> {
   const org = await getOrg(env, o.orgId);
   if (!org) throw new HttpError(404, 'Organisation not found');
-  if (org.storageType && org.storageType !== 'mika') return null;
+  if (org.storageType && org.storageType !== 'mika' && org.storageType !== 'self_host') return null; // files live in their own drive
+  const backend = org.storageType === 'self_host' ? 'self_host' : 'mika';
 
   const id = randomId('file');
-  await env.FILES.put(`${o.orgId}/${id}`, o.bytes, {
-    httpMetadata: { contentType: o.type },
-    customMetadata: { name: o.name, uploadedBy: o.user.id },
-  });
+  await (await storeFor(env, o.orgId, backend)).put(`${o.orgId}/${id}`, o.bytes, { contentType: o.type, name: o.name, uploadedBy: o.user.id });
   const kb = o.bytes.byteLength / 1024;
   const item: FileItem = {
     id, orgId: o.orgId, name: o.name,
     size: kb < 1024 ? `${kb.toFixed(1)} KB` : `${(kb / 1024).toFixed(1)} MB`,
     type: o.type, url: `/api/orgs/${o.orgId}/files/${id}`, downloadUrl: `/api/orgs/${o.orgId}/files/${id}`,
-    storageBackend: 'mika', uploadedByUserId: o.user.id, uploadedByName: o.user.fullName,
+    storageBackend: backend, uploadedByUserId: o.user.id, uploadedByName: o.user.fullName,
     uploadedAt: new Date().toISOString(), sourceTaskId: o.taskId, isAutoArchived: true,
     entryType: 'full_import', integrationSource: o.source,
   };

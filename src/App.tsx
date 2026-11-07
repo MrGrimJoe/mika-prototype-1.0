@@ -802,6 +802,9 @@ export default function App() {
               onFileUpload={handleFileUpload}
               onRateTask={handleRateTask}
               onViewProfile={u => setViewingProfileUser(u)}
+              currentOrg={organization}
+              connections={integrationConnections}
+              assignments={assignments}
               onUpdateTask={(updatedTask) => {
                 setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
                 upsertTask(updatedTask).catch(console.warn);

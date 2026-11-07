@@ -8,8 +8,9 @@ import {
 import { acceptInvite, createOrganization, issueInviteLink, resolveInviteLink, updateOrganization, type CreateOrgBody } from './orgs';
 import { orgChanges, orgState, removeDoc, submitViaShortcut, writeDoc } from './docs';
 import { downloadFile, removeFileBlob, uploadFile } from './files';
-import { isMember, loadOrgContext, listDocs, orgsForUser } from './store';
-import type { IntegrationConnection } from '../src/types';
+import { clearStorage, getStorageSettings, saveStorage, testStorage } from './storage';
+import { getDoc, isMember, loadOrgContext, listDocs, orgsForUser } from './store';
+import type { FileItem, IntegrationConnection } from '../src/types';
 import { registerIntegrationRoutes } from './integrations/routes';
 
 const router = new Router();
@@ -102,8 +103,10 @@ router.add('PUT', '/api/orgs/:orgId/docs/:kind/:id', async ({ req, params }) => 
 router.add('DELETE', '/api/orgs/:orgId/docs/:kind/:id', async ({ req, params }) => {
   const env = currentEnv();
   const user = await requireUser(env, req);
+  // Look up where the bytes live BEFORE the record is deleted, so they can be removed from the right place.
+  const fileMeta = params.kind === 'file' ? await getDoc<FileItem>(env, params.orgId, 'file', params.id) : null;
   await removeDoc(env, user, params.orgId, params.kind, params.id);
-  if (params.kind === 'file') await removeFileBlob(env, params.orgId, params.id);
+  if (params.kind === 'file') await removeFileBlob(env, params.orgId, params.id, fileMeta?.storageBackend === 'self_host' ? 'self_host' : 'mika');
   return json({ success: true });
 });
 
@@ -124,7 +127,13 @@ router.add('POST', '/api/join/:token/signup', async ({ req, params }) => {
   return json({ success: true, ...result, session: await createSession(env, user.id) });
 });
 
-// ---- Files (R2) ---------------------------------------------------------------------------
+// ---- Where files live: Mika storage, or the organisation's own S3-compatible server ---------
+router.add('GET', '/api/orgs/:orgId/storage', async ({ req, params }) => json(await getStorageSettings(currentEnv(), await requireUser(currentEnv(), req), params.orgId)));
+router.add('POST', '/api/orgs/:orgId/storage/test', async ({ req, params }) => json(await testStorage(currentEnv(), await requireUser(currentEnv(), req), params.orgId, await readJson(req))));
+router.add('PUT', '/api/orgs/:orgId/storage', async ({ req, params }) => json(await saveStorage(currentEnv(), await requireUser(currentEnv(), req), params.orgId, await readJson(req))));
+router.add('DELETE', '/api/orgs/:orgId/storage', async ({ req, params }) => json(await clearStorage(currentEnv(), await requireUser(currentEnv(), req), params.orgId)));
+
+// ---- Files ---------------------------------------------------------------------------------
 router.add('POST', '/api/orgs/:orgId/files', async ({ req, params }) => {
   const env = currentEnv();
   const user = await requireUser(env, req);

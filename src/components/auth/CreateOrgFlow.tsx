@@ -1010,7 +1010,7 @@ export const CreateOrgFlow: React.FC<CreateOrgFlowProps> = ({
                     </span>
                   </div>
                   <p className="text-xs text-ink-2 mt-1.5 pl-7 leading-relaxed">
-                    Self-hosted storage for institutional servers; no cost from Mika.
+                    Your own S3-compatible server (Garage, SeaweedFS, RustFS, MinIO); no cost from Mika. You enter the server details in Settings, Storage, right after creating the organisation. Until then files cannot be uploaded.
                   </p>
                 </button>
 
